@@ -91,6 +91,13 @@ public class Trip {
 		this.basePrice = basePrice;
 	}	    
 	
+	public void setTransportation(Transportation transportation) {
+	    this.transportation = transportation;
+	}
+
+	public void setAccommodation(Accommodation accommodation) {
+	    this.accomodation = accommodation;
+	}
 	
 
 }
