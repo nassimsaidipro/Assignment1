@@ -23,7 +23,6 @@ public class Driver {
 	public static void main(String[] args) {
 
 		// Scanner to prompt user input
-		
 
 		// Welcome message
 		System.out.println("=====================================");
@@ -32,7 +31,7 @@ public class Driver {
 		System.out.println("=====================================\n");
 
 		// Prompting the user for their choice between the menu or the scenario tests
-		System.out.println(" Please, choose an option:");
+		System.out.println("Please, choose an option:");
 		System.out.println("1. Predefined testing scenario");
 		System.out.println("2. Menu interface");
 		System.out.print("Enter your choice: ");
@@ -54,7 +53,7 @@ public class Driver {
 	// ------------------------------------------------------------------------------------------------------------------------------------
 	// This is the predefined scenario testing
 	public static void predefinedScenario() {
-		System.out.println("The predefined testing scenario is now running.");
+		System.out.println("\nThe predefined testing scenario is now running.");
 
 		// Creating 3 clients
 		Client c1 = new Client("Maygan", "Beauchamp", "mayg@gmail.com");
@@ -143,15 +142,18 @@ public class Driver {
 
 		// Calculates and displays the cost of trips
 		for (int i = 0; i < tripCount; i++) {
+			System.out.println();
 			System.out.println("Trip " + trips[i].getTripId() + " to " + trips[i].getDestination() + " for "
 					+ trips[i].getDurationInDays() + " days" + "|Total price of: " + trips[i].calculateTotalCost());
+
 		}
 
 		// Displays the most expensive trip
+		System.out.println();
 		showMostExpensiveTrip(trips, tripCount);
 
 		// Demonstration of the deep copy array
-
+		System.out.println();
 		Transportation[] copy = copyTransportationArray(transports, transCount);
 		copy[0].setCompanyName("Modified name");
 		System.out.println("Modified copy[0] company name to 'modified name'.");
@@ -160,10 +162,12 @@ public class Driver {
 		System.out.println("\nOriginal array:");
 		for (int i = 0; i < transCount; i++)
 			System.out.println(transports[i]);
+			System.out.println();
 
 		System.out.println("\nCopied array:");
 		for (int i = 0; i < transCount; i++)
 			System.out.println(copy[i]);
+			System.out.println();
 
 	}
 //------------------------------------------------------------------------------------------------------------------------------------

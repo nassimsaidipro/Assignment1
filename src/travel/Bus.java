@@ -44,7 +44,7 @@ public class Bus extends Transportation {
 
 	@Override
 	public String toString() {
-		return "Bus ID: " + getTransportId() + "\n" +
+		return "\nBus ID: " + getTransportId() + "\n" +
 				"Company: " + companyName + "\n" +
 				"Departure: " + departureCity + "\n" +
 				"Arrival: " + arrivalCity + "\n" +

@@ -44,7 +44,7 @@ public class Train extends Transportation {
 
 	@Override
 	public String toString() {
-		return "Train ID: " + getTransportId() + "\n" +
+		return "\nTrain ID: " + getTransportId() + "\n" +
 				"Company: " + companyName + "\n" +
 				"Departure: " + departureCity + "\n" +
 				"Arrival: " + arrivalCity + "\n" +

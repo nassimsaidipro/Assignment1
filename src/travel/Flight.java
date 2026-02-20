@@ -44,7 +44,7 @@ public class Flight extends Transportation {
 
     @Override
     public String toString() {
-        return "Flight ID: " + getTransportId() + "\n" +
+        return "\nFlight ID: " + getTransportId() + "\n" +
                 "Company: " + companyName + "\n" +
                 "Departure: " + departureCity + "\n" +
                 "Arrival: " + arrivalCity + "\n" +
