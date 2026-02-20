@@ -18,11 +18,12 @@ public class Driver {
 	static Trip[] trips = new Trip[100];
 	static Transportation[] transports = new Transportation[100];
 	static Accommodation[] accommodations = new Accommodation[100];
+	static Scanner input = new Scanner(System.in);
 
 	public static void main(String[] args) {
 
 		// Scanner to prompt user input
-		Scanner input = new Scanner(System.in);
+		
 
 		// Welcome message
 		System.out.println("=====================================");
@@ -50,6 +51,8 @@ public class Driver {
 
 	}
 
+	// ------------------------------------------------------------------------------------------------------------------------------------
+	// This is the predefined scenario testing
 	public static void predefinedScenario() {
 		System.out.println("The predefined testing scenario is now running.");
 
@@ -114,19 +117,19 @@ public class Driver {
 			System.out.println(clients[i]);
 			System.out.println();
 		}
-		
+
 		System.out.println("All transportation: ");
 		for (int i = 0; i < transCount; i++) {
 			System.out.println(transports[i]);
 			System.out.println();
 		}
-		
+
 		System.out.println("All accommodations: ");
 		for (int i = 0; i < accomCount; i++) {
 			System.out.println(accommodations[i]);
 			System.out.println();
 		}
-		
+
 		System.out.println("All trips: ");
 		for (int i = 0; i < tripCount; i++) {
 			System.out.println(trips[i]);
@@ -146,10 +149,9 @@ public class Driver {
 
 		// Displays the most expensive trip
 		showMostExpensiveTrip(trips, tripCount);
-		
-		
+
 		// Demonstration of the deep copy array
-		
+
 		Transportation[] copy = copyTransportationArray(transports, transCount);
 		copy[0].setCompanyName("Modified name");
 		System.out.println("Modified copy[0] company name to 'modified name'.");
@@ -157,13 +159,33 @@ public class Driver {
 		// Display both arrays
 		System.out.println("\nOriginal array:");
 		for (int i = 0; i < transCount; i++)
-		    System.out.println(transports[i]);
+			System.out.println(transports[i]);
 
 		System.out.println("\nCopied array:");
 		for (int i = 0; i < transCount; i++)
-		    System.out.println(copy[i]);
+			System.out.println(copy[i]);
 
 	}
+//------------------------------------------------------------------------------------------------------------------------------------
+
+	// This is the menu
+	public static void menuMode() {
+		boolean running = true;
+
+		while (running) {
+			System.out.println("\n==================== MAIN MENU ====================");
+			System.out.println("1. Client management");
+			System.out.println("2. Trip management");
+			System.out.println("3. Transportation management");
+			System.out.println("4. Accommodation management");
+			System.out.println("===================================================");
+			System.out.println("Your choice: ");
+			int menuChoice = input.nextInt();
+		}
+
+	}
+
+// ------------------------------------------------------------------------------------------------------------------------------------
 
 	// Finds the most expensive trip and displays it
 	public static void showMostExpensiveTrip(Trip[] trips, int tripCount) {
@@ -175,18 +197,16 @@ public class Driver {
 		System.out.println("The most expensive trip is: " + mostExpensive);
 	}
 
-	//creates a copy of the transportation array
+	// creates a copy of the transportation array
 	public static Transportation[] copyTransportationArray(Transportation[] original, int count) {
 		Transportation[] copy = new Transportation[count];
 
 		for (int i = 0; i < count; i++) {
 			if (original[i] instanceof Flight) {
 				copy[i] = new Flight((Flight) original[i]);
-			} 
-			else if (original[i] instanceof Train) {
+			} else if (original[i] instanceof Train) {
 				copy[i] = new Train((Train) original[i]);
-			}
-			else if (original[i] instanceof Bus) {
+			} else if (original[i] instanceof Bus) {
 				copy[i] = new Bus((Bus) original[i]);
 			}
 		}
