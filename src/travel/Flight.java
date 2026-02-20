@@ -4,23 +4,27 @@ public class Flight extends Transportation {
 
     private String airlineName;
     private double luggageAllowance;
+    private double flightPrice;
 
     public Flight() {
         super();
         airlineName = "";
         luggageAllowance = 0.0;
+        flightPrice = 0.0;
     }
 
-    public Flight(String companyName, String departureCity, String arrivalCity, String airlineName, double luggageAllowance) {
+    public Flight(String companyName, String departureCity, String arrivalCity, String airlineName, double luggageAllowance, double flightPrice) {
         super(companyName, departureCity, arrivalCity);
         this.airlineName = airlineName;
         this.luggageAllowance = luggageAllowance;
+        this.flightPrice = flightPrice;
     }
 
     public Flight(Flight other) {
         super(other);
         this.airlineName = other.airlineName;
         this.luggageAllowance = other.luggageAllowance;
+        this.flightPrice = other.flightPrice;
     }
 
     @Override
@@ -47,6 +51,11 @@ public class Flight extends Transportation {
                 "Airline: " + airlineName + "\n" +
                 "Luggage Allowance: " + luggageAllowance + " kg";
     }
+    
+    @Override
+   	public double calculateCost() {		
+   		return flightPrice;
+   	}
 
     public String getAirlineName() {
         return airlineName;
@@ -63,5 +72,6 @@ public class Flight extends Transportation {
     public void setLuggageAllowance(double luggageAllowance) {
         this.luggageAllowance = luggageAllowance;
     }
+
 
 }

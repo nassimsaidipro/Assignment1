@@ -3,65 +3,74 @@ package travel;
 public class Train extends Transportation {
 
 	private String trainType; 
-    private String seatClass;
-    
-    public Train() {
-        super();
-        trainType = "";
-        seatClass = "";
-    }
+	private String seatClass;
+	private double trainFare;
 
-    public Train(String companyName, String departureCity, String arrivalCity, String trainType, String seatClass) {
-        super(companyName, departureCity, arrivalCity);
-        this.trainType = trainType;
-        this.seatClass = seatClass;
-    }
+	public Train() {
+		super();
+		trainType = "";
+		seatClass = "";
+		trainFare = 0.0;
+	}
 
-    public Train(Train other) {
-        super(other);
-        this.trainType = other.trainType;
-        this.seatClass = other.seatClass;
-    }
-    
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null || getClass() != obj.getClass())
-            return false;
-        
-        Train other = (Train) obj;
-        return companyName.equals(other.companyName) && 
-               departureCity.equals(other.departureCity) && 
-               arrivalCity.equals(other.arrivalCity) &&
-               trainType.equals(other.trainType) &&
-               seatClass.equals(other.seatClass);
-    }
+	public Train(String companyName, String departureCity, String arrivalCity, String trainType, String seatClass, double priceFare) {
+		super(companyName, departureCity, arrivalCity);
+		this.trainType = trainType;
+		this.seatClass = seatClass;
+		this.trainFare = priceFare;
+	}
 
-    @Override
-    public String toString() {
-        return "Train ID: " + getTransportId() + "\n" +
-               "Company: " + companyName + "\n" +
-               "Departure: " + departureCity + "\n" +
-               "Arrival: " + arrivalCity + "\n" +
-               "Train Type: " + trainType + "\n" +
-               "Seat Class: " + seatClass;
-    }
+	public Train(Train other) {
+		super(other);
+		this.trainType = other.trainType;
+		this.seatClass = other.seatClass;
+		this.trainFare = other.trainFare;
+	}
 
-    public String getTrainType() {
-        return trainType;
-    }
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null || getClass() != obj.getClass())
+			return false;
 
-    public void setTrainType(String trainType) {
-        this.trainType = trainType;
-    }
+		Train other = (Train) obj;
+		return companyName.equals(other.companyName) && 
+				departureCity.equals(other.departureCity) && 
+				arrivalCity.equals(other.arrivalCity) &&
+				trainType.equals(other.trainType) &&
+				seatClass.equals(other.seatClass);
+	}
 
-    public String getSeatClass() {
-        return seatClass;
-    }
+	@Override
+	public String toString() {
+		return "Train ID: " + getTransportId() + "\n" +
+				"Company: " + companyName + "\n" +
+				"Departure: " + departureCity + "\n" +
+				"Arrival: " + arrivalCity + "\n" +
+				"Train Type: " + trainType + "\n" +
+				"Seat Class: " + seatClass;
+	}
 
-    public void setSeatClass(String seatClass) {
-        this.seatClass = seatClass;
-    }
-    
+	@Override
+	public double calculateCost() {		
+		return trainFare;
+	}
+
+	public String getTrainType() {
+		return trainType;
+	}
+
+	public void setTrainType(String trainType) {
+		this.trainType = trainType;
+	}
+
+	public String getSeatClass() {
+		return seatClass;
+	}
+
+	public void setSeatClass(String seatClass) {
+		this.seatClass = seatClass;
+	}
+
 }

@@ -2,65 +2,75 @@ package travel;
 
 public class Bus extends Transportation {
 
-    private String busCompany;
-    private int numberOfStops;
-	
-    public Bus() {
-        super();
-        busCompany = "";
-        numberOfStops = 0;
-    }
+	private String busCompany;
+	private int numberOfStops;
+	private double busFare;
 
-    public Bus(String companyName, String departureCity, String arrivalCity, String busCompany, int numberOfStops) {
-        super(companyName, departureCity, arrivalCity);
-        this.busCompany = busCompany;
-        this.numberOfStops = numberOfStops;
-    }
+	public Bus() {
+		super();
+		busCompany = "";
+		numberOfStops = 0;
+		busFare = 0.0;
+	}
 
-    public Bus(Bus other) {
-        super(other);
-        this.busCompany = other.busCompany;
-        this.numberOfStops = other.numberOfStops;
-    }
-    
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null || getClass() != obj.getClass())
-            return false;
-        
-        Bus other = (Bus) obj;
-        return companyName.equals(other.companyName) && 
-               departureCity.equals(other.departureCity) && 
-               arrivalCity.equals(other.arrivalCity) &&
-               busCompany.equals(other.busCompany) &&
-               numberOfStops == other.numberOfStops;
-    }
+	public Bus(String companyName, String departureCity, String arrivalCity, String busCompany, int numberOfStops, double busFare) {
+		super(companyName, departureCity, arrivalCity);
+		this.busCompany = busCompany;
+		this.numberOfStops = numberOfStops;
+		this.busFare = busFare;
+	}
 
-    @Override
-    public String toString() {
-        return "Bus ID: " + getTransportId() + "\n" +
-               "Company: " + companyName + "\n" +
-               "Departure: " + departureCity + "\n" +
-               "Arrival: " + arrivalCity + "\n" +
-               "Bus Company: " + busCompany + "\n" +
-               "Number of Stops: " + numberOfStops;
-    }
+	public Bus(Bus other) {
+		super(other);
+		this.busCompany = other.busCompany;
+		this.numberOfStops = other.numberOfStops;
+		this.busFare = other.busFare;
+	}
 
-    public String getBusCompany() {
-        return busCompany;
-    }
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null || getClass() != obj.getClass())
+			return false;
 
-    public void setBusCompany(String busCompany) {
-        this.busCompany = busCompany;
-    }
+		Bus other = (Bus) obj;
+		return companyName.equals(other.companyName) && 
+				departureCity.equals(other.departureCity) && 
+				arrivalCity.equals(other.arrivalCity) &&
+				busCompany.equals(other.busCompany) &&
+				numberOfStops == other.numberOfStops;
+	}
 
-    public int getNumberOfStops() {
-        return numberOfStops;
-    }
+	@Override
+	public String toString() {
+		return "Bus ID: " + getTransportId() + "\n" +
+				"Company: " + companyName + "\n" +
+				"Departure: " + departureCity + "\n" +
+				"Arrival: " + arrivalCity + "\n" +
+				"Bus Company: " + busCompany + "\n" +
+				"Number of Stops: " + numberOfStops;
+	} 
 
-    public void setNumberOfStops(int numberOfStops) {
-        this.numberOfStops = numberOfStops;
-    }
+	@Override
+	public double calculateCost() {		
+		return busFare;
+	}
+
+	public String getBusCompany() {
+		return busCompany;
+	}
+
+	public void setBusCompany(String busCompany) {
+		this.busCompany = busCompany;
+	}
+
+	public int getNumberOfStops() {
+		return numberOfStops;
+	}
+
+	public void setNumberOfStops(int numberOfStops) {
+		this.numberOfStops = numberOfStops;
+	}
+
 }

@@ -20,6 +20,13 @@ public class Hotel extends Accommodation {
 	}
 	
 	@Override
+	public double calculateCost(int numberOfDays) {
+		//Higher the rating, higher the price
+		double additionalCost = (starRating/10) + 1.0;
+		return (numberOfDays*pricePerNight)*additionalCost;
+	}
+	
+	@Override
 	public boolean equals(Object obj) {
 	    if (this == obj)
 	        return true;

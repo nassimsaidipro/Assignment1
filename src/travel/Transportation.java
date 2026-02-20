@@ -34,6 +34,29 @@ public abstract class Transportation {
         
     }
     
+    public abstract double calculateCost();
+    
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null || getClass() != obj.getClass())
+            return false;
+
+        Transportation other = (Transportation) obj;
+        return companyName.equals(other.companyName) &&
+                departureCity.equals(other.departureCity) &&
+                arrivalCity.equals(other.arrivalCity);
+    }
+
+    @Override
+    public String toString() {
+        return "Transport ID: " + transportId + "\n" +
+                "Company: " + companyName + "\n" +
+                "Departure: " + departureCity + "\n" +
+                "Arrival: " + arrivalCity;
+    }
+    
 	public String getTransportId() {
 		return transportId;
 	}
