@@ -20,6 +20,7 @@ public class Driver {
 	static Accommodation[] accommodations = new Accommodation[100];
 	static Scanner input = new Scanner(System.in);
 	static int clientCount = 0;
+	static int tripCount = 0;
 
 	public static void main(String[] args) {
 
@@ -42,6 +43,7 @@ public class Driver {
 			predefinedScenario();
 
 		} else if (choice == 2) {
+			menuMode();
 
 		} else {
 			System.out.print("\nInvalid choice, the program will now close.");
@@ -105,7 +107,6 @@ public class Driver {
 		trip3.setTransportation(bus1);
 		trip3.setAccommodation(hos1);
 
-		int tripCount = 0;
 		trips[tripCount++] = trip1;
 		trips[tripCount++] = trip2;
 		trips[tripCount++] = trip3;
@@ -184,7 +185,7 @@ public class Driver {
 			System.out.println("4. Accommodation management");
 			System.out.println("0. Exit");
 			System.out.println("===================================================");
-			System.out.println("Your choice: ");
+			System.out.print("Your choice: ");
 			int menuChoice = input.nextInt();
 
 			switch (menuChoice) {
@@ -210,42 +211,125 @@ public class Driver {
 		boolean menuReturn = false;
 		while (!menuReturn) {
 			System.out.println("--Client Management--");
-			System.out.println("	1. Add a client");
-			System.out.println("	2. Edit a client");
-			System.out.println("	3. Delete a client");
-			System.out.println("	4. List all clients");
-			System.out.println("	0. Go back to main menu");
+			System.out.println("1. Add a client");
+			System.out.println("2. Edit a client");
+			System.out.println("3. Delete a client");
+			System.out.println("4. List all clients");
+			System.out.println("0. Go back to main menu");
 			System.out.print("Your choice: ");
 
 			int clientChoice = input.nextInt();
+			input.nextLine();
 
 			switch (clientChoice) {
 			case 1:
 				if (clientCount >= clients.length) {
 					System.out.println("the array is full :(");
-					return;
-				}
-				System.out.print("\nEnter the first name");
-				String firstn = input.next().trim();
-				System.out.print("\nEnter the last name");
-				String lastn = input.next().trim();
-				System.out.print("\nEnter the email address");
-				String email = input.next().trim();
+					break;
 
-				clients[clientCount++] = new Client(firstn, lastn, email);
-				System.out.println("\nClient added successfully: " + clients[clientCount - 1]);
+				}
+				System.out.print("\nEnter the first name: ");
+				String firstn = input.nextLine().trim();
+				System.out.print("\nEnter the last name: ");
+				String lastn = input.nextLine().trim();
+				System.out.print("\nEnter the email address: ");
+				String email = input.nextLine().trim();
+
+				Client newClient = new Client(firstn, lastn, email);
+				clients[clientCount] = newClient;
+				clientCount++;
+
+				System.out.println("\nClient added successfully: ");
+				System.out.println(newClient);
+				System.out.println();
 
 				break;
 			case 2:
+				if (clientCount == 0) {
+					System.out.println("There are no clients to edit.");
+					System.out.println();
+					break;
+				}
+
+				System.out.print("Enter client ID to edit: ");
+				String idEdit = input.nextLine();
+				int index = -1;
+
+				for (int i = 0; i < clientCount; i++) {
+					if (clients[i].getClientId().equalsIgnoreCase(idEdit)) {
+						index = i;
+						break;
+					}
+
+				}
+
+				if (index == -1) {
+					System.out.println("Client not found");
+					break;
+				}
+
+				else {
+					System.out.println("\nEditing client: ");
+					System.out.println(clients[index]);
+
+					System.out.print("New first name: ");
+					String newFirst = input.nextLine();
+
+					System.out.print("New last name: ");
+					String newLast = input.nextLine();
+
+					System.out.print("New email: ");
+					String newEmail = input.nextLine();
+
+					clients[index].setEmailAdress(newEmail);
+					clients[index].setFirstName(newFirst);
+					clients[index].setLastName(newLast);
+
+					System.out.println("The client has been updated: ");
+					System.out.println(clients[index]);
+
+				}
 
 				break;
+
 			case 3:
+				if (clientCount == 0) {
+					System.out.println("No clients available to delete.");
+					break;
+				}
+				input.nextLine();
+				System.out.print("Enter client ID to delete: ");
+				String idDelete = input.nextLine().trim();
+				int deleteIndex = -1;
+				for (int i = 0; i < clientCount; i++) {
+					if (clients[i].getClientId().equals(idDelete)) {
+						deleteIndex = i;
+						break;
+					}
+				}
+				if (deleteIndex == -1) {
+					System.out.println("Client not found.");
+				} else {
+					for (int i = deleteIndex; i < clientCount - 1; i++) {
+						clients[i] = clients[i + 1];
+
+					}
+
+					clients[clientCount - 1] = null;
+					clientCount--;
+					System.out.println("Client deleted successfully.");
+
+				}
 
 				break;
 			case 4:
-				
-				for (int i = 0; i<clientCount;i++) {
+				if (clientCount == 0) {
+					System.out.println("There are no clients to display");
+					break;
+				}
+				for (int i = 0; i < clientCount; i++) {
 					System.out.println(clients[i]);
+					System.out.println();
 				}
 				break;
 			case 0:
@@ -258,7 +342,104 @@ public class Driver {
 	}
 
 	public static void tripManagement() {
+		boolean menuReturn = false;
+		while (!menuReturn) {
+			System.out.println("--Client Management--");
+			System.out.println("	1. Create a trip");
+			System.out.println("	2. Edit a trip's information");
+			System.out.println("	3. Cancel a trip");
+			System.out.println("	4. List all trips");
+			System.out.println("	5. List all trips of a specific client");
+			System.out.println("	0. Go back to main menu");
+			System.out.print("Your choice: ");
 
+			int tripChoice = input.nextInt();
+
+			switch (tripChoice) {
+			case 1:
+				
+				if(tripCount>=trips.length) {
+					System.out.println("There's no space left to add a trip.");
+					break;
+				}
+				
+				if (clientCount == 0) {
+			        System.out.println("No clients available. Create a client first.");
+			        break;
+			    }
+				
+				System.out.print("Destination: ");
+				String destin = input.nextLine();
+
+				System.out.print("Duration of the trip: ");
+				int dur = input.nextInt();
+				input.nextLine();
+
+				System.out.print("Price of the trip: ");
+				double price = input.nextDouble();
+				input.nextLine();
+
+				System.out.print("Client's ID: ");
+				String clientId = input.nextLine();
+				
+				Client clientFound = null;
+
+				for (int i = 0; i < clientCount; i++) {
+					if (clients[i].getClientId().equalsIgnoreCase(clientId)) {
+						clientFound = clients[i];
+						break;
+					}
+				}
+				if(clientFound ==null) {
+					System.out.println("Client no found.");
+					break;
+				}
+				
+				Trip newTrip = new Trip(destin,dur,price,clientFound);
+				trips[tripCount++] = newTrip;
+				System.out.println("Trip added successfully: ");
+				 System.out.println(newTrip);
+				break;
+
+			case 2:
+				if(tripCount==0) {
+					System.out.println("There are no trips to edit");
+					break;
+				}
+				
+				
+				System.out.println("Enter the trip ID to edit: ");
+				String tripId = input.nextLine();
+				
+				int index = -1;
+				
+				for(int i = 0; i<tripCount;i++) {
+					if(trips[i].getTripId().equalsIgnoreCase(tripId)) {
+						index = i;
+					}
+				}
+				
+				if(index == -1) {
+					System.out.println("Trip not found");
+				}
+				
+				
+				break;
+
+			case 3:
+				break;
+			case 4:
+				break;
+			case 5:
+				break;
+
+			case 0:
+				menuReturn = true;
+				break;
+			default:
+				System.out.println("Invalid option.");
+			}
+		}
 	}
 
 	public static void transportManagement() {
