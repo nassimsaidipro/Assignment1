@@ -19,6 +19,7 @@ public class Driver {
 	static Transportation[] transports = new Transportation[100];
 	static Accommodation[] accommodations = new Accommodation[100];
 	static Scanner input = new Scanner(System.in);
+	static int clientCount = 0;
 
 	public static void main(String[] args) {
 
@@ -61,7 +62,6 @@ public class Driver {
 		Client c2 = new Client("Venta", "Raji", "venta@gmail.com");
 		Client c3 = new Client("Veda", "Melky", "velky@gmail.com");
 
-		int clientCount = 0;
 		clients[clientCount++] = c1;
 		clients[clientCount++] = c2;
 		clients[clientCount++] = c3;
@@ -162,12 +162,12 @@ public class Driver {
 		System.out.println("\nOriginal array:");
 		for (int i = 0; i < transCount; i++)
 			System.out.println(transports[i]);
-			System.out.println();
+		System.out.println();
 
 		System.out.println("\nCopied array:");
 		for (int i = 0; i < transCount; i++)
 			System.out.println(copy[i]);
-			System.out.println();
+		System.out.println();
 
 	}
 //------------------------------------------------------------------------------------------------------------------------------------
@@ -182,13 +182,92 @@ public class Driver {
 			System.out.println("2. Trip management");
 			System.out.println("3. Transportation management");
 			System.out.println("4. Accommodation management");
+			System.out.println("0. Exit");
 			System.out.println("===================================================");
 			System.out.println("Your choice: ");
 			int menuChoice = input.nextInt();
+
+			switch (menuChoice) {
+			case 1:
+				clientManagement();
+				break;
+			case 2:
+				tripManagement();
+				break;
+			case 3:
+				transportManagement();
+				break;
+			case 4:
+				accomManagement();
+				break;
+
+			}
 		}
 
 	}
 
+	public static void clientManagement() {
+		boolean menuReturn = false;
+		while (!menuReturn) {
+			System.out.println("--Client Management--");
+			System.out.println("	1. Add a client");
+			System.out.println("	2. Edit a client");
+			System.out.println("	3. Delete a client");
+			System.out.println("	4. List all clients");
+			System.out.println("	0. Go back to main menu");
+			System.out.print("Your choice: ");
+
+			int clientChoice = input.nextInt();
+
+			switch (clientChoice) {
+			case 1:
+				if (clientCount >= clients.length) {
+					System.out.println("the array is full :(");
+					return;
+				}
+				System.out.print("\nEnter the first name");
+				String firstn = input.next().trim();
+				System.out.print("\nEnter the last name");
+				String lastn = input.next().trim();
+				System.out.print("\nEnter the email address");
+				String email = input.next().trim();
+
+				clients[clientCount++] = new Client(firstn, lastn, email);
+				System.out.println("\nClient added successfully: " + clients[clientCount - 1]);
+
+				break;
+			case 2:
+
+				break;
+			case 3:
+
+				break;
+			case 4:
+				
+				for (int i = 0; i<clientCount;i++) {
+					System.out.println(clients[i]);
+				}
+				break;
+			case 0:
+				menuReturn = true;
+				break;
+			default:
+				System.out.println("Invalid option.");
+			}
+		}
+	}
+
+	public static void tripManagement() {
+
+	}
+
+	public static void transportManagement() {
+
+	}
+
+	public static void accomManagement() {
+
+	}
 // ------------------------------------------------------------------------------------------------------------------------------------
 
 	// Finds the most expensive trip and displays it
