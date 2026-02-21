@@ -78,6 +78,9 @@ public class Trip {
 	public double getBasePrice() {
 		return basePrice;
 	}
+	public Client getTravelingClient() {
+		return travelingClient;
+	}
 
 	public void setDestination(String destination) {
 		this.destination = destination;

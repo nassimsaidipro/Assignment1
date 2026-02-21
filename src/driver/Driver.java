@@ -21,6 +21,7 @@ public class Driver {
 	static Scanner input = new Scanner(System.in);
 	static int clientCount = 0;
 	static int tripCount = 0;
+	static int transCount = 0;
 
 	public static void main(String[] args) {
 
@@ -75,7 +76,7 @@ public class Driver {
 		Train train2 = new Train("Amtrak", "Boston", "Washington", "regional", "Economy", 80.0);
 		Bus bus1 = new Bus("Greyhound", "Montreal", "Quebec City", "Greyhound Canada", 3, 40.0);
 		Bus bus2 = new Bus("FlixBus", "Paris", "Lyon", "FlixBus Europe", 2, 25.0);
-		int transCount = 0;
+		
 
 		transports[transCount++] = f1;
 		transports[transCount++] = f2;
@@ -315,8 +316,7 @@ public class Driver {
 
 					}
 
-					clients[clientCount - 1] = null;
-					clientCount--;
+					clients[--clientCount] = null;
 					System.out.println("Client deleted successfully.");
 
 				}
@@ -344,30 +344,31 @@ public class Driver {
 	public static void tripManagement() {
 		boolean menuReturn = false;
 		while (!menuReturn) {
-			System.out.println("--Client Management--");
-			System.out.println("	1. Create a trip");
-			System.out.println("	2. Edit a trip's information");
-			System.out.println("	3. Cancel a trip");
-			System.out.println("	4. List all trips");
-			System.out.println("	5. List all trips of a specific client");
-			System.out.println("	0. Go back to main menu");
+			System.out.println("--Trip Management--");
+			System.out.println("1. Create a trip");
+			System.out.println("2. Edit a trip's information");
+			System.out.println("3. Cancel a trip");
+			System.out.println("4. List all trips");
+			System.out.println("5. List all trips of a specific client");
+			System.out.println("0. Go back to main menu");
 			System.out.print("Your choice: ");
 
 			int tripChoice = input.nextInt();
+			input.nextLine();
 
 			switch (tripChoice) {
 			case 1:
-				
-				if(tripCount>=trips.length) {
+
+				if (tripCount >= trips.length) {
 					System.out.println("There's no space left to add a trip.");
 					break;
 				}
-				
+
 				if (clientCount == 0) {
-			        System.out.println("No clients available. Create a client first.");
-			        break;
-			    }
-				
+					System.out.println("No clients available. Create a client first.");
+					break;
+				}
+
 				System.out.print("Destination: ");
 				String destin = input.nextLine();
 
@@ -381,7 +382,7 @@ public class Driver {
 
 				System.out.print("Client's ID: ");
 				String clientId = input.nextLine();
-				
+
 				Client clientFound = null;
 
 				for (int i = 0; i < clientCount; i++) {
@@ -390,47 +391,113 @@ public class Driver {
 						break;
 					}
 				}
-				if(clientFound ==null) {
+				if (clientFound == null) {
 					System.out.println("Client no found.");
 					break;
 				}
-				
-				Trip newTrip = new Trip(destin,dur,price,clientFound);
+
+				Trip newTrip = new Trip(destin, dur, price, clientFound);
 				trips[tripCount++] = newTrip;
 				System.out.println("Trip added successfully: ");
-				 System.out.println(newTrip);
+				System.out.println(newTrip);
 				break;
 
 			case 2:
-				if(tripCount==0) {
+				if (tripCount == 0) {
 					System.out.println("There are no trips to edit");
 					break;
 				}
-				
-				
+
 				System.out.println("Enter the trip ID to edit: ");
 				String tripId = input.nextLine();
-				
+
 				int index = -1;
-				
-				for(int i = 0; i<tripCount;i++) {
-					if(trips[i].getTripId().equalsIgnoreCase(tripId)) {
+
+				for (int i = 0; i < tripCount; i++) {
+					if (trips[i].getTripId().equalsIgnoreCase(tripId)) {
 						index = i;
+						break;
 					}
 				}
-				
-				if(index == -1) {
+
+				if (index == -1) {
 					System.out.println("Trip not found");
+					break;
+				} else {
+					System.out.print("New destination: ");
+					trips[index].setDestination(input.nextLine());
+
+					System.out.print("New duration: ");
+					trips[index].setDurationInDays(input.nextInt());
+					input.nextLine();
+
+					System.out.print("New price: ");
+					trips[index].setBasePrice(input.nextDouble());
+					input.nextLine();
+
+					System.out.println("Trip editted successfully:");
+					System.out.println(trips[index]);
+
 				}
-				
-				
+
 				break;
 
 			case 3:
+				if (tripCount == 0) {
+					System.out.println("There are no trips to delete.");
+					break;
+				}
+				System.out.print("Enter the trip ID to delete: ");
+				String tripDelete = input.nextLine().trim();
+				int indexTripDelete = -1;
+
+				for (int i = 0; i < tripCount; i++) {
+					if (trips[i].getTripId().equalsIgnoreCase(tripDelete)) {
+						indexTripDelete = i;
+						break;
+					}
+				}
+				if (indexTripDelete == -1) {
+					System.out.println("Trip not found");
+				} else {
+					for (int i = indexTripDelete; i < tripCount - 1; i++) {
+						trips[i] = trips[i + 1];
+					}
+
+					trips[--tripCount] = null;
+					System.out.println("Trip deleted Successfully.");
+				}
+
 				break;
 			case 4:
+				if (tripCount == 0) {
+					System.out.println("There are no trips available.");
+					break;
+				}
+				for (int i = 0; i < tripCount; i++) {
+					System.out.println(trips[i]);
+					System.out.println();
+				}
+
 				break;
+
 			case 5:
+
+				System.out.print("Enter the client's ID: ");
+				String searchId = input.nextLine().trim();
+				boolean found = false;
+				for (int i = 0; i < tripCount; i++) {
+					if (trips[i].getTravelingClient().getClientId().equalsIgnoreCase(searchId)) {
+						System.out.println(trips[i]);
+						System.out.println();
+						 found = true;
+					}
+				} 
+				if(found==false) {
+					System.out.println("No trips found for that client.");
+					break;
+				}
+
 				break;
 
 			case 0:
@@ -443,7 +510,57 @@ public class Driver {
 	}
 
 	public static void transportManagement() {
-
+		boolean menuReturn = false;
+		while (!menuReturn) {
+			System.out.println("--Transportation Management--");
+			System.out.println("1. Add a transportation option");
+			System.out.println("2. Remove a transportation option");
+			System.out.println("3. List all transportation options by type");
+			System.out.println("0. Go back to main menu");
+			System.out.print("Your choice: ");
+			
+			int tMenuChoice = input.nextInt();
+			input.nextLine();
+			
+			switch (tMenuChoice) {
+			case 1:
+				System.out.println();
+				System.out.print("1. Flight");
+				System.out.print("2. Train");
+				System.out.print("3. Bus");
+				System.out.print("Your choice: ");
+				int type = input.nextInt();
+				input.nextLine();
+				
+				System.out.print("Company name: ");
+				System.out.print("Departure city: ");
+				System.out.print("Arrival city: ");
+				System.out.print("Airline name: ");
+				System.out.print("Luggage allowance (in kg): ");
+				System.out.print("Price: ");
+				
+				break;
+				
+			case 2:
+				break;
+				
+			case 3:
+				break;
+				
+			case 0 :
+				menuReturn = true;
+				break;
+				
+			default:
+				System.out.println("Invalid option.");
+			}
+			
+			
+			
+			
+		}
+		
+		
 	}
 
 	public static void accomManagement() {
@@ -476,4 +593,5 @@ public class Driver {
 		}
 		return copy;
 	}
+
 }
