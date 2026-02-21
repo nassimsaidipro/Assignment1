@@ -90,7 +90,6 @@ public class Driver {
 		Hotel h2 = new Hotel("The Z hotel", "London", 150.0, 3);
 		Hostel hos1 = new Hostel("Royal Oasis", "Haiti", 35.0, 8);
 		Hostel hos2 = new Hostel("HI Toronto", "Toronto", 30.0, 6);
-		
 
 		accommodations[accomCount++] = h1;
 		accommodations[accomCount++] = h2;
@@ -689,15 +688,90 @@ public class Driver {
 
 			switch (acMenuChoice) {
 			case 1:
-				
-				if(accomCount>=accommodations.length) {
+
+				if (accomCount >= accommodations.length) {
 					System.out.println("Storage is full.");
+					break;
 				}
+
+				Accommodation acc = null;
+				System.out.println();
+				System.out.println("Choose the type of accommodation to add: ");
+				System.out.println("1. Hotel");
+				System.out.println("2. Hostel");
+				System.out.print("Your choice: ");
+				int type = input.nextInt();
+				input.nextLine();
+
+				System.out.print("Name of the place: ");
+				String hName = input.nextLine();
+
+				System.out.print("Location: ");
+				String city = input.nextLine();
+
+				System.out.print("Price per night: ");
+				double pNight = input.nextDouble();
+				input.nextLine();
+
+				if (type == 1) {
+					System.out.println();
+					System.out.print("How many stars: ");
+					int stars = input.nextInt();
+					input.nextLine();
+
+					acc = new Hotel(hName, city, pNight, stars);
+				}
+
+				else if (type == 2) {
+					System.out.println();
+					System.out.print("How many shared beds per room: ");
+					int beds = input.nextInt();
+					input.nextLine();
+
+					acc = new Hostel(hName, city, pNight, beds);
+				} else {
+					System.out.println("invalid option.");
+					break;
+				}
+				accommodations[accomCount++] = acc;
+				System.out.println("Accommodation added.");
+
 				break;
 
 			case 2:
+				if (accomCount == 0) {
+					System.out.println("No accommodations available.");
+					break;
+				}
+				System.out.print("Enter accommodation ID to delete: ");
+				String accDelId = input.nextLine();
+				;
+
+				int index = -1;
+
+				for (int i = 0; i < accomCount; i++) {
+					if (accommodations[i].getAccommodationId().equalsIgnoreCase(accDelId)) {
+						index = i;
+						break;
+					}
+				}
+				if (index == -1) {
+					System.out.println("Not found.");
+					break;
+				} else {
+					for (int i = index; i < accomCount - 1; i++) {
+						accommodations[i] = accommodations[i + 1];
+					}
+					accommodations[--accomCount] = null;
+					System.out.println("Deletion complete.");
+				}
+
+				
 				break;
+				
 			case 3:
+				
+				
 				break;
 
 			case 0:
