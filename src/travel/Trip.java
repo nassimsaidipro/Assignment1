@@ -52,8 +52,18 @@ public class Trip {
 	    } else {
 	        this.travelingClient = new Client(); 
 	    }
-		// A completer tcheck clone() method
-
+		
+		if (other.transportation != null) {
+	        this.transportation = other.transportation.copy();
+	    } else {
+	        this.transportation = null;
+	    }
+	    	   
+	    if (other.accomodation != null) {
+	        this.accomodation = other.accomodation.copy();
+	    } else {
+	        this.accomodation = null;
+	    }
 		tripId = "T" + numId;
 		numId++;
 	}
