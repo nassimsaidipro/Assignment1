@@ -76,7 +76,6 @@ public class Driver {
 		Train train2 = new Train("Amtrak", "Boston", "Washington", "regional", "Economy", 80.0);
 		Bus bus1 = new Bus("Greyhound", "Montreal", "Quebec City", "Greyhound Canada", 3, 40.0);
 		Bus bus2 = new Bus("FlixBus", "Paris", "Lyon", "FlixBus Europe", 2, 25.0);
-		
 
 		transports[transCount++] = f1;
 		transports[transCount++] = f2;
@@ -490,10 +489,10 @@ public class Driver {
 					if (trips[i].getTravelingClient().getClientId().equalsIgnoreCase(searchId)) {
 						System.out.println(trips[i]);
 						System.out.println();
-						 found = true;
+						found = true;
 					}
-				} 
-				if(found==false) {
+				}
+				if (found == false) {
 					System.out.println("No trips found for that client.");
 					break;
 				}
@@ -515,55 +514,178 @@ public class Driver {
 			System.out.println("--Transportation Management--");
 			System.out.println("1. Add a transportation option");
 			System.out.println("2. Remove a transportation option");
-			System.out.println("3. List all transportation options by type");
+			System.out.println("3. List all transportation options by type (Bus, flight or train)");
 			System.out.println("0. Go back to main menu");
 			System.out.print("Your choice: ");
-			
+
 			int tMenuChoice = input.nextInt();
 			input.nextLine();
-			
+
 			switch (tMenuChoice) {
 			case 1:
+
+				if (transCount >= transports.length) {
+					System.out.println("Storage full.");
+					break;
+				}
 				System.out.println();
-				System.out.print("1. Flight");
-				System.out.print("2. Train");
-				System.out.print("3. Bus");
-				System.out.print("Your choice: ");
+				System.out.println("1. Flight");
+				System.out.println("2. Train");
+				System.out.println("3. Bus");
+				System.out.println("Your choice: ");
 				int type = input.nextInt();
 				input.nextLine();
-				
 				System.out.print("Company name: ");
+				String comp = input.nextLine();
+
 				System.out.print("Departure city: ");
+				String dep = input.nextLine();
+
 				System.out.print("Arrival city: ");
-				System.out.print("Airline name: ");
-				System.out.print("Luggage allowance (in kg): ");
-				System.out.print("Price: ");
-				
+				String arrival = input.nextLine();
+				Transportation transpo = null;
+
+				if (type == 1) {
+
+					System.out.print("Airline name: ");
+					String airline = input.nextLine();
+
+					System.out.print("Luggage allowance (in kg): ");
+					double lugg = input.nextDouble();
+					input.nextLine();
+
+					System.out.print("Price: ");
+					double price = input.nextDouble();
+					input.nextLine();
+
+					transpo = new Flight(comp, dep, arrival, airline, lugg, price);
+
+				} else if (type == 2) {
+
+					System.out.print("Train type: ");
+					String tt = input.nextLine();
+
+					System.out.print("Seat class: ");
+					String sClass = input.nextLine();
+
+					System.out.print("Train fare: ");
+					double tFare = input.nextDouble();
+					input.nextLine();
+					transpo = new Train(comp, dep, arrival, tt, sClass, tFare);
+
+				} else if (type == 3) {
+					System.out.print("Bus company: ");
+					String bc = input.nextLine();
+
+					System.out.print("Number of stops: ");
+					int stops = input.nextInt();
+					input.nextLine();
+
+					System.out.print("Bus fare: ");
+					double bFare = input.nextDouble();
+					input.nextLine();
+
+					transpo = new Bus(comp, dep, arrival, bc, stops, bFare);
+				} else {
+					System.out.println("Invalid option");
+					break;
+				}
+
+				transports[transCount++] = transpo;
+				System.out.println("Transportation option successfully added.");
+				System.out.println();
+
 				break;
-				
+
 			case 2:
+				if (transCount == 0) {
+					System.out.println("No transportations. add one first.");
+					break;
+				}
+				System.out.print("Enter the transportation ID to remove: ");
+				String trId = input.nextLine();
+				int index = -1;
+				for (int i = 0; i < transCount; i++) {
+					if (transports[i].getTransportId().equalsIgnoreCase(trId)) {
+						index = i;
+						break;
+
+					}
+				}
+
+				if (index == -1) {
+					System.out.println("Not found.\n");
+					break;
+				} else {
+					for (int i = index; i < transCount; i++) {
+						transports[i] = transports[i + 1];
+
+					}
+
+					transports[--transCount] = null;
+					System.out.println("Deletion complete.");
+				}
+
 				break;
-				
+
 			case 3:
+
+				if (transCount == 0) {
+					System.out.println("No transportation options available.");
+					break;
+				}
+				System.out.println("\n1. Flight");
+				System.out.println("2. Train");
+				System.out.println("3. Bus");
+				System.out.print("Your choice: ");
+
+				int typeChoice = input.nextInt();
+				boolean found = false;
+				for (int i = 0; i < transCount; i++) {
+
+					if (typeChoice == 1 && transports[i] instanceof Flight) {
+						System.out.println(transports[i]);
+						found = true;
+					} else if (typeChoice == 2 && transports[i] instanceof Train) {
+						System.out.println(transports[i]);
+						found = true;
+					}
+
+					else if (typeChoice == 3 && transports[i] instanceof Bus) {
+						System.out.println(transports[i]);
+						found = true;
+					}
+				}
+				if (!found) {
+					System.out.println("None found.");
+				}
 				break;
-				
-			case 0 :
+
+			case 0:
 				menuReturn = true;
 				break;
-				
+
 			default:
 				System.out.println("Invalid option.");
 			}
-			
-			
-			
-			
+
 		}
-		
-		
+
 	}
 
 	public static void accomManagement() {
+		boolean menuReturn = false;
+		while (!menuReturn) {
+			System.out.println("--Accommodation Management--");
+			System.out.println("1. Add an accommodation");
+			System.out.println("2. Remove an accommodation");
+			System.out.println("3. List all accommodations by type (Hotel or hostel)");
+			System.out.println("0. Go back to main menu");
+			System.out.print("Your choice: ");
+			
+			int acMenuChoice = input.nextInt();
+			input.nextLine();
+		}
 
 	}
 // ------------------------------------------------------------------------------------------------------------------------------------
