@@ -22,6 +22,7 @@ public class Driver {
 	static int clientCount = 0;
 	static int tripCount = 0;
 	static int transCount = 0;
+	static int accomCount = 0;
 
 	public static void main(String[] args) {
 
@@ -89,7 +90,7 @@ public class Driver {
 		Hotel h2 = new Hotel("The Z hotel", "London", 150.0, 3);
 		Hostel hos1 = new Hostel("Royal Oasis", "Haiti", 35.0, 8);
 		Hostel hos2 = new Hostel("HI Toronto", "Toronto", 30.0, 6);
-		int accomCount = 0;
+		
 
 		accommodations[accomCount++] = h1;
 		accommodations[accomCount++] = h2;
@@ -682,9 +683,29 @@ public class Driver {
 			System.out.println("3. List all accommodations by type (Hotel or hostel)");
 			System.out.println("0. Go back to main menu");
 			System.out.print("Your choice: ");
-			
+
 			int acMenuChoice = input.nextInt();
 			input.nextLine();
+
+			switch (acMenuChoice) {
+			case 1:
+				
+				if(accomCount>=accommodations.length) {
+					System.out.println("Storage is full.");
+				}
+				break;
+
+			case 2:
+				break;
+			case 3:
+				break;
+
+			case 0:
+				menuReturn = true;
+				break;
+			default:
+				System.out.println("Invalid option.");
+			}
 		}
 
 	}
