@@ -56,6 +56,11 @@ public class Bus extends Transportation {
 	public double calculateCost() {		
 		return busFare;
 	}
+	
+	@Override
+	public Transportation copy() {
+	    return new Bus(this);
+	}
 
 	public String getBusCompany() {
 		return busCompany;

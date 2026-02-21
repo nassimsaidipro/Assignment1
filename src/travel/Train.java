@@ -56,6 +56,11 @@ public class Train extends Transportation {
 	public double calculateCost() {		
 		return trainFare;
 	}
+	
+	@Override
+	public Transportation copy() {
+	    return new Train(this);
+	}
 
 	public String getTrainType() {
 		return trainType;
