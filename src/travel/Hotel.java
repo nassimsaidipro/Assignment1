@@ -49,6 +49,11 @@ public class Hotel extends Accommodation {
 	           "Star Rating: " + starRating;
 	}
 	
+	@Override
+	public Accommodation copy() {
+	    return new Hotel(this);
+	}
+	
 	public int getStarRating() {
 	    return starRating;
 	}

@@ -52,8 +52,18 @@ public class Trip {
 	    } else {
 	        this.travelingClient = new Client(); 
 	    }
-		// A completer tcheck clone() method
-
+		
+		if (other.transportation != null) {
+	        this.transportation = other.transportation.copy();
+	    } else {
+	        this.transportation = null;
+	    }
+	    	   
+	    if (other.accomodation != null) {
+	        this.accomodation = other.accomodation.copy();
+	    } else {
+	        this.accomodation = null;
+	    }
 		tripId = "T" + numId;
 		numId++;
 	}
@@ -78,10 +88,7 @@ public class Trip {
 	public double getBasePrice() {
 		return basePrice;
 	}
-	public Client getTravelingClient() {
-		return travelingClient;
-	}
-
+	
 	public void setDestination(String destination) {
 		this.destination = destination;
 	}
@@ -94,12 +101,49 @@ public class Trip {
 		this.basePrice = basePrice;
 	}	    
 	
+	public Transportation getTransportation() {
+	    if (this.transportation == null) {
+	        return null;
+	    }
+	    return this.transportation.copy();
+	}
+
 	public void setTransportation(Transportation transportation) {
-	    this.transportation = transportation;
+	    if (transportation == null) {
+	        this.transportation = null;
+	    } else {
+	        this.transportation = transportation.copy();
+	    }
+	}
+
+	public Accommodation getAccommodation() {
+	    if (this.accomodation == null) {
+	        return null;
+	    }
+	    return this.accomodation.copy();
 	}
 
 	public void setAccommodation(Accommodation accommodation) {
-	    this.accomodation = accommodation;
+	    if (accommodation == null) {
+	        this.accomodation = null;
+	    } else {
+	        this.accomodation = accommodation.copy();
+	    }
+	}
+
+	public Client getTravelingClient() {
+	    if (this.travelingClient == null) {
+	        return null;
+	    }
+	    return new Client(this.travelingClient);
+	}
+
+	public void setTravelingClient(Client travelingClient) {
+	    if (travelingClient == null) {
+	        this.travelingClient = null;
+	    } else {
+	        this.travelingClient = new Client(travelingClient);
+	    }
 	}
 	
 
