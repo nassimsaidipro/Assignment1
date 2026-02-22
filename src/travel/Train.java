@@ -1,6 +1,14 @@
+// -----------------------------------------------------------------------
+// Assignment 1
+// Written by: Darwinsh Saint-Jean(40341644) and Nassim Saidi(40345885)
+// -----------------------------------------------------------------------
+
 package travel;
 
-// Concrete subclass of Transportation representing a train travel option
+//This class represents a train as a specific type of transportation in the travel system.
+//It extends Transportation and adds train-specific details such as the train type,
+//seat class, and the flat fare for the trip.
+//The cost of a train trip is simply the fixed train fare with no additional calculations.
 public class Train extends Transportation {
 
 	private String trainType;
@@ -32,6 +40,23 @@ public class Train extends Transportation {
 		this.trainType = other.trainType;
 		this.seatClass = other.seatClass;
 		this.trainFare = other.trainFare;
+	}
+
+	// Private constructor used EXCLUSIVELY by the copy() method.
+	// Passes the exact ID and shared fields up to the parent's protected constructor,
+	// and assigns the Train-specific variables, without triggering a numId increment.
+	private Train(String transportId, String companyName, String departureCity, String arrivalCity, String trainType, String seatClass) {
+		super(transportId, companyName, departureCity, arrivalCity);
+		this.trainType = trainType;
+		this.seatClass = seatClass;
+	}
+
+	// Returns a deep copy of this Train object.
+	// It relies on the private backdoor constructor to ensure the exact ID is retained
+	// without accidentally inflating the static numId sequence.
+	@Override
+	public Transportation copy() {
+		return new Train(this.getTransportId(), this.companyName, this.departureCity, this.arrivalCity, this.trainType, this.seatClass);
 	}
 
 	// Checks equality based on company name, departure/arrival cities,
@@ -66,12 +91,6 @@ public class Train extends Transportation {
 	@Override
 	public double calculateCost() {
 		return trainFare;
-	}
-
-	// Returns a deep copy of this Train object using the copy constructor
-	@Override
-	public Transportation copy() {
-	    return new Train(this);
 	}
 
 	// --- Getters and Setters ---

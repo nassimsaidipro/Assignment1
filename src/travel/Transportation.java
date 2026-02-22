@@ -1,7 +1,16 @@
+// -----------------------------------------------------------------------
+// Assignment 1
+// Written by: Darwinsh Saint-Jean(40341644) and Nassim Saidi(40345885)
+// -----------------------------------------------------------------------
+
 package travel;
 
-// Abstract base class representing a general transportation option
-// Subclasses must implement calculateCost() and copy()
+//This class serves as the abstract blueprint for all transportation types in the travel system.
+//It stores common attributes shared by all transportation options such as company name,
+//departure city, and arrival city.
+//It auto-generates a unique ID for each transportation instance using a static counter.
+//Subclasses (e.g. Bus, Flight, Train) must implement calculateCost() and copy() to define
+//their own pricing logic and duplication behavior.
 public abstract class Transportation {
 
 	// Static counter to generate unique IDs starting from 3001
@@ -39,6 +48,16 @@ public abstract class Transportation {
 		this.arrivalCity = other.arrivalCity;
 		transportId = "TR" + numId;
 		numId++;
+	}
+
+	// Protected constructor used EXCLUSIVELY by child classes during their copy() operations.
+	// It manually assigns the exact transportId and shared fields.
+	// This deliberately bypasses the static counter so numId does not falsely increment.
+	protected Transportation(String transportId, String companyName, String departureCity, String arrivalCity) {
+		this.transportId = transportId;
+		this.companyName = companyName;
+		this.departureCity = departureCity;
+		this.arrivalCity = arrivalCity;
 	}
 
 	// Abstract method - subclasses must define how to calculate the total transportation cost

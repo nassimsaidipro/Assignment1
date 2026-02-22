@@ -5,7 +5,10 @@
 
 package travel;
 
-// Concrete subclass of Accommodation representing a hotel stay
+//This class represents a hotel as a specific type of accommodation in the travel system.
+//It extends Accommodation and adds a hotel-specific attribute: the star rating.
+//The cost calculation applies a multiplier based on the star rating, meaning
+//higher-rated hotels cost more per night, reflecting their premium service level.
 public class Hotel extends Accommodation {
 
 	private int starRating;

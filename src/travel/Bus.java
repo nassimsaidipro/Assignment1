@@ -1,6 +1,14 @@
+// -----------------------------------------------------------------------
+// Assignment 1
+// Written by: Darwinsh Saint-Jean(40341644) and Nassim Saidi(40345885)
+// -----------------------------------------------------------------------
+
 package travel;
 
-// Concrete subclass of Transportation representing a bus travel option
+//This class represents a bus as a specific type of transportation in the travel system.
+//It extends Transportation and adds bus-specific details such as the bus company name,
+//number of stops along the route, and the flat fare for the trip.
+//The cost of a bus trip is simply the fixed bus fare with no additional calculations.
 public class Bus extends Transportation {
 
 	private String busCompany;
@@ -32,6 +40,23 @@ public class Bus extends Transportation {
 		this.busCompany = other.busCompany;
 		this.numberOfStops = other.numberOfStops;
 		this.busFare = other.busFare;
+	}
+
+	// Private constructor used EXCLUSIVELY by the copy() method.
+	// Passes the exact ID and shared fields up to the parent's protected constructor,
+	// and assigns the Bus-specific variables, without triggering a numId increment.
+	private Bus(String transportId, String companyName, String departureCity, String arrivalCity, String busCompany, int numberOfStops) {
+		super(transportId, companyName, departureCity, arrivalCity);
+		this.busCompany = busCompany;
+		this.numberOfStops = numberOfStops;
+	}
+
+	// Returns a deep copy of this Bus object.
+	// It relies on the private backdoor constructor to ensure the exact ID is retained
+	// without accidentally inflating the static numId sequence.
+	@Override
+	public Transportation copy() {
+		return new Bus(this.getTransportId(), this.companyName, this.departureCity, this.arrivalCity, this.busCompany, this.numberOfStops);
 	}
 
 	// Checks equality based on company name, departure/arrival cities,
@@ -66,12 +91,6 @@ public class Bus extends Transportation {
 	@Override
 	public double calculateCost() {
 		return busFare;
-	}
-
-	// Returns a deep copy of this Bus object using the copy constructor
-	@Override
-	public Transportation copy() {
-	    return new Bus(this);
 	}
 
 	// --- Getters and Setters ---

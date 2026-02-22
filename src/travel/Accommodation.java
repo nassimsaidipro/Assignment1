@@ -5,8 +5,11 @@
 
 package travel;
 
-// Abstract base class representing a general accommodation
-// Subclasses must implement calculateCost() and copy()
+//This class serves as the abstract blueprint for all accommodation types in the travel system.
+//It stores common attributes shared by all accommodations such as name, location, and price per night.
+//It auto-generates a unique ID for each accommodation created using a static counter.
+//Subclasses (e.g. Hotel, Hostel) must implement calculateCost() and copy() to define
+//their own pricing logic and duplication behavior.
 public abstract class Accommodation {
 
 	// Static counter to generate unique IDs starting from 4001
@@ -43,34 +46,44 @@ public abstract class Accommodation {
 		numId++;
 	}
 
+	// Protected constructor used EXCLUSIVELY by child classes during their copy() operations.
+	// It manually assigns the exact accommodationId and shared fields.
+	// This deliberately bypasses the static counter so numId does not falsely increment.
+	protected Accommodation(String accommodationId, String name, String location, double pricePerNight) {
+		this.accommodationId = accommodationId;
+		this.name = name;
+		this.location = location;
+		this.pricePerNight = pricePerNight;
+	}
+
 	// Abstract method - subclasses must define how to calculate the total cost for a given number of days
 	public abstract double calculateCost(int numberOfDays);
 
 	// Checks equality based on name, location, and price per night (excludes ID)
 	@Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null || getClass() != obj.getClass())
-            return false;
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null || getClass() != obj.getClass())
+			return false;
 
-        Accommodation other = (Accommodation) obj;
-        return name.equals(other.name) &&
-                location.equals(other.location) &&
-                pricePerNight == other.pricePerNight;
-    }
+		Accommodation other = (Accommodation) obj;
+		return name.equals(other.name) &&
+				location.equals(other.location) &&
+				pricePerNight == other.pricePerNight;
+	}
 
-    // Returns a formatted string representation of the accommodation's details
-    @Override
-    public String toString() {
-        return "Accommodation ID: " + accommodationId + "\n" +
-                "Name: " + name + "\n" +
-                "Location: " + location + "\n" +
-                "Price Per Night: $" + pricePerNight;
-    }
+	// Returns a formatted string representation of the accommodation's details
+	@Override
+	public String toString() {
+		return "Accommodation ID: " + accommodationId + "\n" +
+				"Name: " + name + "\n" +
+				"Location: " + location + "\n" +
+				"Price Per Night: $" + pricePerNight;
+	}
 
-    // Abstract method - subclasses must define how to return a deep copy of themselves
-    public abstract Accommodation copy();
+	// Abstract method - subclasses must define how to return a deep copy of themselves
+	public abstract Accommodation copy();
 
 	// --- Getters and Setters ---
 
