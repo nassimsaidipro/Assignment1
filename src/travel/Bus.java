@@ -84,7 +84,8 @@ public class Bus extends Transportation {
 				"Departure: " + departureCity + "\n" +
 				"Arrival: " + arrivalCity + "\n" +
 				"Bus Company: " + busCompany + "\n" +
-				"Number of Stops: " + numberOfStops;
+				"Number of Stops: " + numberOfStops + "\n" +
+				"Bus Fare: " + busFare;
 	}
 
 	// Returns the total cost of the bus trip, which is simply the flat bus fare

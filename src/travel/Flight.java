@@ -84,7 +84,8 @@ public class Flight extends Transportation {
 				"Departure: " + departureCity + "\n" +
 				"Arrival: " + arrivalCity + "\n" +
 				"Airline: " + airlineName + "\n" +
-				"Luggage Allowance: " + luggageAllowance + " kg";
+				"Luggage Allowance: " + luggageAllowance + " kg" + "\n" +
+				"Flight price: " + flightPrice;
 	}
 
 	// Returns the total cost of the flight, which is simply the flat flight price

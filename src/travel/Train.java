@@ -84,7 +84,8 @@ public class Train extends Transportation {
 				"Departure: " + departureCity + "\n" +
 				"Arrival: " + arrivalCity + "\n" +
 				"Train Type: " + trainType + "\n" +
-				"Seat Class: " + seatClass;
+				"Seat Class: " + seatClass + "\n" +
+				"Train Fare: " + trainFare;
 	}
 
 	// Returns the total cost of the train trip, which is simply the flat train fare
