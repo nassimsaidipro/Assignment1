@@ -50,4 +50,10 @@ public class Hostel extends Accommodation {
 				"Shared Beds Per Room: " + sharedBedsPerRoom;
 	}
 
+	@Override
+	public Accommodation copy() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

@@ -73,5 +73,11 @@ public class Flight extends Transportation {
         this.luggageAllowance = luggageAllowance;
     }
 
+	@Override
+	public Transportation copy() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 
 }

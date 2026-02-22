@@ -3,6 +3,23 @@
 // Question: 
 // Written by: Darwinsh Saint-Jean (40341644)
 // -----------------------------------------------------------------------
+
+// -----------------------------------------------------------------------
+// This SmartTravel program is a travel agency management system,
+// allowing employees to manage clients, trips, transportation options, and accommodations.
+// The program provides two modes:
+// 1. A predefined testing scenario that demonstrates the functionality:
+//    - Object creation and display using toString()
+//    - The equals() method tested across different cases
+//    - Polymorphic cost calculation for trips
+//    - A method to find the most expensive trip
+//    - Deep copy methods for transportation and accommodation arrays
+// 2. A menu interface that allows the user to add, edit, remove,
+//    and display information for all elements.
+//
+// The program uses inheritance and polymorphism for different types of
+// transportation (Flight, Train, Bus) and accommodations (Hotel, Hostel).
+// -----------------------------------------------------------------------
 package driver;
 
 import travel.*;
@@ -18,7 +35,11 @@ public class Driver {
 	static Trip[] trips = new Trip[100];
 	static Transportation[] transports = new Transportation[100];
 	static Accommodation[] accommodations = new Accommodation[100];
+
+	// Scanner to prompt user input
 	static Scanner input = new Scanner(System.in);
+
+	// Counters to track how many elements are in each array
 	static int clientCount = 0;
 	static int tripCount = 0;
 	static int transCount = 0;
@@ -26,32 +47,30 @@ public class Driver {
 
 	public static void main(String[] args) {
 
-		// Scanner to prompt user input
-
-		// Welcome message
+		// Displays a welcome message
 		System.out.println("=====================================");
 		System.out.println(" Welcome to SmartTravel System");
 		System.out.println(" Developed by: Darwinsh and Nassim!");
 		System.out.println("=====================================\n");
 
-		// Prompting the user for their choice between the menu or the scenario tests
+		// Prompts the user for the execution mode
 		System.out.println("Please, choose an option:");
 		System.out.println("1. Predefined testing scenario");
 		System.out.println("2. Menu interface");
 		System.out.print("Enter your choice: ");
 		int choice = input.nextInt();
 
+		// The scenario or the menu runs, depending on the user's choice
 		if (choice == 1) {
 			predefinedScenario();
-
 		} else if (choice == 2) {
 			menuMode();
-
 		} else {
 			System.out.print("\nInvalid choice, the program will now close.");
 		}
 
-		System.out.println("\nThank you for using our SmartTravel system!");
+		// Display closing message
+		System.out.println("\nThank you for using our SmartTravel system! The program will now close.");
 
 	}
 
@@ -60,15 +79,18 @@ public class Driver {
 	public static void predefinedScenario() {
 		System.out.println("\nThe predefined testing scenario is now running.");
 
-		// Creating 3 clients
+		// Creating 3 clients to sample
 		Client c1 = new Client("Maygan", "Beauchamp", "mayg@gmail.com");
-		Client c1Clone = new Client("Maygan", "Beauchamp", "mayg@gmail.com");
+		
 		Client c2 = new Client("Venta", "Raji", "venta@gmail.com");
 		Client c3 = new Client("Veda", "Melky", "velky@gmail.com");
 
+		// Store the clients in the array
 		clients[clientCount++] = c1;
 		clients[clientCount++] = c2;
 		clients[clientCount++] = c3;
+		
+		Client c1Clone = new Client("Maygan", "Beauchamp", "mayg@gmail.com");
 
 		// creating 2 types of each transportation
 		Flight f1 = new Flight("AirCanada", "Montreal", "Paris", "Air Canada", 23.0, 650.0);
@@ -78,6 +100,7 @@ public class Driver {
 		Bus bus1 = new Bus("Greyhound", "Montreal", "Quebec City", "Greyhound Canada", 3, 40.0);
 		Bus bus2 = new Bus("FlixBus", "Paris", "Lyon", "FlixBus Europe", 2, 25.0);
 
+		// Store the transportation options in the array
 		transports[transCount++] = f1;
 		transports[transCount++] = f2;
 		transports[transCount++] = train1;
@@ -91,6 +114,7 @@ public class Driver {
 		Hostel hos1 = new Hostel("Royal Oasis", "Haiti", 35.0, 8);
 		Hostel hos2 = new Hostel("HI Toronto", "Toronto", 30.0, 6);
 
+		// Store the accommodations in the array
 		accommodations[accomCount++] = h1;
 		accommodations[accomCount++] = h2;
 		accommodations[accomCount++] = hos1;
@@ -107,29 +131,27 @@ public class Driver {
 		trip3.setTransportation(bus1);
 		trip3.setAccommodation(hos1);
 
+		// Store trips in the array
 		trips[tripCount++] = trip1;
 		trips[tripCount++] = trip2;
 		trips[tripCount++] = trip3;
 
-		// Displaying everything
+		// Displaying all created objects by using toString()
 		System.out.println("\nAll clients: ");
 		for (int i = 0; i < clientCount; i++) {
 			System.out.println(clients[i]);
 			System.out.println();
 		}
-
 		System.out.println("All transportation: ");
 		for (int i = 0; i < transCount; i++) {
 			System.out.println(transports[i]);
 			System.out.println();
 		}
-
 		System.out.println("All accommodations: ");
 		for (int i = 0; i < accomCount; i++) {
 			System.out.println(accommodations[i]);
 			System.out.println();
 		}
-
 		System.out.println("All trips: ");
 		for (int i = 0; i < tripCount; i++) {
 			System.out.println(trips[i]);
@@ -137,8 +159,11 @@ public class Driver {
 		}
 
 		// testing the equals() method in various ways
+		// Comparing objects of different classes
 		System.out.println("Comparing a client to a flight: " + c1.equals(f1));
+		// Comparing two clients with different attributes
 		System.out.println("Comparing a client to another client: " + c1.equals(c2));
+		// Comparing two clients with the same attributes
 		System.out.println("Comparing a client to oneself: " + c1.equals(c1Clone));
 
 		// Calculates and displays the cost of trips
@@ -153,9 +178,9 @@ public class Driver {
 		System.out.println();
 		showMostExpensiveTrip(trips, tripCount);
 
-		// Demonstration of the deep copy array
+		// Create copy of transportation array, modify an element, then display both arrays
 		System.out.println();
-		Transportation[] copy = copyTransportationArray(transports, transCount);
+		Transportation[] copy = copyTransportationArray(transports);
 		copy[0].setCompanyName("Modified name");
 		System.out.println("Modified copy[0] company name to 'modified name'.");
 
@@ -169,24 +194,33 @@ public class Driver {
 		for (int i = 0; i < transCount; i++)
 			System.out.println(copy[i]);
 		System.out.println();
+		
+		
+		
 
 	}
 //------------------------------------------------------------------------------------------------------------------------------------
 
-	// This is the menu
+	// Displays the menu until the user chooses to exit.
 	public static void menuMode() {
 		boolean running = true;
 
+		// Prompting the user for the management operation and additional operations.
 		while (running) {
 			System.out.println("\n==================== MAIN MENU ====================");
 			System.out.println("1. Client management");
 			System.out.println("2. Trip management");
 			System.out.println("3. Transportation management");
 			System.out.println("4. Accommodation management");
+			System.out.println("5. Show the most expensive trip");
+			System.out.println("6. Deep copy of the transportation array");
+			System.out.println("7. Deep copy of the accommodation array");
+			System.out.println("8. Total cost of a trip");
 			System.out.println("0. Exit");
 			System.out.println("===================================================");
 			System.out.print("Your choice: ");
 			int menuChoice = input.nextInt();
+			input.nextLine();
 
 			switch (menuChoice) {
 			case 1:
@@ -202,11 +236,80 @@ public class Driver {
 				accomManagement();
 				break;
 
+			// Find and display the most expensive trip
+			case 5:
+				if (tripCount == 0) {
+					System.out.println("There are no trips available");
+
+				} else {
+					showMostExpensiveTrip(trips, tripCount);
+				}
+
+				break;
+
+			// Create and display a deep copy of the transportation array
+			case 6:
+				if (transCount == 0) {
+					System.out.println("No transportation options available.");
+				} else {
+					Transportation[] copyT = copyTransportationArray(transports);
+					copyT[0].setCompanyName("Modified name");
+					System.out.println("Modified copy[0] company name to 'Modified name'.");
+					System.out.println("\nOriginal array:");
+					for (int i = 0; i < transCount; i++)
+						System.out.println(transports[i]);
+					System.out.println("\nCopied array:");
+					for (int i = 0; i < transCount; i++)
+						System.out.println(copyT[i]);
+				}
+				break;
+
+			// Create and display a deep copy of the accommodation array
+			case 7:
+				if (accomCount == 0) {
+					System.out.println("No accommodations available.");
+				} else {
+					Accommodation[] copyA = copyAccommodationArray(accommodations, accomCount);
+					copyA[0].setName("Modified name");
+					System.out.println("\nOriginal accommodation array:");
+					for (int i = 0; i < accomCount; i++)
+						System.out.println(accommodations[i]);
+					System.out.println("\nCopied accommodation array:");
+					for (int i = 0; i < accomCount; i++)
+						System.out.println(copyA[i]);
+				}
+				break;
+			case 8:
+				if (tripCount == 0) {
+					System.out.println("No trips available.");
+					break;
+				}
+				System.out.print("Enter the trip ID: ");
+				String costTripId = input.nextLine().trim();
+				boolean tripFound = false;
+				for (int i = 0; i < tripCount; i++) {
+					if (trips[i].getTripId().equalsIgnoreCase(costTripId)) {
+						System.out.println("Trip: " + trips[i].getTripId() + " to " + trips[i].getDestination()
+								+ " for " + trips[i].getDurationInDays() + " days");
+						System.out.println("Total cost: $" + trips[i].calculateTotalCost());
+						tripFound = true;
+						break;
+					}
+				}
+				if (!tripFound) {
+					System.out.println("Trip not found.");
+				}
+				break;
+			case 0:
+				running = false;
+				break;
+
 			}
 		}
 
 	}
 
+	// Handles all operations related to clients (add, edit, delete, list)
 	public static void clientManagement() {
 		boolean menuReturn = false;
 		while (!menuReturn) {
@@ -222,6 +325,7 @@ public class Driver {
 			input.nextLine();
 
 			switch (clientChoice) {
+			// Add a new client
 			case 1:
 				if (clientCount >= clients.length) {
 					System.out.println("the array is full :(");
@@ -235,6 +339,7 @@ public class Driver {
 				System.out.print("\nEnter the email address: ");
 				String email = input.nextLine().trim();
 
+				// Create a client and store in array
 				Client newClient = new Client(firstn, lastn, email);
 				clients[clientCount] = newClient;
 				clientCount++;
@@ -244,13 +349,15 @@ public class Driver {
 				System.out.println();
 
 				break;
+
+			// Edit an existing client by ID
 			case 2:
 				if (clientCount == 0) {
 					System.out.println("There are no clients to edit.");
 					System.out.println();
 					break;
 				}
-
+				// Search for client by ID
 				System.out.print("Enter client ID to edit: ");
 				String idEdit = input.nextLine();
 				int index = -1;
@@ -271,7 +378,7 @@ public class Driver {
 				else {
 					System.out.println("\nEditing client: ");
 					System.out.println(clients[index]);
-
+					System.out.println();
 					System.out.print("New first name: ");
 					String newFirst = input.nextLine();
 
@@ -287,22 +394,25 @@ public class Driver {
 
 					System.out.println("The client has been updated: ");
 					System.out.println(clients[index]);
+					System.out.println();
 
 				}
 
 				break;
 
+			// Delete a client by ID
 			case 3:
 				if (clientCount == 0) {
 					System.out.println("No clients available to delete.");
 					break;
 				}
-				input.nextLine();
+
+				// Search for client by ID
 				System.out.print("Enter client ID to delete: ");
 				String idDelete = input.nextLine().trim();
 				int deleteIndex = -1;
 				for (int i = 0; i < clientCount; i++) {
-					if (clients[i].getClientId().equals(idDelete)) {
+					if (clients[i].getClientId().equalsIgnoreCase(idDelete)) {
 						deleteIndex = i;
 						break;
 					}
@@ -321,6 +431,8 @@ public class Driver {
 				}
 
 				break;
+
+			// List all clients
 			case 4:
 				if (clientCount == 0) {
 					System.out.println("There are no clients to display");
@@ -340,6 +452,7 @@ public class Driver {
 		}
 	}
 
+	// Handles all operations related to trips (create, edit, cancel, list)
 	public static void tripManagement() {
 		boolean menuReturn = false;
 		while (!menuReturn) {
@@ -356,6 +469,8 @@ public class Driver {
 			input.nextLine();
 
 			switch (tripChoice) {
+
+			// Create a new trip and associate it with a client
 			case 1:
 
 				if (tripCount >= trips.length) {
@@ -367,7 +482,7 @@ public class Driver {
 					System.out.println("No clients available. Create a client first.");
 					break;
 				}
-
+				// Ask the user for trip details
 				System.out.print("Destination: ");
 				String destin = input.nextLine();
 
@@ -391,22 +506,25 @@ public class Driver {
 					}
 				}
 				if (clientFound == null) {
-					System.out.println("Client no found.");
+					System.out.println("Client not found.");
 					break;
 				}
 
+				// Create and store the trip
 				Trip newTrip = new Trip(destin, dur, price, clientFound);
 				trips[tripCount++] = newTrip;
 				System.out.println("Trip added successfully: ");
 				System.out.println(newTrip);
 				break;
 
+			// Edit an existing trip by ID
 			case 2:
 				if (tripCount == 0) {
 					System.out.println("There are no trips to edit");
 					break;
 				}
 
+				// Search for trip by ID
 				System.out.println("Enter the trip ID to edit: ");
 				String tripId = input.nextLine();
 
@@ -423,6 +541,7 @@ public class Driver {
 					System.out.println("Trip not found");
 					break;
 				} else {
+					// Update the trip with new values
 					System.out.print("New destination: ");
 					trips[index].setDestination(input.nextLine());
 
@@ -441,11 +560,14 @@ public class Driver {
 
 				break;
 
+			// Cancel a trip by ID
 			case 3:
 				if (tripCount == 0) {
 					System.out.println("There are no trips to delete.");
 					break;
 				}
+
+				// Search for trip by ID
 				System.out.print("Enter the trip ID to delete: ");
 				String tripDelete = input.nextLine().trim();
 				int indexTripDelete = -1;
@@ -459,6 +581,8 @@ public class Driver {
 				if (indexTripDelete == -1) {
 					System.out.println("Trip not found");
 				} else {
+
+					// Shift elements to the left and null out the last slot
 					for (int i = indexTripDelete; i < tripCount - 1; i++) {
 						trips[i] = trips[i + 1];
 					}
@@ -468,6 +592,8 @@ public class Driver {
 				}
 
 				break;
+
+			// List all trips
 			case 4:
 				if (tripCount == 0) {
 					System.out.println("There are no trips available.");
@@ -480,6 +606,7 @@ public class Driver {
 
 				break;
 
+			// List all the trips of a specific client
 			case 5:
 
 				System.out.print("Enter the client's ID: ");
@@ -508,6 +635,7 @@ public class Driver {
 		}
 	}
 
+	// Handles all operations related to transportations (add, remove, list)
 	public static void transportManagement() {
 		boolean menuReturn = false;
 		while (!menuReturn) {
@@ -522,19 +650,25 @@ public class Driver {
 			input.nextLine();
 
 			switch (tMenuChoice) {
+
+			// Add a new transportation option (Flight, Train, or Bus)
 			case 1:
 
 				if (transCount >= transports.length) {
 					System.out.println("Storage full.");
 					break;
 				}
+
+				// Ask user which type to add
 				System.out.println();
 				System.out.println("1. Flight");
 				System.out.println("2. Train");
 				System.out.println("3. Bus");
-				System.out.println("Your choice: ");
+				System.out.print("Your choice: ");
 				int type = input.nextInt();
 				input.nextLine();
+
+				// Collect the shared attributes
 				System.out.print("Company name: ");
 				String comp = input.nextLine();
 
@@ -545,6 +679,7 @@ public class Driver {
 				String arrival = input.nextLine();
 				Transportation transpo = null;
 
+				// Collect type-specific attributes and create the object
 				if (type == 1) {
 
 					System.out.print("Airline name: ");
@@ -591,12 +726,14 @@ public class Driver {
 					break;
 				}
 
+				// Store the new transportation option
 				transports[transCount++] = transpo;
 				System.out.println("Transportation option successfully added.");
 				System.out.println();
 
 				break;
 
+			// Remove a transportation option by ID
 			case 2:
 				if (transCount == 0) {
 					System.out.println("No transportations. add one first.");
@@ -616,8 +753,10 @@ public class Driver {
 				if (index == -1) {
 					System.out.println("Not found.\n");
 					break;
-				} else {
-					for (int i = index; i < transCount; i++) {
+				}
+				// Shift elements left and null out the last slot
+				else {
+					for (int i = index; i < transCount - 1; i++) {
 						transports[i] = transports[i + 1];
 
 					}
@@ -628,6 +767,7 @@ public class Driver {
 
 				break;
 
+			// List all transportation options by type
 			case 3:
 
 				if (transCount == 0) {
@@ -645,14 +785,17 @@ public class Driver {
 
 					if (typeChoice == 1 && transports[i] instanceof Flight) {
 						System.out.println(transports[i]);
+						System.out.println();
 						found = true;
 					} else if (typeChoice == 2 && transports[i] instanceof Train) {
 						System.out.println(transports[i]);
 						found = true;
+						System.out.println();
 					}
 
 					else if (typeChoice == 3 && transports[i] instanceof Bus) {
 						System.out.println(transports[i]);
+						System.out.println();
 						found = true;
 					}
 				}
@@ -673,6 +816,7 @@ public class Driver {
 
 	}
 
+	// Handles all operations related to accommodations (add, remove, list)
 	public static void accomManagement() {
 		boolean menuReturn = false;
 		while (!menuReturn) {
@@ -687,6 +831,8 @@ public class Driver {
 			input.nextLine();
 
 			switch (acMenuChoice) {
+
+			// Add a new accommodation (Hotel or Hostel)
 			case 1:
 
 				if (accomCount >= accommodations.length) {
@@ -694,6 +840,7 @@ public class Driver {
 					break;
 				}
 
+				// Ask user which type to add
 				Accommodation acc = null;
 				System.out.println();
 				System.out.println("Choose the type of accommodation to add: ");
@@ -703,6 +850,7 @@ public class Driver {
 				int type = input.nextInt();
 				input.nextLine();
 
+				// Collect shared attributes of the accommodation
 				System.out.print("Name of the place: ");
 				String hName = input.nextLine();
 
@@ -713,6 +861,7 @@ public class Driver {
 				double pNight = input.nextDouble();
 				input.nextLine();
 
+				// Collect type-specific attributes and create the object
 				if (type == 1) {
 					System.out.println();
 					System.out.print("How many stars: ");
@@ -733,16 +882,21 @@ public class Driver {
 					System.out.println("invalid option.");
 					break;
 				}
+
+				// Store the new accommodation
 				accommodations[accomCount++] = acc;
 				System.out.println("Accommodation added.");
 
 				break;
 
+			// Remove an accommodation by ID
 			case 2:
 				if (accomCount == 0) {
 					System.out.println("No accommodations available.");
 					break;
 				}
+
+				// Search for accommodation by ID
 				System.out.print("Enter accommodation ID to delete: ");
 				String accDelId = input.nextLine();
 				;
@@ -758,7 +912,9 @@ public class Driver {
 				if (index == -1) {
 					System.out.println("Not found.");
 					break;
-				} else {
+				}
+				// Shift elements left and null out the last slot
+				else {
 					for (int i = index; i < accomCount - 1; i++) {
 						accommodations[i] = accommodations[i + 1];
 					}
@@ -766,12 +922,37 @@ public class Driver {
 					System.out.println("Deletion complete.");
 				}
 
-				
 				break;
-				
+			// List all accommodations by type
 			case 3:
-				
-				
+				if (accomCount == 0) {
+					System.out.println("No accommodations available.");
+					break;
+				}
+				System.out.println("\n1. Hotel");
+				System.out.println("2. Hostel");
+				System.out.print("Your choice: ");
+
+				int typeChoice = input.nextInt();
+				input.nextLine();
+				boolean found = false;
+				for (int i = 0; i < accomCount; i++) {
+					if (typeChoice == 1 && accommodations[i] instanceof Hotel) {
+						System.out.println(accommodations[i]);
+						found = true;
+
+					} else if (typeChoice == 2 && accommodations[i] instanceof Hostel) {
+						System.out.println(accommodations[i]);
+						found = true;
+
+					}
+
+				}
+
+				if (!found) {
+					System.out.println("No accommodations of that type were found.");
+				}
+
 				break;
 
 			case 0:
@@ -792,20 +973,35 @@ public class Driver {
 			if (trips[i].calculateTotalCost() > mostExpensive.calculateTotalCost())
 				mostExpensive = trips[i];
 		}
-		System.out.println("The most expensive trip is: " + mostExpensive);
+		System.out.println("The most expensive trip is: \n" + mostExpensive);
 	}
 
-	// creates a copy of the transportation array
-	public static Transportation[] copyTransportationArray(Transportation[] original, int count) {
-		Transportation[] copy = new Transportation[count];
+	// creates a deep copy of the transportation array using copy constructors
+	// Changes to the copied array will not affect the original
+	public static Transportation[] copyTransportationArray(Transportation[] original) {
+		Transportation[] copy = new Transportation[transCount];
 
-		for (int i = 0; i < count; i++) {
+		for (int i = 0; i < transCount; i++) {
 			if (original[i] instanceof Flight) {
 				copy[i] = new Flight((Flight) original[i]);
 			} else if (original[i] instanceof Train) {
 				copy[i] = new Train((Train) original[i]);
 			} else if (original[i] instanceof Bus) {
 				copy[i] = new Bus((Bus) original[i]);
+			}
+		}
+		return copy;
+	}
+
+	// creates a deep copy of the accommodation array using copy constructors
+	// Changes to the copied array will not affect the original
+	public static Accommodation[] copyAccommodationArray(Accommodation[] original, int count) {
+		Accommodation[] copy = new Accommodation[count];
+		for (int i = 0; i < count; i++) {
+			if (original[i] instanceof Hotel) {
+				copy[i] = new Hotel((Hotel) original[i]);
+			} else if (original[i] instanceof Hostel) {
+				copy[i] = new Hostel((Hostel) original[i]);
 			}
 		}
 		return copy;

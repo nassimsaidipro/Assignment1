@@ -84,6 +84,8 @@ public abstract class Transportation {
 	public void setArrivalCity(String arrivalCity) {
 		this.arrivalCity = arrivalCity;
 	}
+
+	public abstract Transportation copy();
     
     
     
