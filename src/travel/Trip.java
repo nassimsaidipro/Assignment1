@@ -47,7 +47,7 @@ public class Trip {
 		this.basePrice = basePrice;
 
 		if (travelingClient != null) {
-			this.travelingClient = new Client(travelingClient);
+			this.travelingClient = travelingClient.copy();
 		} else {
 			this.travelingClient = new Client();
 		}

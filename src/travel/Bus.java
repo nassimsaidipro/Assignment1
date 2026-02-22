@@ -45,7 +45,7 @@ public class Bus extends Transportation {
 	// Private constructor used EXCLUSIVELY by the copy() method.
 	// Passes the exact ID and shared fields up to the parent's protected constructor,
 	// and assigns the Bus-specific variables, without triggering a numId increment.
-	private Bus(String transportId, String companyName, String departureCity, String arrivalCity, String busCompany, int numberOfStops) {
+	private Bus(String transportId, String companyName, String departureCity, String arrivalCity, String busCompany, int numberOfStops, double busFare) {
 		super(transportId, companyName, departureCity, arrivalCity);
 		this.busCompany = busCompany;
 		this.numberOfStops = numberOfStops;
@@ -56,7 +56,7 @@ public class Bus extends Transportation {
 	// without accidentally inflating the static numId sequence.
 	@Override
 	public Transportation copy() {
-		return new Bus(this.getTransportId(), this.companyName, this.departureCity, this.arrivalCity, this.busCompany, this.numberOfStops);
+		return new Bus(this.getTransportId(), this.companyName, this.departureCity, this.arrivalCity, this.busCompany, this.numberOfStops, this.busFare);
 	}
 
 	// Checks equality based on company name, departure/arrival cities,
