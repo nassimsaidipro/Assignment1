@@ -55,7 +55,7 @@ public class Hostel extends Accommodation {
 	@Override
 	public double calculateCost(int numberOfDays) {
 		//If more than 4 shared beds 25% off
-		double priceAdjustment = sharedBedsPerRoom > 4 ? 0.25 : 1;
+		double priceAdjustment = sharedBedsPerRoom > 4 ? 0.75 : 1;
 		return (numberOfDays*pricePerNight)*priceAdjustment;
 
 	}
