@@ -45,7 +45,7 @@ public class Flight extends Transportation {
 	// Private constructor used EXCLUSIVELY by the copy() method.
 	// Passes the exact ID and shared fields up to the parent's protected constructor,
 	// and assigns the Flight-specific variables, without triggering a numId increment.
-	private Flight(String transportId, String companyName, String departureCity, String arrivalCity, String airlineName, double luggageAllowance) {
+	private Flight(String transportId, String companyName, String departureCity, String arrivalCity, String airlineName, double luggageAllowance, double flightPrice) {
 		super(transportId, companyName, departureCity, arrivalCity);
 		this.airlineName = airlineName;
 		this.luggageAllowance = luggageAllowance;
@@ -56,7 +56,7 @@ public class Flight extends Transportation {
 	// without accidentally inflating the static numId sequence.
 	@Override
 	public Transportation copy() {
-		return new Flight(this.getTransportId(), this.companyName, this.departureCity, this.arrivalCity, this.airlineName, this.luggageAllowance);
+		return new Flight(this.getTransportId(), this.companyName, this.departureCity, this.arrivalCity, this.airlineName, this.luggageAllowance, this.flightPrice);
 	}
 
 	// Checks equality based on company name, departure/arrival cities,

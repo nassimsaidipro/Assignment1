@@ -45,7 +45,7 @@ public class Train extends Transportation {
 	// Private constructor used EXCLUSIVELY by the copy() method.
 	// Passes the exact ID and shared fields up to the parent's protected constructor,
 	// and assigns the Train-specific variables, without triggering a numId increment.
-	private Train(String transportId, String companyName, String departureCity, String arrivalCity, String trainType, String seatClass) {
+	private Train(String transportId, String companyName, String departureCity, String arrivalCity, String trainType, String seatClass, double trainFare) {
 		super(transportId, companyName, departureCity, arrivalCity);
 		this.trainType = trainType;
 		this.seatClass = seatClass;
@@ -56,7 +56,7 @@ public class Train extends Transportation {
 	// without accidentally inflating the static numId sequence.
 	@Override
 	public Transportation copy() {
-		return new Train(this.getTransportId(), this.companyName, this.departureCity, this.arrivalCity, this.trainType, this.seatClass);
+		return new Train(this.getTransportId(), this.companyName, this.departureCity, this.arrivalCity, this.trainType, this.seatClass, this.trainFare);
 	}
 
 	// Checks equality based on company name, departure/arrival cities,
