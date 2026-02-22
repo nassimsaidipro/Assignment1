@@ -49,6 +49,7 @@ public class Flight extends Transportation {
 		super(transportId, companyName, departureCity, arrivalCity);
 		this.airlineName = airlineName;
 		this.luggageAllowance = luggageAllowance;
+		this.flightPrice = flightPrice;
 	}
 
 	// Returns a deep copy of this Flight object.

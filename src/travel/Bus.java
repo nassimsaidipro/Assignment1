@@ -49,6 +49,7 @@ public class Bus extends Transportation {
 		super(transportId, companyName, departureCity, arrivalCity);
 		this.busCompany = busCompany;
 		this.numberOfStops = numberOfStops;
+		this.busFare = busFare;
 	}
 
 	// Returns a deep copy of this Bus object.

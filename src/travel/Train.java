@@ -49,6 +49,7 @@ public class Train extends Transportation {
 		super(transportId, companyName, departureCity, arrivalCity);
 		this.trainType = trainType;
 		this.seatClass = seatClass;
+		this.trainFare = trainFare;
 	}
 
 	// Returns a deep copy of this Train object.

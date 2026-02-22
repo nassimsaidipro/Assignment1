@@ -55,7 +55,7 @@ public class Hotel extends Accommodation {
 	@Override
 	public double calculateCost(int numberOfDays) {
 		//Higher the rating, higher the price
-		double additionalCost = ((double)(starRating/10)) + 1.0;
+		double additionalCost = (starRating/10.0) + 1.0;
 		return (numberOfDays*pricePerNight)*additionalCost;
 	}
 
