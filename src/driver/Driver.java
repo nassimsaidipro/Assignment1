@@ -80,7 +80,7 @@ public class Driver {
 
 		// Creating 3 clients to sample
 		Client c1 = new Client("Maygan", "Beauchamp", "mayg@gmail.com");
-		
+
 		Client c2 = new Client("Venta", "Raji", "venta@gmail.com");
 		Client c3 = new Client("Veda", "Melky", "velky@gmail.com");
 
@@ -88,7 +88,7 @@ public class Driver {
 		clients[clientCount++] = c1;
 		clients[clientCount++] = c2;
 		clients[clientCount++] = c3;
-		
+
 		Client c1Clone = new Client("Maygan", "Beauchamp", "mayg@gmail.com");
 
 		// creating 2 types of each transportation
@@ -177,7 +177,8 @@ public class Driver {
 		System.out.println();
 		showMostExpensiveTrip(trips, tripCount);
 
-		// Create copy of transportation array, modify an element, then display both arrays
+		// Create copy of transportation array, modify an element, then display both
+		// arrays
 		System.out.println();
 		Transportation[] copy = copyTransportationArray(transports);
 		copy[0].setCompanyName("Modified name");
@@ -193,9 +194,6 @@ public class Driver {
 		for (int i = 0; i < transCount; i++)
 			System.out.println(copy[i]);
 		System.out.println();
-		
-		
-		
 
 	}
 //------------------------------------------------------------------------------------------------------------------------------------
@@ -511,9 +509,118 @@ public class Driver {
 
 				// Create and store the trip
 				Trip newTrip = new Trip(destin, dur, price, clientFound);
+
+				// Assign a transportation to the trip
+				if (transCount > 0) {
+					System.out.print("\nWould you like to attach a transportation option? (yes/no): ");
+					String transChoice = input.nextLine().trim();
+
+					if (transChoice.equalsIgnoreCase("yes")) {
+						System.out.println("\nSelect transportation type:");
+						System.out.println("1. Flight");
+						System.out.println("2. Train");
+						System.out.println("3. Bus");
+						System.out.print("Your choice: ");
+						int transType = input.nextInt();
+						input.nextLine();
+
+						System.out.println("\nAvailable options:");
+						boolean anyFound = false;
+
+						for (int i = 0; i < transCount; i++) {
+							if (transType == 1 && transports[i] instanceof Flight) {
+								System.out.println(transports[i]);
+								System.out.println();
+								anyFound = true;
+							} else if (transType == 2 && transports[i] instanceof Train) {
+								System.out.println(transports[i]);
+								System.out.println();
+								anyFound = true;
+							} else if (transType == 3 && transports[i] instanceof Bus) {
+								System.out.println(transports[i]);
+								System.out.println();
+								anyFound = true;
+							}
+						}
+
+						if (!anyFound) {
+							System.out.println(
+									"No transportation options of that type are available. Please create a transportation first.");
+
+						} else {
+							System.out.print("Enter the transportation ID to attach: ");
+							String transId = input.nextLine().trim();
+							boolean transFound = false;
+							for (int i = 0; i < transCount; i++) {
+								if (transports[i].getTransportId().equalsIgnoreCase(transId)) {
+									newTrip.setTransportation(transports[i]);
+									System.out.println("Transportation attached successfully.");
+									transFound = true;
+									break;
+								}
+							}
+							if (!transFound) {
+								System.out.println("Transportation ID not found. No transportation attached.");
+							}
+						}
+					}
+				}
+
+				// Assign an accommodation to the trip
+				if (accomCount > 0) {
+					System.out.print("\nWould you like to attach an accommodation? (yes/no): ");
+					String accomChoice = input.nextLine().trim();
+
+					if (accomChoice.equalsIgnoreCase("yes")) {
+						System.out.println("\nSelect accommodation type:");
+						System.out.println("1. Hotel");
+						System.out.println("2. Hostel");
+						System.out.print("Your choice: ");
+						int accomType = input.nextInt();
+						input.nextLine();
+
+						System.out.println("\nAvailable options:");
+						boolean anyFound = false;
+
+						for (int i = 0; i < accomCount; i++) {
+							if (accomType == 1 && accommodations[i] instanceof Hotel) {
+								System.out.println(accommodations[i]);
+								System.out.println();
+								anyFound = true;
+							} else if (accomType == 2 && accommodations[i] instanceof Hostel) {
+								System.out.println(accommodations[i]);
+								System.out.println();
+								anyFound = true;
+							}
+						}
+
+						if (!anyFound) {
+							System.out.println("No accommodations of that type are available.");
+						} else {
+							System.out.print("Enter the accommodation ID to attach: ");
+							String accomId = input.nextLine().trim();
+							boolean accomFound = false;
+							for (int i = 0; i < accomCount; i++) {
+								if (accommodations[i].getAccommodationId().equalsIgnoreCase(accomId)) {
+									newTrip.setAccommodation(accommodations[i]);
+									System.out.println("Accommodation attached successfully.");
+									accomFound = true;
+									break;
+								}
+							}
+							if (!accomFound) {
+								System.out.println("Accommodation ID not found. No accommodation attached.");
+							}
+						}
+					}
+				} else {
+					System.out.println("No accommodations available to attach.");
+				}
+				
 				trips[tripCount++] = newTrip;
 				System.out.println("Trip added successfully: ");
 				System.out.println(newTrip);
+				
 				break;
 
 			// Edit an existing trip by ID
@@ -524,7 +631,7 @@ public class Driver {
 				}
 
 				// Search for trip by ID
-				System.out.println("Enter the trip ID to edit: ");
+				System.out.print("Enter the trip ID to edit: ");
 				String tripId = input.nextLine();
 
 				int index = -1;
@@ -551,6 +658,113 @@ public class Driver {
 					System.out.print("New price: ");
 					trips[index].setBasePrice(input.nextDouble());
 					input.nextLine();
+
+					// Edit trannsportation
+					if (transCount > 0) {
+						System.out.print("\nWould you like to change the transportation? (yes/no): ");
+						String transChoice = input.nextLine().trim();
+
+						if (transChoice.equalsIgnoreCase("yes")) {
+							System.out.println("\nSelect transportation type:");
+							System.out.println("1. Flight");
+							System.out.println("2. Train");
+							System.out.println("3. Bus");
+							System.out.print("Your choice: ");
+							int transType = input.nextInt();
+							input.nextLine();
+
+							System.out.println("\nAvailable options:");
+							boolean anyTransFound = false;
+
+							for (int i = 0; i < transCount; i++) {
+								if (transType == 1 && transports[i] instanceof Flight) {
+									System.out.println(transports[i]);
+									System.out.println();
+									anyTransFound = true;
+								} else if (transType == 2 && transports[i] instanceof Train) {
+									System.out.println(transports[i]);
+									System.out.println();
+									anyTransFound = true;
+								} else if (transType == 3 && transports[i] instanceof Bus) {
+									System.out.println(transports[i]);
+									System.out.println();
+									anyTransFound = true;
+								}
+							}
+
+							if (!anyTransFound) {
+								System.out.println("No transportation options of that type are available.");
+							} else {
+								System.out.print("Enter the transportation ID to attach: ");
+								String transId = input.nextLine().trim();
+								boolean transFound = false;
+								for (int i = 0; i < transCount; i++) {
+									if (transports[i].getTransportId().equalsIgnoreCase(transId)) {
+										trips[index].setTransportation(transports[i]);
+										System.out.println("Transportation updated successfully.");
+										transFound = true;
+										break;
+									}
+								}
+								if (!transFound) {
+									System.out.println("Transportation ID not found. Transportation was not changed.");
+								}
+							}
+						}
+					} else {
+						System.out.println("No transportation options available to attach.");
+					}
+
+					// Edit accommodation
+					if (accomCount > 0) {
+						System.out.print("\nWould you like to change the accommodation? (yes/no): ");
+						String accomChoice = input.nextLine().trim();
+
+						if (accomChoice.equalsIgnoreCase("yes")) {
+							System.out.println("\nSelect accommodation type:");
+							System.out.println("1. Hotel");
+							System.out.println("2. Hostel");
+							System.out.print("Your choice: ");
+							int accomType = input.nextInt();
+							input.nextLine();
+
+							System.out.println("\nAvailable options:");
+							boolean anyAccomFound = false;
+
+							for (int i = 0; i < accomCount; i++) {
+								if (accomType == 1 && accommodations[i] instanceof Hotel) {
+									System.out.println(accommodations[i]);
+									System.out.println();
+									anyAccomFound = true;
+								} else if (accomType == 2 && accommodations[i] instanceof Hostel) {
+									System.out.println(accommodations[i]);
+									System.out.println();
+									anyAccomFound = true;
+								}
+							}
+
+							if (!anyAccomFound) {
+								System.out.println("No accommodations of that type are available.");
+							} else {
+								System.out.print("Enter the accommodation ID to attach: ");
+								String accomId = input.nextLine().trim();
+								boolean accomFound = false;
+								for (int i = 0; i < accomCount; i++) {
+									if (accommodations[i].getAccommodationId().equalsIgnoreCase(accomId)) {
+										trips[index].setAccommodation(accommodations[i]);
+										System.out.println("Accommodation updated successfully.");
+										accomFound = true;
+										break;
+									}
+								}
+								if (!accomFound) {
+									System.out.println("Accommodation ID not found. Accommodation was not changed.");
+								}
+							}
+						}
+					} else {
+						System.out.println("No accommodations available to attach.");
+					}
 
 					System.out.println("Trip editted successfully:");
 					System.out.println(trips[index]);
@@ -1005,5 +1219,4 @@ public class Driver {
 		}
 		return copy;
 	}
-
 }
