@@ -1,11 +1,14 @@
 package travel;
 
+// Concrete subclass of Transportation representing a flight travel option
 public class Flight extends Transportation {
 
     private String airlineName;
     private double luggageAllowance;
     private double flightPrice;
 
+    // Default constructor - initializes all Flight-specific fields to default values
+    // and calls the parent Transportation default constructor
     public Flight() {
         super();
         airlineName = "";
@@ -13,6 +16,8 @@ public class Flight extends Transportation {
         flightPrice = 0.0;
     }
 
+    // Parameterized constructor - passes shared transportation fields to the parent constructor
+    // and initializes Flight-specific fields with provided values
     public Flight(String companyName, String departureCity, String arrivalCity, String airlineName, double luggageAllowance, double flightPrice) {
         super(companyName, departureCity, arrivalCity);
         this.airlineName = airlineName;
@@ -20,6 +25,8 @@ public class Flight extends Transportation {
         this.flightPrice = flightPrice;
     }
 
+    // Copy constructor - copies parent fields via super copy constructor
+    // and copies Flight-specific fields from the other Flight object
     public Flight(Flight other) {
         super(other);
         this.airlineName = other.airlineName;
@@ -27,6 +34,8 @@ public class Flight extends Transportation {
         this.flightPrice = other.flightPrice;
     }
 
+    // Checks equality based on company name, departure/arrival cities,
+    // airline name, and luggage allowance (excludes flightPrice)
     @Override
     public boolean equals(Object obj) {
         if (this == obj)
@@ -42,6 +51,7 @@ public class Flight extends Transportation {
                 luggageAllowance == other.luggageAllowance;
     }
 
+    // Returns a formatted string displaying all relevant Flight details
     @Override
     public String toString() {
         return "\nFlight ID: " + getTransportId() + "\n" +
@@ -51,11 +61,20 @@ public class Flight extends Transportation {
                 "Airline: " + airlineName + "\n" +
                 "Luggage Allowance: " + luggageAllowance + " kg";
     }
-    
+
+    // Returns the total cost of the flight, which is simply the flat flight price
     @Override
-   	public double calculateCost() {		
+   	public double calculateCost() {
    		return flightPrice;
    	}
+
+    // Returns a deep copy of this Flight object using the copy constructor
+    @Override
+    public Transportation copy() {
+        return new Flight(this);
+    }
+
+    // --- Getters and Setters ---
 
     public String getAirlineName() {
         return airlineName;
