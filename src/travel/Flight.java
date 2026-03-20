@@ -5,6 +5,8 @@
 
 package travel;
 
+import exceptions.InvalidTransportDataException;
+
 //This class represents a flight as a specific type of transportation in the travel system.
 //It extends Transportation and adds flight-specific details such as the airline name,
 //luggage allowance in kilograms, and the flat flight price.
@@ -26,8 +28,13 @@ public class Flight extends Transportation {
 
 	// Parameterized constructor - passes shared transportation fields to the parent constructor
 	// and initializes Flight-specific fields with provided values
-	public Flight(String companyName, String departureCity, String arrivalCity, String airlineName, double luggageAllowance, double flightPrice) {
+	public Flight(String companyName, String departureCity, String arrivalCity, String airlineName, double luggageAllowance, double flightPrice) throws InvalidTransportDataException {	
 		super(companyName, departureCity, arrivalCity);
+		
+		if (luggageAllowance < 0) {
+			throw new InvalidTransportDataException("Luggage allowance cannot be less than 0kg");
+		}
+		
 		this.airlineName = airlineName;
 		this.luggageAllowance = luggageAllowance;
 		this.flightPrice = flightPrice;
@@ -109,7 +116,10 @@ public class Flight extends Transportation {
 		return luggageAllowance;
 	}
 
-	public void setLuggageAllowance(double luggageAllowance) {
+	public void setLuggageAllowance(double luggageAllowance) throws InvalidTransportDataException  {	
+		if (luggageAllowance < 0) {
+			throw new InvalidTransportDataException("Luggage allowance cannot be less than 0kg");
+		}
 		this.luggageAllowance = luggageAllowance;
 	}
 

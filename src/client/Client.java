@@ -5,6 +5,8 @@
 
 package client;
 
+import exceptions.InvalidClientDataException;
+
 //This class represents a client of the travel agency.
 //It stores personal information about the client such as their first name,
 //last name, and email address.
@@ -22,21 +24,34 @@ public class Client {
 	// Default constructor - initializes all fields to empty strings
 	// and assigns a unique client ID using the static counter
 	public Client() {
-		firstName = "";
-		lastName = "";
-		emailAddress = "";
-		clientId = "C" + numId;
-		numId++;
+		this.firstName = "Unknown";
+	    this.lastName = "Unknown";
+	    this.emailAddress = "unknown@default.com";
+	    clientIdGenerator();
 	}
 
 	// Parameterized constructor - initializes fields with provided values
 	// and assigns a unique client ID using the static counter
-	public Client(String firstName, String lastName, String emailAdress) {
+	public Client(String firstName, String lastName, String emailAddress) throws InvalidClientDataException {
+
+		// Validate First Name
+		if (firstName == null || firstName.trim().isEmpty() || firstName.length() > 50) {
+			throw new InvalidClientDataException("First name must be non-empty and 50 characters or less.");
+		}
+
+		// Validate Last Name
+		if (lastName == null || lastName.trim().isEmpty() || lastName.length() > 50) {
+			throw new InvalidClientDataException("Last name must be non-empty and 50 characters or less.");
+		}
+
+		// Validate Email
+		if (emailAddress == null || emailAddress.length() > 100 || !emailAddress.contains("@") || !emailAddress.contains(".") || emailAddress.contains(" ")) {
+			throw new InvalidClientDataException("Email must contain '@' and '.', have no spaces, and be <= 100 chars.");
+		}
 		this.firstName = firstName;
 		this.lastName = lastName;
-		this.emailAddress = emailAdress;
-		clientId = "C" + numId;
-		numId++;
+		this.emailAddress = emailAddress;
+		clientIdGenerator();
 	}
 
 	// Copy constructor - copies all fields from another Client object
@@ -45,8 +60,7 @@ public class Client {
 		firstName = other.firstName;
 		lastName = other.lastName;
 		emailAddress = other.emailAddress;
-		clientId = "C" + numId;
-		numId++;
+		clientIdGenerator();
 	}
 
 	// Private constructor used EXCLUSIVELY by the copy() method.
@@ -93,6 +107,12 @@ public class Client {
 
 	}
 
+	// Generates Client ID and increments ID number for next client
+	private void clientIdGenerator() {
+		clientId = "C" + numId;
+		numId++;
+	}
+
 	// --- Getters and Setters ---
 
 	public String getFirstName() {
@@ -107,13 +127,24 @@ public class Client {
 	public String getClientId() {
 		return clientId;
 	}
-	public void setFirstName(String firstName) {
+	public void setFirstName(String firstName) throws InvalidClientDataException {
+		if (firstName == null || firstName.trim().isEmpty() || firstName.length() > 50) {
+			throw new InvalidClientDataException("First name must be non-empty and 50 characters or less.");
+		}
 		this.firstName = firstName;
 	}
-	public void setLastName(String lastName) {
+
+	public void setLastName(String lastName) throws InvalidClientDataException {
+		if (lastName == null || lastName.trim().isEmpty() || lastName.length() > 50) {
+			throw new InvalidClientDataException("Last name must be non-empty and 50 characters or less.");
+		}
 		this.lastName = lastName;
 	}
-	public void setEmailAdress(String emailAdress) {
+
+	public void setEmailAdress(String emailAdress) throws InvalidClientDataException {
+		if (emailAdress == null || emailAdress.length() > 100 || !emailAdress.contains("@") || !emailAdress.contains(".") || emailAdress.contains(" ")) {
+			throw new InvalidClientDataException("Email must contain '@' and '.', have no spaces, and be <= 100 chars.");
+		}
 		this.emailAddress = emailAdress;
 	}
 

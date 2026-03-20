@@ -6,6 +6,7 @@
 package travel;
 
 import client.Client;
+import exceptions.InvalidTripDataException;
 
 //This class represents a complete travel package in the travel system.
 //It brings together a client, a destination, a transportation option, and an accommodation
@@ -28,20 +29,28 @@ public class Trip {
 	// creates a default Client, sets transportation and accommodation to null,
 	// and assigns a unique trip ID using the static counter
 	public Trip() {
-		destination = "";
-		durationInDays = 0;
-		basePrice = 0.0;
-		travelingClient = new Client();
-		transportation = null;
-		accomodation = null;
-		tripId = "T" + numId;
-		numId++;
+		this.destination = "Unknown";
+		this.durationInDays = 1;      
+		this.basePrice = 100.0;       
+		this.travelingClient = new Client(); 
+		this.transportation = null;
+		this.accomodation = null;
+		tripIdGenerator();
 	}
 
 	// Parameterized constructor - initializes trip details with provided values
 	// Performs a defensive copy of the client if not null, otherwise creates a default Client
 	// Sets transportation and accommodation to null, and assigns a unique trip ID
-	public Trip(String destination, int duration, double basePrice, Client travelingClient) {
+	public Trip(String destination, int duration, double basePrice, Client travelingClient) throws InvalidTripDataException {
+
+		if (basePrice < 100) {
+			throw new InvalidTripDataException("Base price needs to be greater or equal than 100$");
+		}
+
+		if (duration < 1 || duration > 20) {
+			throw new InvalidTripDataException("Duration can only be 1 to 20 days");
+		}
+
 		this.destination = destination;
 		this.durationInDays = duration;
 		this.basePrice = basePrice;
@@ -54,8 +63,7 @@ public class Trip {
 
 		this.transportation = null;
 		this.accomodation = null;
-		tripId = "T" + numId;
-		numId++;
+		tripIdGenerator();
 	}
 
 	// Copy constructor - performs deep copies of all fields from another Trip object
@@ -87,8 +95,7 @@ public class Trip {
 			this.accomodation = null;
 		}
 
-		tripId = "T" + numId;
-		numId++;
+		tripIdGenerator();
 	}
 
 	// Checks equality based on destination, duration, base price, client, transportation, and accommodation.
@@ -160,6 +167,12 @@ public class Trip {
 		return total;
 	}
 
+	// Generates Trip ID and increments ID number for next trip
+	private void tripIdGenerator() {
+		tripId = "T" + numId;
+		numId++;
+	}
+
 	// --- Getters and Setters ---
 
 	public String getTripId() {
@@ -182,11 +195,17 @@ public class Trip {
 		this.destination = destination;
 	}
 
-	public void setDurationInDays(int durationInDays) {
+	public void setDurationInDays(int durationInDays) throws InvalidTripDataException {
+		if (durationInDays < 1 || durationInDays > 20) {
+			throw new InvalidTripDataException("Duration can only be 1 to 20 days");
+		}
 		this.durationInDays = durationInDays;
 	}
 
-	public void setBasePrice(double basePrice) {
+	public void setBasePrice(double basePrice) throws InvalidTripDataException {
+		if (basePrice < 100.0) {
+			throw new InvalidTripDataException("Base price needs to be greater or equal than 100$");
+		}
 		this.basePrice = basePrice;
 	}
 

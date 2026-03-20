@@ -5,6 +5,8 @@
 
 package travel;
 
+import exceptions.InvalidAccommodationDataException;
+
 //This class represents a hotel as a specific type of accommodation in the travel system.
 //It extends Accommodation and adds a hotel-specific attribute: the star rating.
 //The cost calculation applies a multiplier based on the star rating, meaning
@@ -22,8 +24,11 @@ public class Hotel extends Accommodation {
 
 	// Parameterized constructor - passes shared accommodation fields to the parent constructor
 	// and initializes the Hotel-specific starRating field
-	public Hotel(String name, String location, double pricePerNight, int starRating) {
+	public Hotel(String name, String location, double pricePerNight, int starRating) throws InvalidAccommodationDataException {
 		super(name, location, pricePerNight);
+		if (starRating < 1 || starRating > 5) {
+			throw new InvalidAccommodationDataException("Hotel star rating only 1 to 5");
+		}
 		this.starRating = starRating;
 	}
 
@@ -38,7 +43,7 @@ public class Hotel extends Accommodation {
 	// Passes the exact ID and shared fields up to the parent's protected constructor,
 	// and assigns the Hotel-specific star rating, without triggering a numId increment.
 	private Hotel(String accommodationId, String name, String location, double pricePerNight, int starRating) {
-		super(accommodationId, name, location, pricePerNight); 
+		super(accommodationId, name, location, pricePerNight); 		
 		this.starRating = starRating;
 	}
 

@@ -26,8 +26,7 @@ public abstract class Transportation {
 		companyName = "";
 		departureCity = "";
 		arrivalCity = "";
-		transportId = "TR" + numId;
-		numId++;
+		transportIdGenerator();
 	}
 
 	// Parameterized constructor - initializes fields with provided values
@@ -36,8 +35,7 @@ public abstract class Transportation {
 		this.companyName = companyName;
 		this.departureCity = departureCity;
 		this.arrivalCity = arrivalCity;
-		transportId = "TR" + numId;
-		numId++;
+		transportIdGenerator();
 	}
 
 	// Copy constructor - copies fields from another Transportation object
@@ -46,8 +44,7 @@ public abstract class Transportation {
 		this.companyName = other.companyName;
 		this.departureCity = other.departureCity;
 		this.arrivalCity = other.arrivalCity;
-		transportId = "TR" + numId;
-		numId++;
+		transportIdGenerator();
 	}
 
 	// Protected constructor used EXCLUSIVELY by child classes during their copy() operations.
@@ -84,6 +81,12 @@ public abstract class Transportation {
 				"Company: " + companyName + "\n" +
 				"Departure: " + departureCity + "\n" +
 				"Arrival: " + arrivalCity;
+	}
+
+	// Generates Transportation ID and increments ID number for next transportation
+	private void transportIdGenerator() {
+		transportId = "TR" + numId;
+		numId++;
 	}
 
 	// Abstract method - subclasses must define how to return a deep copy of themselves

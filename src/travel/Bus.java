@@ -5,6 +5,8 @@
 
 package travel;
 
+import exceptions.InvalidTransportDataException;
+
 //This class represents a bus as a specific type of transportation in the travel system.
 //It extends Transportation and adds bus-specific details such as the bus company name,
 //number of stops along the route, and the flat fare for the trip.
@@ -35,8 +37,13 @@ public class Bus extends Transportation {
 
 	// Copy constructor - copies parent fields via super copy constructor
 	// and copies Bus-specific fields from the other Bus object
-	public Bus(Bus other) {
+	public Bus(Bus other) throws InvalidTransportDataException {
 		super(other);
+		
+		if (numberOfStops < 1) {
+			throw new InvalidTransportDataException("Bus requires to have at least 1 stop");
+		}
+		
 		this.busCompany = other.busCompany;
 		this.numberOfStops = other.numberOfStops;
 		this.busFare = other.busFare;
@@ -109,7 +116,10 @@ public class Bus extends Transportation {
 		return numberOfStops;
 	}
 
-	public void setNumberOfStops(int numberOfStops) {
+	public void setNumberOfStops(int numberOfStops) throws InvalidTransportDataException {	
+		if (numberOfStops < 1) {
+			throw new InvalidTransportDataException("Bus requires to have at least 1 stop");
+		}
 		this.numberOfStops = numberOfStops;
 	}
 

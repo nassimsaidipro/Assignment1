@@ -5,6 +5,8 @@
 
 package travel;
 
+import exceptions.InvalidAccommodationDataException;
+
 //This class serves as the abstract blueprint for all accommodation types in the travel system.
 //It stores common attributes shared by all accommodations such as name, location, and price per night.
 //It auto-generates a unique ID for each accommodation created using a static counter.
@@ -24,17 +26,20 @@ public abstract class Accommodation {
 		name = "";
 		location = "";
 		pricePerNight = 0.0;
-		accommodationId = "A" + numId;
-		numId++;
+		accomIdGenerator();
 	}
 
 	// Parameterized constructor - initializes fields with provided values and assigns a unique accommodation ID
-	public Accommodation(String name, String location, double pricePerNight) {
+	public Accommodation(String name, String location, double pricePerNight) throws InvalidAccommodationDataException {
+
+		if (pricePerNight > 0) {
+			throw new InvalidAccommodationDataException("Price per night needs to be greater than 0$");
+		}
+
 		this.name = name;
 		this.location = location;
 		this.pricePerNight = pricePerNight;
-		accommodationId = "A" + numId;
-		numId++;
+		accomIdGenerator();
 	}
 
 	// Copy constructor - initializes fields from another Accommodation object and assigns a new unique ID
@@ -42,8 +47,7 @@ public abstract class Accommodation {
 		name = other.name;
 		location = other.location;
 		pricePerNight = other.pricePerNight;
-		accommodationId = "A" + numId;
-		numId++;
+		accomIdGenerator();
 	}
 
 	// Protected constructor used EXCLUSIVELY by child classes during their copy() operations.
@@ -84,6 +88,12 @@ public abstract class Accommodation {
 
 	// Abstract method - subclasses must define how to return a deep copy of themselves
 	public abstract Accommodation copy();
+
+	// Generates Accommodation ID and increments ID number for next accommodation
+	private void accomIdGenerator() {
+		accommodationId = "A" + numId;
+		numId++;	
+	}
 
 	// --- Getters and Setters ---
 

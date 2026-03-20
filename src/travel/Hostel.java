@@ -5,6 +5,8 @@
 
 package travel;
 
+import exceptions.InvalidAccommodationDataException;
+
 //This class represents a hostel as a specific type of accommodation in the travel system.
 //It extends Accommodation and adds a hostel-specific attribute: the number of shared beds per room.
 //The cost calculation applies a 25% discount if the room has more than 4 shared beds,
@@ -22,8 +24,8 @@ public class Hostel extends Accommodation {
 
 	// Parameterized constructor - passes shared accommodation fields to the parent constructor
 	// and initializes the Hostel-specific sharedBedsPerRoom field
-	public Hostel(String name, String location, double pricePerNight, int sharedBedsPerRoom) {
-		super(name, location, pricePerNight);
+	public Hostel(String name, String location, double pricePerNight, int sharedBedsPerRoom) throws InvalidAccommodationDataException {
+		super(name, location, pricePerNight);		
 		this.sharedBedsPerRoom = sharedBedsPerRoom;
 	}
 
