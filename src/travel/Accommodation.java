@@ -115,7 +115,12 @@ public abstract class Accommodation {
 	public void setLocation(String location) {
 		this.location = location;
 	}
-	public void setPricePerNight(double pricePerNight) {
+	public void setPricePerNight(double pricePerNight) throws InvalidAccommodationDataException {
+		
+		if (pricePerNight > 0) {
+			throw new InvalidAccommodationDataException("Price per night needs to be greater than 0$");
+		}
+		
 		this.pricePerNight = pricePerNight;
 	}
 

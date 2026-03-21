@@ -26,6 +26,7 @@ public class Hotel extends Accommodation {
 	// and initializes the Hotel-specific starRating field
 	public Hotel(String name, String location, double pricePerNight, int starRating) throws InvalidAccommodationDataException {
 		super(name, location, pricePerNight);
+		
 		if (starRating < 1 || starRating > 5) {
 			throw new InvalidAccommodationDataException("Hotel star rating only 1 to 5");
 		}
@@ -95,7 +96,10 @@ public class Hotel extends Accommodation {
 		return starRating;
 	}
 
-	public void setStarRating(int starRating) {
+	public void setStarRating(int starRating) throws InvalidAccommodationDataException {
+		if (starRating < 1 || starRating > 5) {
+			throw new InvalidAccommodationDataException("Hotel star rating only 1 to 5");
+		}
 		this.starRating = starRating;
 	}
 }
