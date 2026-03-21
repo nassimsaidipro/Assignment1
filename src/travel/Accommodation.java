@@ -25,7 +25,7 @@ public abstract class Accommodation {
 	public Accommodation() {
 		name = "";
 		location = "";
-		pricePerNight = 0.0;
+		pricePerNight = 1.0;
 		accomIdGenerator();
 	}
 

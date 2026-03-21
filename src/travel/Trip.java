@@ -157,7 +157,7 @@ public class Trip {
 		double total = basePrice;
 
 		if (this.accomodation != null) {
-			total += this.accomodation.calculateCost(durationInDays);
+			total += this.accomodation.calculateCost((durationInDays-1));
 		}
 
 		if (this.transportation != null) {

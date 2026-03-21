@@ -22,7 +22,7 @@ public class Bus extends Transportation {
 	public Bus() {
 		super();
 		busCompany = "";
-		numberOfStops = 0;
+		numberOfStops = 1;
 		busFare = 0.0;
 	}
 
