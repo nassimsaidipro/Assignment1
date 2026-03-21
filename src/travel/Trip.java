@@ -50,17 +50,15 @@ public class Trip {
 		if (duration < 1 || duration > 20) {
 			throw new InvalidTripDataException("Duration can only be 1 to 20 days");
 		}
+		
+		if (travelingClient == null) {
+			throw new InvalidTripDataException("Client ID must exist in current client array.");
+		}
 
 		this.destination = destination;
 		this.durationInDays = duration;
 		this.basePrice = basePrice;
-
-		if (travelingClient != null) {
-			this.travelingClient = travelingClient.copy();
-		} else {
-			this.travelingClient = new Client();
-		}
-
+		this.travelingClient = travelingClient.copy();
 		this.transportation = null;
 		this.accomodation = null;
 		tripIdGenerator();
@@ -105,7 +103,6 @@ public class Trip {
 	    this.durationInDays = durationInDays;
 	    this.basePrice = basePrice;
 	    
-	    // Defensive copy
 	    if (travelingClient != null) {
 	        this.travelingClient = travelingClient.copy();
 	    } else {
@@ -270,12 +267,12 @@ public class Trip {
 	}
 
 	// Sets the traveling client using a deep copy to protect encapsulation, or null if not provided
-	public void setTravelingClient(Client travelingClient) {
+	public void setTravelingClient(Client travelingClient) throws InvalidTripDataException {
 		if (travelingClient == null) {
-			this.travelingClient = null;
-		} else {
-			this.travelingClient = travelingClient.copy();
-		}
+	        throw new InvalidTripDataException("Client ID must exist in current client array.");
+	    }
+	    
+	    this.travelingClient = travelingClient.copy();
 	}
 
 }
