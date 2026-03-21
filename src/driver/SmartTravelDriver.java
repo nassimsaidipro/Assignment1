@@ -129,13 +129,16 @@ public class SmartTravelDriver {
 
 			trip1.setTransportation(service.getTransports(0));
 			trip1.setAccommodation(service.getAccoms(0));
+			service.getClient(0).setAmountSpent(service.getClient(0).getTotalSpent() + trip1.calculateTotalCost());
 			System.out.println("Trip created: " + trip1);
 			Trip trip2 = service.createTrip("Tel Aviv", 5, 400.0, service.getClient(1).getClientId());
 			trip2.setTransportation(service.getTransports(1));
 			trip2.setAccommodation(service.getAccoms(1));
+			service.getClient(1).setAmountSpent(service.getClient(1).getTotalSpent() + trip2.calculateTotalCost());
 			Trip trip3 = service.createTrip("Haiti", 3, 300.0, service.getClient(2).getClientId());
 			trip3.setTransportation(service.getTransports(2));
 			trip3.setAccommodation(service.getAccoms(2));
+			service.getClient(2).setAmountSpent(service.getClient(2).getTotalSpent() + trip3.calculateTotalCost());
 		} catch (InvalidTripDataException | EntityNotFoundException e) {
 			System.out.println(e.getMessage());
 		}

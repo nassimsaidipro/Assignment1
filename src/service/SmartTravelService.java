@@ -20,6 +20,7 @@ import travel.*;
 import exceptions.*;
 import persistence.*;
 
+import java.io.File;
 import java.io.IOException;
 
 public class SmartTravelService {
@@ -208,6 +209,7 @@ public class SmartTravelService {
 	// Saves all data currently in arrays back to CSV files[cite: 99, 118].
 
 	public void saveAllData(String directory) throws IOException {
+		new File(directory).mkdirs();
 		ClientFileManager.saveClients(clients, clientCount, directory + "clients.csv");
 		TransportationFileManager.saveTransports(transports, transCount, directory + "transports.csv");
 		AccommodationFileManager.saveAccommodations(accommodations, accomCount, directory + "accommodations.csv");
