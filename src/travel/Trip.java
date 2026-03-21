@@ -97,6 +97,24 @@ public class Trip {
 
 		tripIdGenerator();
 	}
+	
+	// Public constructor for file loading (Bypasses ID generation)
+	public Trip(String tripId, String destination, int durationInDays, double basePrice, Client travelingClient) {
+	    this.tripId = tripId;
+	    this.destination = destination;
+	    this.durationInDays = durationInDays;
+	    this.basePrice = basePrice;
+	    
+	    // Defensive copy
+	    if (travelingClient != null) {
+	        this.travelingClient = travelingClient.copy();
+	    } else {
+	        this.travelingClient = null; 
+	    }
+	    
+	    this.transportation = null;
+	    this.accomodation = null;
+	}
 
 	// Checks equality based on destination, duration, base price, client, transportation, and accommodation.
 	// The unique tripId is excluded from this comparison since every trip object gets a different ID.

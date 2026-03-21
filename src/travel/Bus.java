@@ -49,10 +49,10 @@ public class Bus extends Transportation {
 		this.busFare = other.busFare;
 	}
 
-	// Private constructor used EXCLUSIVELY by the copy() method.
+	// Public constructor used by the copy() method and file managers.
 	// Passes the exact ID and shared fields up to the parent's protected constructor,
 	// and assigns the Bus-specific variables, without triggering a numId increment.
-	private Bus(String transportId, String companyName, String departureCity, String arrivalCity, String busCompany, int numberOfStops, double busFare) {
+	public Bus(String transportId, String companyName, String departureCity, String arrivalCity, String busCompany, int numberOfStops, double busFare) {
 		super(transportId, companyName, departureCity, arrivalCity);
 		this.busCompany = busCompany;
 		this.numberOfStops = numberOfStops;

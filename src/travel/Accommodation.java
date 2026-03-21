@@ -32,7 +32,7 @@ public abstract class Accommodation {
 	// Parameterized constructor - initializes fields with provided values and assigns a unique accommodation ID
 	public Accommodation(String name, String location, double pricePerNight) throws InvalidAccommodationDataException {
 
-		if (pricePerNight > 0) {
+		if (pricePerNight <= 0) {
 			throw new InvalidAccommodationDataException("Price per night needs to be greater than 0$");
 		}
 
@@ -117,7 +117,7 @@ public abstract class Accommodation {
 	}
 	public void setPricePerNight(double pricePerNight) throws InvalidAccommodationDataException {
 		
-		if (pricePerNight > 0) {
+		if (pricePerNight <= 0) {
 			throw new InvalidAccommodationDataException("Price per night needs to be greater than 0$");
 		}
 		

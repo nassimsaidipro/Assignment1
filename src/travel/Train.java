@@ -42,10 +42,10 @@ public class Train extends Transportation {
 		this.trainFare = other.trainFare;
 	}
 
-	// Private constructor used EXCLUSIVELY by the copy() method.
+	// Public constructor used by the copy() method and file managers.
 	// Passes the exact ID and shared fields up to the parent's protected constructor,
 	// and assigns the Train-specific variables, without triggering a numId increment.
-	private Train(String transportId, String companyName, String departureCity, String arrivalCity, String trainType, String seatClass, double trainFare) {
+	public Train(String transportId, String companyName, String departureCity, String arrivalCity, String trainType, String seatClass, double trainFare) {
 		super(transportId, companyName, departureCity, arrivalCity);
 		this.trainType = trainType;
 		this.seatClass = seatClass;

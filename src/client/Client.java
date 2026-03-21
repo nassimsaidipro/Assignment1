@@ -63,10 +63,10 @@ public class Client {
 		clientIdGenerator();
 	}
 
-	// Private constructor used EXCLUSIVELY by the copy() method.
+	// Public constructor used by the copy() method and file managers.
 	// It manually assigns all fields, including the exact clientId, to create a perfect clone.
 	// This deliberately bypasses the static counter so numId does not falsely increment.
-	private Client(String clientId, String firstName, String lastName, String emailAddress) {
+	public Client(String clientId, String firstName, String lastName, String emailAddress) {
 		this.clientId = clientId;
 		this.firstName = firstName;
 		this.lastName = lastName;

@@ -40,10 +40,10 @@ public class Hotel extends Accommodation {
 		this.starRating = other.starRating;
 	}
 
-	// Private constructor used EXCLUSIVELY by the copy() method.
+	// Private constructor used by the copy() method and file managers.
 	// Passes the exact ID and shared fields up to the parent's protected constructor,
 	// and assigns the Hotel-specific star rating, without triggering a numId increment.
-	private Hotel(String accommodationId, String name, String location, double pricePerNight, int starRating) {
+	public Hotel(String accommodationId, String name, String location, double pricePerNight, int starRating) {
 		super(accommodationId, name, location, pricePerNight); 		
 		this.starRating = starRating;
 	}
