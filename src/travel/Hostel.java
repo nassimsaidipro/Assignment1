@@ -25,7 +25,11 @@ public class Hostel extends Accommodation {
 	// Parameterized constructor - passes shared accommodation fields to the parent constructor
 	// and initializes the Hostel-specific sharedBedsPerRoom field
 	public Hostel(String name, String location, double pricePerNight, int sharedBedsPerRoom) throws InvalidAccommodationDataException {
-		super(name, location, pricePerNight);		
+		super(name, location, pricePerNight);
+		
+		if (pricePerNight > 150) {
+	        throw new InvalidAccommodationDataException("Hostel price cannot exceed $150 per night.");
+	    }
 		this.sharedBedsPerRoom = sharedBedsPerRoom;
 	}
 

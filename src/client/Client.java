@@ -20,14 +20,15 @@ public class Client {
 	private String firstName;
 	private String lastName;
 	private String emailAddress;
+	private double amountSpent = 0.0;
 
 	// Default constructor - initializes all fields to empty strings
 	// and assigns a unique client ID using the static counter
 	public Client() {
 		this.firstName = "Unknown";
-	    this.lastName = "Unknown";
-	    this.emailAddress = "unknown@default.com";
-	    clientIdGenerator();
+		this.lastName = "Unknown";
+		this.emailAddress = "unknown@default.com";
+		clientIdGenerator();
 	}
 
 	// Parameterized constructor - initializes fields with provided values
@@ -45,8 +46,10 @@ public class Client {
 		}
 
 		// Validate Email
-		if (emailAddress == null || emailAddress.length() > 100 || !emailAddress.contains("@") || !emailAddress.contains(".") || emailAddress.contains(" ")) {
-			throw new InvalidClientDataException("Email must contain '@' and '.', have no spaces, and be <= 100 chars.");
+		if (emailAddress == null || emailAddress.length() > 100 || !emailAddress.contains("@")
+				|| !emailAddress.contains(".") || emailAddress.contains(" ")) {
+			throw new InvalidClientDataException(
+					"Email must contain '@' and '.', have no spaces, and be <= 100 chars.");
 		}
 		this.firstName = firstName;
 		this.lastName = lastName;
@@ -60,21 +63,27 @@ public class Client {
 		firstName = other.firstName;
 		lastName = other.lastName;
 		emailAddress = other.emailAddress;
+		amountSpent = other.amountSpent;
 		clientIdGenerator();
 	}
 
-	// Private constructor used EXCLUSIVELY by the copy() method.
-	// It manually assigns all fields, including the exact clientId, to create a perfect clone.
-	// This deliberately bypasses the static counter so numId does not falsely increment.
-	private Client(String clientId, String firstName, String lastName, String emailAddress) {
+	// Public constructor used by the copy() method and file managers.
+	// It manually assigns all fields, including the exact clientId, to create a
+	// perfect clone.
+	// This deliberately bypasses the static counter so numId does not falsely
+	// increment.
+	public Client(String clientId, String firstName, String lastName, String emailAddress) {
 		this.clientId = clientId;
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.emailAddress = emailAddress;
+		this.amountSpent = 0.0;
+
 	}
 
 	// Returns a deep copy of this Client object.
-	// It relies on the private backdoor constructor to ensure the exact ID is retained
+	// It relies on the private backdoor constructor to ensure the exact ID is
+	// retained
 	// without accidentally inflating the static numId sequence.
 	public Client copy() {
 		return new Client(this.clientId, this.firstName, this.lastName, this.emailAddress);
@@ -83,13 +92,12 @@ public class Client {
 	// Returns a formatted string displaying all relevant Client details
 	@Override
 	public String toString() {
-		return "Client ID: " + clientId + "\n" +
-				"First Name: " + firstName + "\n" +
-				"Last Name: " + lastName + "\n" +
-				"Email: " + emailAddress;
+		return "Client ID: " + clientId + "\n" + "First Name: " + firstName + "\n" + "Last Name: " + lastName + "\n"
+				+ "Email: " + emailAddress + "\n" + "Total Spent: " + String.format("%.2f", amountSpent) + "$";
 	}
 
-	// Checks equality based on first name, last name, and email address (excludes ID)
+	// Checks equality based on first name, last name, and email address (excludes
+	// ID)
 	@Override
 	public boolean equals(Object obj) {
 
@@ -103,7 +111,8 @@ public class Client {
 
 		Client other = (Client) obj;
 
-		return (this.firstName.equals(other.firstName) && this.lastName.equals(other.lastName) && this.emailAddress.equals(other.emailAddress));
+		return (this.firstName.equals(other.firstName) && this.lastName.equals(other.lastName)
+				&& this.emailAddress.equals(other.emailAddress));
 
 	}
 
@@ -118,15 +127,19 @@ public class Client {
 	public String getFirstName() {
 		return firstName;
 	}
+
 	public String getLastName() {
 		return lastName;
 	}
+
 	public String getEmailAdress() {
 		return emailAddress;
 	}
+
 	public String getClientId() {
 		return clientId;
 	}
+
 	public void setFirstName(String firstName) throws InvalidClientDataException {
 		if (firstName == null || firstName.trim().isEmpty() || firstName.length() > 50) {
 			throw new InvalidClientDataException("First name must be non-empty and 50 characters or less.");
@@ -142,10 +155,21 @@ public class Client {
 	}
 
 	public void setEmailAdress(String emailAdress) throws InvalidClientDataException {
-		if (emailAdress == null || emailAdress.length() > 100 || !emailAdress.contains("@") || !emailAdress.contains(".") || emailAdress.contains(" ")) {
-			throw new InvalidClientDataException("Email must contain '@' and '.', have no spaces, and be <= 100 chars.");
+		if (emailAdress == null || emailAdress.length() > 100 || !emailAdress.contains("@")
+				|| !emailAdress.contains(".") || emailAdress.contains(" ")) {
+			throw new InvalidClientDataException(
+					"Email must contain '@' and '.', have no spaces, and be <= 100 chars.");
 		}
 		this.emailAddress = emailAdress;
+	}
+
+	public double getTotalSpent() {
+		return amountSpent;
+	}
+
+	public void setAmountSpent(double amountSpent) {
+		if (amountSpent >= 0)
+			this.amountSpent = amountSpent;
 	}
 
 }
