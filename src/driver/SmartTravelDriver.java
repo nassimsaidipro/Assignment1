@@ -22,25 +22,28 @@
 package driver;
 
 import travel.*;
+import visualization.DashboardGenerator;
 
 import java.util.Scanner;
 
 import client.*;
 import exceptions.InvalidClientDataException;
+import service.SmartTravelService;
 
-/**
-public class Driver {
+import java.io.*;
+import exceptions.InvalidClientDataException;
+import exceptions.DuplicateEmailException;
+import exceptions.InvalidTripDataException;
+import exceptions.EntityNotFoundException;
+import exceptions.InvalidTransportDataException;
+import exceptions.InvalidAccommodationDataException;
 
-	// Arrays for the classes
-	static Client[] clients = new Client[100];
-	static Trip[] trips = new Trip[100];
-	static Transportation[] transports = new Transportation[100];
-	static Accommodation[] accommodations = new Accommodation[100];
+public class SmartTravelDriver {
 
+	// Service layer owns all arrays
+	static SmartTravelService service = new SmartTravelService();
 	// Scanner to prompt user input
 	static Scanner input = new Scanner(System.in);
-	
-	
 
 	// Counters to track how many elements are in each array
 	static int clientCount = 0;
@@ -74,117 +77,168 @@ public class Driver {
 		// Display closing message
 		System.out.println("\nThank you for using our SmartTravel system! The program will now close.");
 
-	}	
-	
-	
+	}
 
 	// ------------------------------------------------------------------------------------------------------------------------------------
 	// This is the predefined scenario testing
 	public static void predefinedScenario() {
 		System.out.println("\nThe predefined testing scenario is now running.");
 
+		// Creating 3 clients to sample
 		try {
-			// Creating 3 clients to sample
-			Client c1 = new Client("Maygan", "Beauchamp", "mayg@gmail.com");
+			service.addClient(new Client("Maygan", "Beauchamp", "mayg@gmail.com"));
 
-			Client c2 = new Client("Venta", "Raji", "venta@gmail.com");
-			Client c3 = new Client("Veda", "Melky", "velky@gmail.com");
-
-			// Store the clients in the array
-			clients[clientCount++] = c1;
-			clients[clientCount++] = c2;
-			clients[clientCount++] = c3;
-		} catch (InvalidClientDataException e) {
+			service.addClient(new Client("Venta", "Raji", "venta@gmail.com"));
+			service.addClient(new Client("Veda", "Melky", "velky@gmail.com"));
+			System.out.println("Clients created successfully.");
+		} catch (InvalidClientDataException | DuplicateEmailException e) {
 			System.out.println(e.getMessage());
 		}
 
 		Client c1Clone = new Client("Maygan", "Beauchamp", "mayg@gmail.com");
 
 		// creating 2 types of each transportation
-		Flight f1 = new Flight("AirCanada", "Montreal", "Paris", "Air Canada", 23.0, 650.0);
-		Flight f2 = new Flight("Delta", "New York", "London", "Delta Air Lines", 20.0, 550.0);
-		Train train1 = new Train("VIA Rail", "Montreal", "Toronto", "high-speed", "Business", 120.0);
-		Train train2 = new Train("Amtrak", "Boston", "Washington", "regional", "Economy", 80.0);
-		Bus bus1 = new Bus("Greyhound", "Montreal", "Quebec City", "Greyhound Canada", 3, 40.0);
-		Bus bus2 = new Bus("FlixBus", "Paris", "Lyon", "FlixBus Europe", 2, 25.0);
-
-		// Store the transportation options in the array
-		transports[transCount++] = f1;
-		transports[transCount++] = f2;
-		transports[transCount++] = train1;
-		transports[transCount++] = train2;
-		transports[transCount++] = bus1;
-		transports[transCount++] = bus2;
+		try {
+			Flight f1 = new Flight("AirCanada", "Montreal", "Paris", "Air Canada", 23.0, 650.0);
+			service.addTransportation(f1);
+			Flight f2 = new Flight("Delta", "New York", "London", "Delta Air Lines", 20.0, 550.0);
+			service.addTransportation(f2);
+			Train train1 = new Train("VIA Rail", "Montreal", "Toronto", "high-speed", "Business", 120.0);
+			service.addTransportation(train1);
+			Train train2 = new Train("Amtrak", "Boston", "Washington", "regional", "Economy", 80.0);
+			service.addTransportation(train2);
+			Bus bus1 = new Bus("Greyhound", "Montreal", "Quebec City", "Greyhound Canada", 3, 40.0);
+			service.addTransportation(bus1);
+			Bus bus2 = new Bus("FlixBus", "Paris", "Lyon", "FlixBus Europe", 2, 25.0);
+			service.addTransportation(bus2);
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
 
 		// Creating accommodations
-		Hotel h1 = new Hotel("Paris Opera", "Paris", 250.0, 5);
+		service.addAccommodation(new Hotel("Paris Opera", "Paris", 250.0, 5));
 		Hotel h2 = new Hotel("The Z hotel", "London", 150.0, 3);
+		service.addAccommodation(h2);
 		Hostel hos1 = new Hostel("Royal Oasis", "Haiti", 35.0, 8);
+		service.addAccommodation(hos1);
 		Hostel hos2 = new Hostel("HI Toronto", "Toronto", 30.0, 6);
-
-		// Store the accommodations in the array
-		accommodations[accomCount++] = h1;
-		accommodations[accomCount++] = h2;
-		accommodations[accomCount++] = hos1;
-		accommodations[accomCount++] = hos2;
+		service.addAccommodation(hos2);
 
 		// Creating 3 trips
-		Trip trip1 = new Trip("Paris", 7, 500.0, c1);
-		trip1.setTransportation(f1);
-		trip1.setAccommodation(h1);
-		Trip trip2 = new Trip("Tel Aviv", 5, 400.0, c2);
-		trip2.setTransportation(train1);
-		trip2.setAccommodation(h2);
-		Trip trip3 = new Trip("Haiti", 3, 300.0, c3);
-		trip3.setTransportation(bus1);
-		trip3.setAccommodation(hos1);
 
-		// Store trips in the array
-		trips[tripCount++] = trip1;
-		trips[tripCount++] = trip2;
-		trips[tripCount++] = trip3;
+		try {
+			Trip trip1 = service.createTrip("Paris", 7, 500.0, service.getClient(0).getClientId());
+
+			trip1.setTransportation(service.getTransports(0));
+			trip1.setAccommodation(service.getAccoms(0));
+			System.out.println("Trip created: " + trip1);
+			Trip trip2 = service.createTrip("Tel Aviv", 5, 400.0, service.getClient(1).getClientId());
+			trip2.setTransportation(service.getTransports(1));
+			trip2.setAccommodation(service.getAccoms(1));
+			Trip trip3 = service.createTrip("Haiti", 3, 300.0, service.getClient(2).getClientId());
+			trip3.setTransportation(service.getTransports(2));
+			trip3.setAccommodation(service.getAccoms(2));
+		} catch (InvalidTripDataException | EntityNotFoundException e) {
+			System.out.println(e.getMessage());
+		}
+
+		// 5. Triggers InvalidClientDataException
+		System.out.println("\n ---- Testing InvalidClientDataException (bad email)...");
+		try {
+			service.addClient(new Client("Bad", "Email", "notanemail"));
+		} catch (InvalidClientDataException e) {
+			System.out.println(e.getMessage());
+		} catch (DuplicateEmailException e) {
+			System.out.println(e.getMessage());
+		}
+
+		// 6. Triggers DuplicateEmailException
+		System.out.println("\n ---- Testing DuplicateEmailException (duplicate email)...");
+		try {
+			service.addClient(new Client("Maygan", "Duplicate", "mayg@gmail.com"));
+		} catch (InvalidClientDataException e) {
+			System.out.println(e.getMessage());
+		} catch (DuplicateEmailException e) {
+			System.out.println(e.getMessage());
+		}
+
+		// 7. Triggers InvalidTripDataException
+		System.out.println("\n ---- Testing InvalidTripDataException (price < $100)...");
+		try {
+			service.createTrip("Nowhere", 2, 50.0, service.getClient(0).getClientId());
+		} catch (InvalidTripDataException e) {
+			System.out.println(e.getMessage());
+		} catch (EntityNotFoundException e) {
+			System.out.println(e.getMessage());
+		}
+
+		// 8. Triggers EntityNotFoundException
+		System.out.println("\n ---- Testing EntityNotFoundException (bad client ID)...");
+		try {
+			service.findClientById("C9999");
+		} catch (EntityNotFoundException e) {
+			System.out.println(e.getMessage());
+		}
+
+		// 9. Triggers InvalidTransportDataException (bus with 0 stops)
+		System.out.println("\n ----Testing InvalidTransportDataException (bus 0 stops)...");
+		try {
+			new Bus("BadBus", "A", "B", "BadCo", 0, 30.0);
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
+
+		// 10. Triggers InvalidAccommodationDataException (hostel > $150)
+		System.out.println("\n ---- Testing InvalidAccommodationDataException (hostel > $150)...");
+		try {
+			new Hostel("Fancy", "Paris", 200.0, 4);
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
 
 		// Displaying all created objects by using toString()
 		System.out.println("\nAll clients: ");
-		for (int i = 0; i < clientCount; i++) {
-			System.out.println(clients[i]);
+		for (int i = 0; i < service.getClientCount(); i++) {
+			System.out.println(service.getClient(i));
 			System.out.println();
 		}
 		System.out.println("All transportation: ");
-		for (int i = 0; i < transCount; i++) {
-			System.out.println(transports[i]);
+		for (int i = 0; i < service.getTransCount(); i++) {
+			System.out.println(service.getTransports(i));
 			System.out.println();
 		}
 		System.out.println("All accommodations: ");
-		for (int i = 0; i < accomCount; i++) {
-			System.out.println(accommodations[i]);
+		for (int i = 0; i < service.getAccomCount(); i++) {
+			System.out.println(service.getAccoms(i));
 			System.out.println();
 		}
 		System.out.println("All trips: ");
-		for (int i = 0; i < tripCount; i++) {
-			System.out.println(trips[i]);
+		for (int i = 0; i < service.getTripCount(); i++) {
+			System.out.println(service.getTrip(i));
 			System.out.println();
 		}
 
 		// testing the equals() method in various ways
 		// Comparing objects of different classes
-		System.out.println("Comparing a client to a flight: " + c1.equals(f1));
+		System.out.println("Comparing a client to a flight: " + service.getClient(0).equals(service.getTransports(0)));
 		// Comparing two clients with different attributes
-		System.out.println("Comparing a client to another client: " + c1.equals(c2));
+		System.out
+				.println("Comparing a client to another client: " + service.getClient(0).equals(service.getClient(1)));
 		// Comparing two clients with the same attributes
-		System.out.println("Comparing a client to oneself: " + c1.equals(c1Clone));
+		System.out.println("Comparing a client to oneself: " + service.getClient(0).equals(c1Clone));
 
 		// Calculates and displays the cost of trips
-		for (int i = 0; i < tripCount; i++) {
+		for (int i = 0; i < service.getTripCount(); i++) {
 			System.out.println();
-			System.out.println("Trip " + trips[i].getTripId() + " to " + trips[i].getDestination() + " for "
-					+ trips[i].getDurationInDays() + " days" + "|Total price of: " + trips[i].calculateTotalCost());
+			System.out.println("Trip " + service.getTrip(i).getTripId() + " to " + service.getTrip(i).getDestination()
+					+ " for " + service.getTrip(i).getDurationInDays() + " days" + "|Total price of: "
+					+ service.getTrip(i).calculateTotalCost());
 
 		}
 
 		// Displays the most expensive trip
 		System.out.println();
-		showMostExpensiveTrip(trips, tripCount);
+		showMostExpensiveTrip();
 
 		// Create copy of transportation array, modify an element, then display both
 		// arrays
@@ -195,12 +249,12 @@ public class Driver {
 
 		// Display both arrays
 		System.out.println("\nOriginal array:");
-		for (int i = 0; i < transCount; i++)
-			System.out.println(transports[i]);
+		for (int i = 0; i < service.getTransCount(); i++)
+			System.out.println(service.getTransports(i));
 		System.out.println();
 
 		System.out.println("\nCopied array:");
-		for (int i = 0; i < transCount; i++)
+		for (int i = 0; i < service.getTransCount(); i++)
 			System.out.println(copy[i]);
 		System.out.println();
 
@@ -222,6 +276,11 @@ public class Driver {
 			System.out.println("6. Deep copy of the transportation array");
 			System.out.println("7. Deep copy of the accommodation array");
 			System.out.println("8. Total cost of a trip");
+			System.out.println("9.  List All Data Summary");
+			System.out.println("10. Load All Data (output/data/*.csv)");
+			System.out.println("11. Save All Data (output/data/*.csv)");
+			System.out.println("12. Run Predefined Scenario");
+			System.out.println("13. Generate Dashboard");
 			System.out.println("0. Exit");
 			System.out.println("===================================================");
 			System.out.print("Your choice: ");
@@ -244,11 +303,11 @@ public class Driver {
 
 			// Find and display the most expensive trip
 			case 5:
-				if (tripCount == 0) {
+				if (service.getTripCount() == 0) {
 					System.out.println("There are no trips available");
 
 				} else {
-					showMostExpensiveTrip(trips, tripCount);
+					showMostExpensiveTrip();
 				}
 
 				break;
@@ -262,10 +321,10 @@ public class Driver {
 					copyT[0].setCompanyName("Modified name");
 					System.out.println("Modified copy[0] company name to 'Modified name'.");
 					System.out.println("\nOriginal array:");
-					for (int i = 0; i < transCount; i++)
-						System.out.println(transports[i]);
+					for (int i = 0; i < service.getTransCount(); i++)
+						System.out.println(service.getTransports(i));
 					System.out.println("\nCopied array:");
-					for (int i = 0; i < transCount; i++)
+					for (int i = 0; i < service.getTransCount(); i++)
 						System.out.println(copyT[i]);
 				}
 				break;
@@ -278,10 +337,10 @@ public class Driver {
 					Accommodation[] copyA = copyAccommodationArray(accommodations, accomCount);
 					copyA[0].setName("Modified name");
 					System.out.println("\nOriginal accommodation array:");
-					for (int i = 0; i < accomCount; i++)
-						System.out.println(accommodations[i]);
+					for (int i = 0; i < service.getAccomCount(); i++)
+						System.out.println(service.getAccoms(i));
 					System.out.println("\nCopied accommodation array:");
-					for (int i = 0; i < accomCount; i++)
+					for (int i = 0; i < service.getAccomCount(); i++)
 						System.out.println(copyA[i]);
 				}
 				break;
@@ -294,16 +353,64 @@ public class Driver {
 				String costTripId = input.nextLine().trim();
 				boolean tripFound = false;
 				for (int i = 0; i < tripCount; i++) {
-					if (trips[i].getTripId().equalsIgnoreCase(costTripId)) {
-						System.out.println("Trip: " + trips[i].getTripId() + " to " + trips[i].getDestination()
-								+ " for " + trips[i].getDurationInDays() + " days");
-						System.out.println("Total cost: $" + trips[i].calculateTotalCost());
+					if (service.getTrip(i).getTripId().equalsIgnoreCase(costTripId)) {
+						System.out.println(
+								"Trip: " + service.getTrip(i).getTripId() + " to " + service.getTrip(i).getDestination()
+										+ " for " + service.getTrip(i).getDurationInDays() + " days");
+						System.out.println("Total cost: $" + service.getTrip(i).calculateTotalCost());
 						tripFound = true;
 						break;
 					}
 				}
 				if (!tripFound) {
 					System.out.println("Trip not found.");
+				}
+				break;
+
+			case 9:
+				if (service.getTripCount() == 0) {
+					System.out.println("There are no trips.");
+				} else {
+					for (int i = 0; i < service.getTripCount(); i++) {
+						System.out.println(service.getTrip(i));
+						System.out.println();
+					}
+				}
+
+				break;
+
+			case 10:
+
+				try {
+					service.loadAllData("output/data/");
+					System.out.println("All data loaded successfully.");
+				} catch (IOException e) {
+					System.out.println("Error saving data: " + e.getMessage());
+					// ERROR LOGGER
+				}
+
+				break;
+
+			case 11:
+				try {
+					service.saveAllData("output/data/");
+					System.out.println("All data saved successfully.");
+				} catch (IOException e) {
+					System.out.println("Error saving data: " + e.getMessage());
+					// ERROR LOGGER
+				}
+
+				break;
+
+			case 12:
+				predefinedScenario();
+				break;
+
+			case 13:
+				try {
+					DashboardGenerator.generateDashboard(service);
+				} catch (IOException e) {
+					System.out.println("Dashboard generation failed: " + e.getMessage());
 				}
 				break;
 			case 0:
@@ -333,11 +440,7 @@ public class Driver {
 			switch (clientChoice) {
 			// Add a new client
 			case 1:
-				if (clientCount >= clients.length) {
-					System.out.println("the array is full :(");
-					break;
 
-				}
 				System.out.print("\nEnter the first name: ");
 				String firstn = input.nextLine().trim();
 				System.out.print("\nEnter the last name: ");
@@ -346,44 +449,34 @@ public class Driver {
 				String email = input.nextLine().trim();
 
 				// Create a client and store in array
-				Client newClient = new Client(firstn, lastn, email);
-				clients[clientCount] = newClient;
-				clientCount++;
+				try {
+					Client newClient = new Client(firstn, lastn, email);
+					service.addClient(newClient);
 
-				System.out.println("\nClient added successfully: ");
-				System.out.println(newClient);
-				System.out.println();
+					System.out.println("\nClient added successfully: ");
+					System.out.println(newClient);
+					System.out.println();
+				} catch (InvalidClientDataException | DuplicateEmailException e) {
+					System.out.println("An error has occured");
+				}
 
 				break;
 
 			// Edit an existing client by ID
 			case 2:
-				if (clientCount == 0) {
+				if (service.getClientCount() == 0) {
 					System.out.println("There are no clients to edit.");
 					System.out.println();
 					break;
 				}
 				// Search for client by ID
 				System.out.print("Enter client ID to edit: ");
-				String idEdit = input.nextLine();
-				int index = -1;
+				String idEdit = input.nextLine().trim();
 
-				for (int i = 0; i < clientCount; i++) {
-					if (clients[i].getClientId().equalsIgnoreCase(idEdit)) {
-						index = i;
-						break;
-					}
-
-				}
-
-				if (index == -1) {
-					System.out.println("Client not found");
-					break;
-				}
-
-				else {
+				try {
+					Client c = service.findClientById(idEdit);
 					System.out.println("\nEditing client: ");
-					System.out.println(clients[index]);
+					System.out.println(c);
 					System.out.println();
 					System.out.print("New first name: ");
 					String newFirst = input.nextLine();
@@ -393,22 +486,24 @@ public class Driver {
 
 					System.out.print("New email: ");
 					String newEmail = input.nextLine();
-
-					clients[index].setEmailAdress(newEmail);
-					clients[index].setFirstName(newFirst);
-					clients[index].setLastName(newLast);
-
+					c.setFirstName(firstn);
+					c.setLastName(lastn);
+					c.setEmailAdress(newEmail);
 					System.out.println("The client has been updated: ");
-					System.out.println(clients[index]);
+					System.out.println(c);
 					System.out.println();
 
+				} catch (EntityNotFoundException e) {
+					System.out.println("Client not found.");
+				} catch (InvalidClientDataException e) {
+					System.out.println("Invalid data: " + e.getMessage());
 				}
 
 				break;
 
 			// Delete a client by ID
 			case 3:
-				if (clientCount == 0) {
+				if (service.getClientCount() == 0) {
 					System.out.println("No clients available to delete.");
 					break;
 				}
@@ -417,8 +512,11 @@ public class Driver {
 				System.out.print("Enter client ID to delete: ");
 				String idDelete = input.nextLine().trim();
 				int deleteIndex = -1;
+                int clientCount = service.getClientCount();
+                
+                
 				for (int i = 0; i < clientCount; i++) {
-					if (clients[i].getClientId().equalsIgnoreCase(idDelete)) {
+					if (service.getClient(i).getClientId().equalsIgnoreCase(idDelete)) {
 						deleteIndex = i;
 						break;
 					}
@@ -427,7 +525,7 @@ public class Driver {
 					System.out.println("Client not found.");
 				} else {
 					for (int i = deleteIndex; i < clientCount - 1; i++) {
-						clients[i] = clients[i + 1];
+						service.getClient(i) = service.getClient(i + 1);
 
 					}
 
@@ -511,13 +609,16 @@ public class Driver {
 						break;
 					}
 				}
-				if (clientFound == null) {
-					System.out.println("Client not found.");
+
+				Trip newTrip = null;
+
+				try {
+					newTrip = new Trip(destin, dur, price, clientFound);
+
+				} catch (exceptions.InvalidTripDataException e) {
+					System.out.println("Error: " + e.getMessage());
 					break;
 				}
-
-				// Create and store the trip
-				Trip newTrip = new Trip(destin, dur, price, clientFound);
 
 				// Assign a transportation to the trip
 				if (transCount > 0) {
@@ -1229,4 +1330,3 @@ public class Driver {
 		return copy;
 	}
 }
-*/
