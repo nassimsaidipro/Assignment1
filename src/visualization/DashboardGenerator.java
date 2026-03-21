@@ -46,6 +46,8 @@ public class DashboardGenerator {
 	public static void generateDashboard(SmartTravelService service) throws IOException {
 		// Ensure output dir exists
 		new File("output").mkdirs();
+		new File("output/charts").mkdirs(); // add this
+		new File("output/dashboard").mkdirs();
 
 		// 1. Generate charts FIRST (your existing code)
 		TripChartGenerator.generateCostBarChart(service);
@@ -260,7 +262,7 @@ public class DashboardGenerator {
 			totalDays += service.getTrip(i).getDurationInDays();
 		}
 		avgDuration = totalDays / tripCount;
-		
+
 		mostVisited = findMostVisitedDestination(service);
 		visitCount = countDestinationVisits(service, mostVisited);
 
