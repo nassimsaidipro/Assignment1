@@ -26,7 +26,9 @@ import travel.*;
 import java.util.Scanner;
 
 import client.*;
+import exceptions.InvalidClientDataException;
 
+/**
 public class Driver {
 
 	// Arrays for the classes
@@ -37,6 +39,8 @@ public class Driver {
 
 	// Scanner to prompt user input
 	static Scanner input = new Scanner(System.in);
+	
+	
 
 	// Counters to track how many elements are in each array
 	static int clientCount = 0;
@@ -59,7 +63,6 @@ public class Driver {
 		System.out.print("Enter your choice: ");
 		int choice = input.nextInt();
 
-		// The scenario or the menu runs, depending on the user's choice
 		if (choice == 1) {
 			predefinedScenario();
 		} else if (choice == 2) {
@@ -71,23 +74,29 @@ public class Driver {
 		// Display closing message
 		System.out.println("\nThank you for using our SmartTravel system! The program will now close.");
 
-	}
+	}	
+	
+	
 
 	// ------------------------------------------------------------------------------------------------------------------------------------
 	// This is the predefined scenario testing
 	public static void predefinedScenario() {
 		System.out.println("\nThe predefined testing scenario is now running.");
 
-		// Creating 3 clients to sample
-		Client c1 = new Client("Maygan", "Beauchamp", "mayg@gmail.com");
+		try {
+			// Creating 3 clients to sample
+			Client c1 = new Client("Maygan", "Beauchamp", "mayg@gmail.com");
 
-		Client c2 = new Client("Venta", "Raji", "venta@gmail.com");
-		Client c3 = new Client("Veda", "Melky", "velky@gmail.com");
+			Client c2 = new Client("Venta", "Raji", "venta@gmail.com");
+			Client c3 = new Client("Veda", "Melky", "velky@gmail.com");
 
-		// Store the clients in the array
-		clients[clientCount++] = c1;
-		clients[clientCount++] = c2;
-		clients[clientCount++] = c3;
+			// Store the clients in the array
+			clients[clientCount++] = c1;
+			clients[clientCount++] = c2;
+			clients[clientCount++] = c3;
+		} catch (InvalidClientDataException e) {
+			System.out.println(e.getMessage());
+		}
 
 		Client c1Clone = new Client("Maygan", "Beauchamp", "mayg@gmail.com");
 
@@ -616,11 +625,11 @@ public class Driver {
 				} else {
 					System.out.println("No accommodations available to attach.");
 				}
-				
+
 				trips[tripCount++] = newTrip;
 				System.out.println("Trip added successfully: ");
 				System.out.println(newTrip);
-				
+
 				break;
 
 			// Edit an existing trip by ID
@@ -1220,3 +1229,4 @@ public class Driver {
 		return copy;
 	}
 }
+*/
