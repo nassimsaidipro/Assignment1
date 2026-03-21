@@ -43,7 +43,7 @@ public class Hostel extends Accommodation {
 	// Private constructor used EXCLUSIVELY by the copy() method.
 	// Passes the exact ID and shared fields up to the parent's protected constructor,
 	// and assigns the Hostel-specific shared beds, without triggering a numId increment.
-	private Hostel(String accommodationId, String name, String location, double pricePerNight, int sharedBedsPerRoom) {
+	public Hostel(String accommodationId, String name, String location, double pricePerNight, int sharedBedsPerRoom) {
 		super(accommodationId, name, location, pricePerNight); 
 		this.sharedBedsPerRoom = sharedBedsPerRoom;
 	}
