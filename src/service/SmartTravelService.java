@@ -32,9 +32,80 @@ public class SmartTravelService {
 	private Accommodation[] accommodations = new Accommodation[50];
 
 	private int clientCount = 0;
+	
+
 	private int tripCount = 0;
 	private int transCount = 0;
 	private int accomCount = 0;
+	
+	public Client getClient(int i) {
+		return clients[i];
+	}
+
+	public void setClients(Client[] clients) {
+		this.clients = clients;
+	}
+
+	public Trip getTrip(int i) {
+		return trips[i];
+	}
+	
+	public Trip[] getAllTrips() {
+		return trips;
+	}
+
+	public void setTrips(Trip[] trips) {
+		this.trips = trips;
+	}
+
+	public Transportation[] getTransports() {
+		return transports;
+	}
+
+	public void setTransports(Transportation[] transports) {
+		this.transports = transports;
+	}
+
+	public Accommodation[] getAccommodations() {
+		return accommodations;
+	}
+
+	public void setAccommodations(Accommodation[] accommodations) {
+		this.accommodations = accommodations;
+	}
+
+	public int getClientCount() {
+		return clientCount;
+	}
+
+	public void setClientCount(int clientCount) {
+		this.clientCount = clientCount;
+	}
+
+	public int getTripCount() {
+		return tripCount;
+	}
+
+	public void setTripCount(int tripCount) {
+		this.tripCount = tripCount;
+	}
+
+	public int getTransCount() {
+		return transCount;
+	}
+
+	public void setTransCount(int transCount) {
+		this.transCount = transCount;
+	}
+
+	public int getAccomCount() {
+		return accomCount;
+	}
+
+	public void setAccomCount(int accomCount) {
+		this.accomCount = accomCount;
+	}
+	
 
 	// Adds a client after verifying the email is unique.
 	public void addClient(Client c) throws InvalidClientDataException, DuplicateEmailException {
