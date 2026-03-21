@@ -37,6 +37,22 @@ public class SmartTravelService {
 	private int transCount = 0;
 	private int accomCount = 0;
 
+	public Client[] getClients() {
+		return clients;
+	}
+
+	public Trip[] getTrips() {
+		return trips;
+	}
+
+	public Transportation[] getTransports() {
+		return transports;
+	}
+
+	public Accommodation[] getAccoms() {
+		return accommodations;
+	}
+
 	public Client getClient(int i) {
 		return clients[i];
 	}
@@ -159,15 +175,13 @@ public class SmartTravelService {
 		return t;
 
 	}
-	
-	
+
 	// Adds a transportation
 	public void addTransportation(Transportation t) {
 		transports[transCount++] = t;
 	}
-	
-	
-	//Adds an accomodation
+
+	// Adds an accomodation
 	public void addAccommodation(Accommodation a) {
 		accommodations[accomCount++] = a;
 	}
