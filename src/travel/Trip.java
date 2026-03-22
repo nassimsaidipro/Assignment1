@@ -58,7 +58,7 @@ public class Trip {
 		this.destination = destination;
 		this.durationInDays = duration;
 		this.basePrice = basePrice;
-		this.travelingClient = travelingClient.copy();
+		this.travelingClient = travelingClient;
 		this.transportation = null;
 		this.accomodation = null;
 		tripIdGenerator();
@@ -104,7 +104,7 @@ public class Trip {
 	    this.basePrice = basePrice;
 	    
 	    if (travelingClient != null) {
-	        this.travelingClient = travelingClient.copy();
+	        this.travelingClient = travelingClient;
 	    } else {
 	        this.travelingClient = null; 
 	    }
@@ -263,7 +263,7 @@ public class Trip {
 		if (this.travelingClient == null) {
 			return null;
 		}
-		return this.travelingClient.copy();
+		return this.travelingClient;
 	}
 
 	// Sets the traveling client using a deep copy to protect encapsulation, or null if not provided
@@ -271,7 +271,7 @@ public class Trip {
 	    if (travelingClient == null) {
 	        throw new InvalidTripDataException("A valid client object is required for this trip."); // Driver handles the ID search
 	    }
-	    this.travelingClient = travelingClient.copy();
+	    this.travelingClient = travelingClient;
 	}
 
 }

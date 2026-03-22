@@ -227,5 +227,7 @@ public class SmartTravelService {
 				throw new DuplicateEmailException("Email already exists.");
 		}
 	}
+	
+
 
 }
