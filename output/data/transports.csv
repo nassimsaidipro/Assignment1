@@ -1,6 +1,0 @@
-FLIGHT;TR3001;AirCanada;Montreal;Paris;650.0;23.0
-FLIGHT;TR3002;Delta;New York;London;550.0;20.0
-TRAIN;TR3003;VIA Rail;Montreal;Toronto;120.0;high-speed
-TRAIN;TR3004;Amtrak;Boston;Washington;80.0;regional
-BUS;TR3005;Greyhound;Montreal;Quebec City;40.0;3
-BUS;TR3006;FlixBus;Paris;Lyon;25.0;2
