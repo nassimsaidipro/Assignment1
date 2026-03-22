@@ -1,6 +1,6 @@
 // -----------------------------------------------------------------------
-// Assignment 1
-// Written by: Darwinsh Saint-Jean(40341644) and Nassim Saidi(40345885)
+// Assignment 2
+// Written by: Darwinsh Saint-Jean (40341644) & Nassim Saidi (40345885)
 // -----------------------------------------------------------------------
 
 package travel;
@@ -64,29 +64,18 @@ public class Train extends Transportation {
 	// train type, and seat class (excludes trainFare)
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null || getClass() != obj.getClass())
-			return false;
-
-		Train other = (Train) obj;
-		return companyName.equals(other.companyName) &&
-				departureCity.equals(other.departureCity) &&
-				arrivalCity.equals(other.arrivalCity) &&
-				trainType.equals(other.trainType) &&
-				seatClass.equals(other.seatClass);
+	    if (!super.equals(obj)) return false;
+	    Train other = (Train) obj;
+	    return trainType.equals(other.trainType) && seatClass.equals(other.seatClass);
 	}
 
 	// Returns a formatted string displaying all relevant Train details
 	@Override
 	public String toString() {
-		return "\nTrain ID: " + getTransportId() + "\n" +
-				"Company: " + companyName + "\n" +
-				"Departure: " + departureCity + "\n" +
-				"Arrival: " + arrivalCity + "\n" +
-				"Train Type: " + trainType + "\n" +
-				"Seat Class: " + seatClass + "\n" +
-				"Train Fare: " + trainFare;
+	    return super.toString() + 
+	           "\nTrain Type: " + trainType + 
+	           "\nSeat Class: " + seatClass + 
+	           "\nTrain Fare: " + trainFare;
 	}
 
 	// Returns the total cost of the train trip, which is simply the flat train fare

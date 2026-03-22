@@ -1,6 +1,6 @@
 // -----------------------------------------------------------------------
-// Assignment 1
-// Written by: Darwinsh Saint-Jean(40341644) and Nassim Saidi(40345885)
+// Assignment 2
+// Written by: Darwinsh Saint-Jean (40341644) & Nassim Saidi (40345885)
 // -----------------------------------------------------------------------
 
 package travel;
@@ -268,10 +268,9 @@ public class Trip {
 
 	// Sets the traveling client using a deep copy to protect encapsulation, or null if not provided
 	public void setTravelingClient(Client travelingClient) throws InvalidTripDataException {
-		if (travelingClient == null) {
-	        throw new InvalidTripDataException("Client ID must exist in current client array.");
+	    if (travelingClient == null) {
+	        throw new InvalidTripDataException("A valid client object is required for this trip."); // Driver handles the ID search
 	    }
-	    
 	    this.travelingClient = travelingClient.copy();
 	}
 

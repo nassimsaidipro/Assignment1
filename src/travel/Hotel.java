@@ -1,8 +1,7 @@
 // -----------------------------------------------------------------------
-// Assignment 1
-// Written by: Darwinsh Saint-Jean(40341644) and Nassim Saidi(40345885)
+// Assignment 2
+// Written by: Darwinsh Saint-Jean (40341644) & Nassim Saidi (40345885)
 // -----------------------------------------------------------------------
-
 package travel;
 
 import exceptions.InvalidAccommodationDataException;
@@ -68,26 +67,15 @@ public class Hotel extends Accommodation {
 	// Checks equality based on name, location, price per night, and star rating
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null || getClass() != obj.getClass())
-			return false;
-
-		Hotel other = (Hotel) obj;
-		return name.equals(other.name) &&
-				location.equals(other.location) &&
-				pricePerNight == other.pricePerNight &&
-				starRating == other.starRating;
+	    if (!super.equals(obj)) return false; // Checks Name, Location, Price
+	    Hotel other = (Hotel) obj;
+	    return starRating == other.starRating;
 	}
 
 	// Returns a formatted string displaying all relevant Hotel details
 	@Override
 	public String toString() {
-		return "Hotel ID: " + getAccommodationId() + "\n" +
-				"Name: " + name + "\n" +
-				"Location: " + location + "\n" +
-				"Price Per Night: $" + pricePerNight + "\n" +
-				"Star Rating: " + starRating;
+	    return super.toString() + "\nStar Rating: " + starRating;
 	}
 
 	// --- Getters and Setters ---
