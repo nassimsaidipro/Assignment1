@@ -513,6 +513,8 @@ public class SmartTravelDriver {
 
 					System.out.print("New email: ");
 					String newEmail = input.nextLine();
+
+					service.checkDuplicateEmail(newEmail);
 					c.setFirstName(newFirst);
 					c.setLastName(newLast);
 					c.setEmailAdress(newEmail);
@@ -522,6 +524,8 @@ public class SmartTravelDriver {
 
 				} catch (EntityNotFoundException e) {
 					System.out.println("Client not found.");
+				} catch (DuplicateEmailException e) {
+					System.out.println("Email already exists: " + e.getMessage());
 				} catch (InvalidClientDataException e) {
 					System.out.println("Invalid data: " + e.getMessage());
 				}

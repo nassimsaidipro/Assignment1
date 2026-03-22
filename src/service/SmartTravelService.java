@@ -127,11 +127,14 @@ public class SmartTravelService {
 
 		if (clientCount >= clients.length) {
 			System.out.println("Client array is full.");
+			return;
 		}
 		for (int i = 0; i < clientCount; i++) {
 			if (clients[i].getEmailAdress().equalsIgnoreCase(c.getEmailAdress())) {
 				throw new DuplicateEmailException("Email already exists.");
+				
 			}
+			
 
 		}
 		clients[clientCount++] = c;
@@ -214,6 +217,15 @@ public class SmartTravelService {
 		TransportationFileManager.saveTransports(transports, transCount, directory + "transports.csv");
 		AccommodationFileManager.saveAccommodations(accommodations, accomCount, directory + "accommodations.csv");
 		TripFileManager.saveTrips(trips, tripCount, directory + "trips.csv");
+	}
+	
+	
+	// Verifies if the email is a duplicate or not
+	public void checkDuplicateEmail(String email) throws DuplicateEmailException {
+		for (int i = 0; i < clientCount; i++) {
+			if (clients[i].getEmailAdress().equalsIgnoreCase(email))
+				throw new DuplicateEmailException("Email already exists.");
+		}
 	}
 
 }
