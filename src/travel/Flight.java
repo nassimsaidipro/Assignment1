@@ -71,29 +71,18 @@ public class Flight extends Transportation {
 	// airline name, and luggage allowance (excludes flightPrice)
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null || getClass() != obj.getClass())
-			return false;
-
-		Flight other = (Flight) obj;
-		return companyName.equals(other.companyName) &&
-				departureCity.equals(other.departureCity) &&
-				arrivalCity.equals(other.arrivalCity) &&
-				airlineName.equals(other.airlineName) &&
-				luggageAllowance == other.luggageAllowance;
+	    if (!super.equals(obj)) return false;
+	    Flight other = (Flight) obj;
+	    return airlineName.equals(other.airlineName) && luggageAllowance == other.luggageAllowance;
 	}
 
 	// Returns a formatted string displaying all relevant Flight details
 	@Override
 	public String toString() {
-		return "\nFlight ID: " + getTransportId() + "\n" +
-				"Company: " + companyName + "\n" +
-				"Departure: " + departureCity + "\n" +
-				"Arrival: " + arrivalCity + "\n" +
-				"Airline: " + airlineName + "\n" +
-				"Luggage Allowance: " + luggageAllowance + " kg" + "\n" +
-				"Flight price: " + flightPrice;
+	    return super.toString() + 
+	           "\nAirline: " + airlineName + 
+	           "\nLuggage Allowance: " + luggageAllowance + " kg" + 
+	           "\nFlight price: " + flightPrice;
 	}
 
 	// Returns the total cost of the flight, which is simply the flat flight price

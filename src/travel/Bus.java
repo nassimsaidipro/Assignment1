@@ -1,6 +1,6 @@
 // -----------------------------------------------------------------------
-// Assignment 1
-// Written by: Darwinsh Saint-Jean(40341644) and Nassim Saidi(40345885)
+// Assignment 2
+// Written by: Darwinsh Saint-Jean (40341644) & Nassim Saidi (40345885)
 // -----------------------------------------------------------------------
 
 package travel;
@@ -29,8 +29,7 @@ public class Bus extends Transportation {
 	// Parameterized constructor - passes shared transportation fields to the parent
 	// constructor
 	// and initializes Bus-specific fields with provided values
-	public Bus(String companyName, String departureCity, String arrivalCity, String busCompany, int numberOfStops,
-			double busFare) throws InvalidTransportDataException {
+	public Bus(String companyName, String departureCity, String arrivalCity, String busCompany, int numberOfStops, double busFare) throws InvalidTransportDataException {
 		super(companyName, departureCity, arrivalCity);
 		if (numberOfStops < 1) {
 			throw new InvalidTransportDataException("Bus requires to have at least 1 stop");
@@ -44,12 +43,6 @@ public class Bus extends Transportation {
 	// and copies Bus-specific fields from the other Bus object
 	public Bus(Bus other) {
 		super(other);
-
-		// if (numberOfStops < 1) {
-		// throw new InvalidTransportDataException("Bus requires to have at least 1
-		// stop");
-		// }
-
 		this.busCompany = other.busCompany;
 		this.numberOfStops = other.numberOfStops;
 		this.busFare = other.busFare;
@@ -81,23 +74,18 @@ public class Bus extends Transportation {
 	// bus company, and number of stops (excludes busFare)
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null || getClass() != obj.getClass())
-			return false;
-
-		Bus other = (Bus) obj;
-		return companyName.equals(other.companyName) && departureCity.equals(other.departureCity)
-				&& arrivalCity.equals(other.arrivalCity) && busCompany.equals(other.busCompany)
-				&& numberOfStops == other.numberOfStops;
+	    if (!super.equals(obj)) return false; // Checks Company, Departure, and Arrival
+	    Bus other = (Bus) obj;
+	    return busCompany.equals(other.busCompany) && numberOfStops == other.numberOfStops;
 	}
 
 	// Returns a formatted string displaying all relevant Bus details
 	@Override
 	public String toString() {
-		return "\nBus ID: " + getTransportId() + "\n" + "Company: " + companyName + "\n" + "Departure: " + departureCity
-				+ "\n" + "Arrival: " + arrivalCity + "\n" + "Bus Company: " + busCompany + "\n" + "Number of Stops: "
-				+ numberOfStops + "\n" + "Bus Fare: " + busFare;
+	    return super.toString() + // Gets parent info
+	           "\nBus Company: " + busCompany + 
+	           "\nNumber of Stops: " + numberOfStops + 
+	           "\nBus Fare: " + busFare;
 	}
 
 	// Returns the total cost of the bus trip, which is simply the flat bus fare

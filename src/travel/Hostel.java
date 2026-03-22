@@ -1,6 +1,6 @@
 // -----------------------------------------------------------------------
-// Assignment 1
-// Written by: Darwinsh Saint-Jean(40341644) and Nassim Saidi(40345885)
+// Assignment 2
+// Written by: Darwinsh Saint-Jean (40341644) & Nassim Saidi (40345885)
 // -----------------------------------------------------------------------
 
 package travel;
@@ -69,28 +69,17 @@ public class Hostel extends Accommodation {
 	// Checks equality based on name, location, price per night, and shared beds per room
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null || getClass() != obj.getClass())
-			return false;
-
-		Hostel other = (Hostel) obj;
-		return name.equals(other.name) &&
-				location.equals(other.location) &&
-				pricePerNight == other.pricePerNight &&
-				sharedBedsPerRoom == other.sharedBedsPerRoom;
+	    if (!super.equals(obj)) return false;
+	    Hostel other = (Hostel) obj;
+	    return sharedBedsPerRoom == other.sharedBedsPerRoom;
 	}
 
 	// Returns a formatted string displaying all relevant Hostel details
 	@Override
 	public String toString() {
-		return "Hostel ID: " + getAccommodationId() + "\n" +
-				"Name: " + name + "\n" +
-				"Location: " + location + "\n" +
-				"Price Per Night: $" + pricePerNight + "\n" +
-				"Shared Beds Per Room: " + sharedBedsPerRoom;
+	    return super.toString() + "\nShared Beds Per Room: " + sharedBedsPerRoom;
 	}
-
+	
 	// --- Getters and Setters ---
 
 	public int getSharedBedsPerRoom() {

@@ -1,6 +1,6 @@
 // -----------------------------------------------------------------------
-// Assignment 1
-// Written by: Darwinsh Saint-Jean(40341644) and Nassim Saidi(40345885)
+// Assignment 2
+// Written by: Darwinsh Saint-Jean (40341644) & Nassim Saidi (40345885)
 // -----------------------------------------------------------------------
 
 package travel;
