@@ -14,64 +14,51 @@ import java.io.*;
 // ensures that any corrupted data lines are logged safely without crashing the program.
 public class AccommodationFileManager {
 
-    // Saves the current array of accommodations to a text file
-    public static void saveAccommodations(Accommodation[] accs, int count, String filePath) throws IOException {
-        
-        // Open a PrintWriter to write to the specified file
-        try (PrintWriter writer = new PrintWriter(new FileWriter(filePath))) {
-            
-            // Loop through the array up to the current count
-            for (int i = 0; i < count; i++) {
-                Accommodation a = accs[i];
-                
-                // Identify the specific subclass to format and write its unique attributes
-                if (a instanceof Hotel) {
-                    Hotel h = (Hotel) a;                   
-                    writer.println("HOTEL;" + h.getAccommodationId() + ";" + h.getName() + ";" + h.getLocation() + ";" + h.getPricePerNight() + ";" + h.getStarRating());                       
-                } else if (a instanceof Hostel) {
-                    Hostel hos = (Hostel) a;
-                    writer.println("HOSTEL;" + hos.getAccommodationId() + ";" + hos.getName() + ";" + hos.getLocation() + ";" + hos.getPricePerNight() + ";" + hos.getSharedBedsPerRoom());                
-                }
-            }
-        }
-    }
-
-    // Loads accommodation data from a text file and reconstructs the objects
     public static int loadAccommodations(Accommodation[] accs, String filePath) throws IOException {
         int count = 0;
-        
-        // Open a BufferedReader to read the file line-by-line
+        int recordNumber = 0; // Tracks the line number in the CSV
+
         try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
             String line;
-            
             while ((line = reader.readLine()) != null) {
-                // Skip any empty or blank lines at the bottom of the file
+                recordNumber++;
                 if (line.trim().isEmpty()) continue;
 
-                // Try to parse the line; catch errors to prevent the entire load from failing
                 try {
-                    // Split the line into individual data fields using the semicolon delimiter
                     String[] d = line.split(";");
-                    
-                    // Check the first field to determine if we are building a Hotel or a Hostel
-                    switch (d[0].toUpperCase()) {
-                        case "HOTEL":                            
-                            accs[count++] = new Hotel(d[1], d[2], d[3], Double.parseDouble(d[4]), Integer.parseInt(d[5]));
-                            break;
-                        case "HOSTEL":                         
-                            accs[count++] = new Hostel(d[1], d[2], d[3], Double.parseDouble(d[4]), Integer.parseInt(d[5]));
-                            break;
-                        default:
-                            throw new Exception("Unknown accommodation type: " + d[0]);
+                    // Assuming d[1] is the Type (HOTEL, HOSTEL)
+                    String type = d[1].toUpperCase();
+
+                    Accommodation a;
+                    if (type.equals("HOTEL")) {
+                        a = new Hotel(d[0], d[2], d[3], Double.parseDouble(d[4]), Integer.parseInt(d[5]));
+                    } else if (type.equals("HOSTEL")) {
+                        a = new Hostel(d[0], d[2], d[3], Double.parseDouble(d[4]), Integer.parseInt(d[5]));
+                    } else {
+                        // This triggers Error #3: Unknown Accommodation type
+                        throw new Exception("Accommodation Error: Unknown Accommodation type: " + type);
                     }
+
+                    accs[count++] = a;
+
                 } catch (Exception e) {
-                    // Log the specific corrupted line to the error file and move to the next line
-                    ErrorLogger.log("Accommodation load error on line: " + line + " | Error: " + e.getMessage());
+                    // Logs to the ErrorLogger bucket for the final report
+                    ErrorLogger.log("Invalid Accommodation Exception: Record number " + recordNumber + 
+                                    " in accommodations file. " + e.getMessage());
                 }
             }
         }
-        
-        // Return the number of accommodations successfully loaded into the array
         return count;
+    }
+
+    public static void saveAccommodations(Accommodation[] accs, int count, String filePath) throws IOException {
+        try (PrintWriter writer = new PrintWriter(new FileWriter(filePath))) {
+            for (int i = 0; i < count; i++) {
+                Accommodation a = accs[i];
+                String type = (a instanceof Hotel) ? "HOTEL" : "HOSTEL";
+                writer.println(a.getAccommodationId() + ";" + type + ";" + a.getName() + ";" + 
+                               a.getLocation() + ";" + a.getPricePerNight());
+            }
+        }
     }
 }

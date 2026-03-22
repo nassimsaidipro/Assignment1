@@ -16,56 +16,53 @@ public class ClientFileManager {
 
 	// Writes the array of current clients to a specified text file
 	public static void saveClients(Client[] clients, int count, String filePath) throws IOException {
-
-		// Initialize a PrintWriter with a FileWriter for file output
 		try (PrintWriter writer = new PrintWriter(new FileWriter(filePath))) {
-
-			// Iterate through the client array up to the current count
 			for (int i = 0; i < count; i++) {
 				Client c = clients[i];
-				// Format client data into a single string with semicolon delimiters
+				// Saves: ID;First;Last;Email;AmountSpent
 				writer.println(c.getClientId() + ";" + c.getFirstName() + ";" + c.getLastName() + ";"
 						+ c.getEmailAdress() + ";" + c.getTotalSpent());
-
 			}
 		}
 	}
 
-	// Reads client data from a text file and reconstructs the Client objects
+	// Reads client data and reconstructs objects while tracking line numbers for errors
 	public static int loadClients(Client[] clients, String filePath) throws IOException {
 		int count = 0;
+		int recordNumber = 0; // NEW: Tracks the exact line in the CSV file
 
-		// Initialize a BufferedReader to read the file line by line
 		try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
 			String line;
 
 			while ((line = reader.readLine()) != null) {
-				// Ignore empty lines to prevent parsing errors
+				recordNumber++; // Increment for every line read (including empty ones)
+				
 				if (line.trim().isEmpty())
 					continue;
 
 				try {
-					// Split the raw string into an array of data fields
 					String[] d = line.split(";");
 
-					// Call the public backdoor constructor to recreate the Client with its original
-					// ID
+					// Validate column count to match Error #1 in your example
+					if (d.length < 4) {
+						throw new Exception("Must have at least 4 columns (ID, First, Last, Email)");
+					}
+
+					// Recreate the Client using the backdoor constructor
+					// Updated to pass 0.0 initially, then set the actual amount if it exists
 					clients[count] = new Client(d[0], d[1], d[2], d[3]);
 
 					if (d.length > 4) {
 						clients[count].setAmountSpent(Double.parseDouble(d[4]));
-
 					}
 					count++;
 
-				} catch (Exception e) {
-					// Log the error to errors.txt and continue reading the next line
-					ErrorLogger.log("Client load error on line: " + line + " | Error: " + e.getMessage());
+				} catch (Exception e) {					
+					ErrorLogger.log("Invalid Client Exception: Record number " + recordNumber + 
+					                " in clients file. " + e.getMessage());
 				}
 			}
 		}
-
-		// Return the final number of clients successfully loaded
 		return count;
 	}
 }

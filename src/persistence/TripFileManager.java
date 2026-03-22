@@ -9,25 +9,19 @@ import travel.*;
 import client.Client;
 import java.io.*;
 
-// This class handles the persistence of Trip objects. Unlike simpler objects, 
-// Trip serialization requires linking IDs for Clients, Transportation, and 
-// Accommodations. During loading, the class uses helper methods to search 
-// existing arrays and "re-link" these objects to the Trip, ensuring 
-// relational integrity is maintained between sessions.
 public class TripFileManager {
 
-    // Saves the array of Trip objects to a text file using semicolon delimiters
+    // Saves Trip data including the IDs of linked objects
     public static void saveTrips(Trip[] trips, int count, String filePath) throws IOException {
         try (PrintWriter writer = new PrintWriter(new FileWriter(filePath))) {
             for (int i = 0; i < count; i++) {
                 Trip t = trips[i];
                 
-                // Safely extract IDs from linked objects; use "NONE" if the component isn't booked
+                // Use "NONE" if an object isn't linked to avoid NullPointerExceptions
                 String clientId = (t.getTravelingClient() != null) ? t.getTravelingClient().getClientId() : "NONE";
                 String transId = (t.getTransportation() != null) ? t.getTransportation().getTransportId() : "NONE";
                 String accomId = (t.getAccommodation() != null) ? t.getAccommodation().getAccommodationId() : "NONE";
                 
-                // Print the formatted line representing a single trip
                 writer.println(t.getTripId() + ";" + 
                                t.getDestination() + ";" + 
                                t.getDurationInDays() + ";" + 
@@ -39,53 +33,64 @@ public class TripFileManager {
         }
     }
 
-    // Reconstructs Trip objects from a file by searching associated object arrays for matches
+    // Loads Trip data and performs manual ID linking with error reporting
     public static int loadTrips(Trip[] trips, String filePath, 
                                 Client[] clients, int clientCount, 
                                 Transportation[] transports, int transCount, 
                                 Accommodation[] accommodations, int accomCount) throws IOException {
         int count = 0;
+        int recordNumber = 0; // Tracks line number for ErrorLogger
+
         try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
             String line;
             while ((line = reader.readLine()) != null) {
-                // Skip blank lines
+                recordNumber++;
                 if (line.trim().isEmpty()) continue; 
 
                 try {
                     String[] d = line.split(";");
-                
-                    // 1. Locate the specific Client object in memory using the saved ID
-                    Client c = findClient(d[4], clients, clientCount);
                     
-                    // 2. Instantiate the Trip using the specialized constructor to preserve the ID
+                    // Validation: Ensure the Trip ID format is correct (Error #8 in example)
+                    if (!d[0].startsWith("T")) {
+                        throw new Exception("Invalid tripId: " + d[0]);
+                    }
+
+                    // 1. Link Client (Matches Error #7: Client not found)
+                    Client c = findClient(d[4], clients, clientCount);
+                    if (c == null && !d[4].equals("NONE")) {
+                        throw new Exception("Entity not found: ID = Client not found: " + d[4]);
+                    }
+                    
+                    // Create basic Trip object
                     Trip t = new Trip(d[0], d[1], Integer.parseInt(d[2]), Double.parseDouble(d[3]), c);
                     
-                    // 3. Search and re-link the Transportation object if an ID was saved
+                    // 2. Link Transportation (Matches Error #6: Transportation not found)
                     Transportation trans = findTransport(d[5], transports, transCount);
-                    if (trans != null) {
-                        t.setTransportation(trans);
+                    if (trans == null && !d[5].equals("NONE")) {
+                        throw new Exception("Entity not found: ID = Transportation not found: " + d[5]);
                     }
+                    if (trans != null) t.setTransportation(trans);
                     
-                    // 4. Search and re-link the Accommodation object if an ID was saved
+                    // 3. Link Accommodation (Matches Error #9: Accommodation not found)
                     Accommodation accom = findAccommodation(d[6], accommodations, accomCount);
-                    if (accom != null) {
-                        t.setAccommodation(accom);
+                    if (accom == null && !d[6].equals("NONE")) {
+                        throw new Exception("Entity not found: ID = Accommodation not found: " + d[6]);
                     }
+                    if (accom != null) t.setAccommodation(accom);
                     
-                    // 5. Add the fully reconstructed Trip to the array
                     trips[count++] = t;
                     
                 } catch (Exception e) {
-                    // Log errors for malformed lines to the error log file
-                    ErrorLogger.log("Trip load error on line: " + line + " | Error: " + e.getMessage());
+                    // Logs the error using the exact prefix required for Trips
+                    ErrorLogger.log("Invalid Trip Exception: Record number " + recordNumber + 
+                                    " in trips file. Trip Error: " + e.getMessage());
                 }
             }
         }
         return count;
     }
 
-    // --- PRIVATE HELPER METHODS ---
-    // These methods perform linear searches on existing arrays to find object references by ID.
+    // --- Private Helper Methods for ID Searching ---
 
     private static Client findClient(String id, Client[] clients, int count) {
         if (id.equals("NONE")) return null;

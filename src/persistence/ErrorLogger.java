@@ -1,34 +1,57 @@
-// -----------------------------------------------------------------------
-// Assignment 2
-// Written by: Darwinsh Saint-Jean (40341644) & Nassim Saidi (40345885)
-// -----------------------------------------------------------------------
-
 package persistence;
 
 import java.io.*;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
-// This utility class provides a centralized logging mechanism for the system.
-// It records non-fatal errors—primarily those encountered during file loading—to 
-// an external text file. This ensures that the program can skip corrupted data 
-// and continue running while leaving a timestamped audit trail for debugging.
 public class ErrorLogger {
-    
-    // The relative path where the error log file is stored
     private static final String LOG_PATH = "output/logs/errors.txt";
+    
+    // Arrays to hold the errors during the batch load
+    private static String[] errorList = new String[200]; 
+    private static int errorCount = 0;
 
-    // Appends a specific error message to the log file
+    // Call this before a new load starts to reset the bucket
+    public static void clear() {
+        errorCount = 0;
+        errorList = new String[200];
+    }
+
+    // Collects an error instead of printing it immediately
     public static void log(String message) {
-        
-        // Use FileOutputStream with 'true' to enable append mode, preventing file overwrites
+        if (errorCount < errorList.length) {
+            errorList[errorCount] = message;
+            errorCount++;
+        }
+    }
+
+    // Prints the beautiful formatted block to the text file
+    public static void generateReport(String sourceFolder) {
+        if (errorCount == 0) return; // Don't make a file if there were no errors
+
+        // Ensure the folder exists
+        new File("output/logs").mkdirs();
+
         try (PrintWriter out = new PrintWriter(new FileOutputStream(LOG_PATH, true))) {
+            out.println("================================================================================================================================");
+            out.println("BATCH LOAD ERRORS");
+            out.println("Source: " + sourceFolder);
             
-            // Print the current date, time, and the error message to the file
-            out.println(LocalDateTime.now() + " - ERROR: " + message);
+            // Format the time exactly like the example
+            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+            out.println("Time:   " + dtf.format(LocalDateTime.now()));
+            out.println("Count:  " + errorCount);
+            out.println();
+            
+      
+            for (int i = 0; i < errorCount; i++) {
+                out.printf(" %d: %s\n", (i + 1), errorList[i]);
+            }
+            out.println("================================================================================================================================");
+            out.println(); // Add a blank line for the next batch
             
         } catch (IOException e) {
-            // Fallback: If the log file itself cannot be accessed, print the error to the standard console
-            System.err.println("Logging failed: " + message);
+            System.err.println("Logging failed to write to file.");
         }
     }
 }

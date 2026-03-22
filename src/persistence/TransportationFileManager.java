@@ -14,73 +14,57 @@ import java.io.*;
 // specific constructors to preserve original transport IDs and data integrity.
 public class TransportationFileManager {
 
-    // Saves the array of transportation options to a text file
-    public static void saveTransports(Transportation[] trans, int count, String filePath) throws IOException {
-        
-        // Open a PrintWriter to write data to the specified file path
-        try (PrintWriter writer = new PrintWriter(new FileWriter(filePath))) {
-            
-            // Iterate through the transportation array up to the active count
-            for (int i = 0; i < count; i++) {
-                
-                Transportation t = trans[i];               
-                
-                // Use instance checking to handle subclass-specific fields during serialization
-                if (t instanceof Flight) {
-                    Flight f = (Flight) t;
-                    writer.println("FLIGHT;" + f.getTransportId() + ";" + f.getCompanyName() + ";" + f.getDepartureCity() + ";" + f.getArrivalCity() + ";" + f.calculateCost() + ";" + f.getLuggageAllowance());
-                } else if (t instanceof Train) {
-                    Train tr = (Train) t;
-                    writer.println("TRAIN;" + tr.getTransportId() + ";" + tr.getCompanyName() + ";" + tr.getDepartureCity() + ";" + tr.getArrivalCity() + ";" + tr.calculateCost() + ";" + tr.getTrainType());
-                } else if (t instanceof Bus) {
-                    Bus b = (Bus) t;
-                    writer.println("BUS;" + b.getTransportId() + ";" + b.getCompanyName() + ";" + b.getDepartureCity() + ";" + b.getArrivalCity() + ";" + b.calculateCost() + ";" + b.getNumberOfStops());
-                }
-            }
-        }
-    }
+	public static int loadTransports(Transportation[] transports, String filePath) throws IOException {
+		int count = 0;
+		int recordNumber = 0; // Tracks the current line for the error report
 
-    // Loads transportation data from a text file and populates the provided array
-    public static int loadTransports(Transportation[] trans, String filePath) throws IOException {
-        int count = 0;
-        
-        // Open a BufferedReader to read the file line-by-line
-        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
-            String line;
-            
-            while ((line = reader.readLine()) != null) {
-                // Skip empty lines to avoid parsing errors
-                if (line.trim().isEmpty()) continue;
-                
-                try {
-                    // Split the line into an array of data strings using the semicolon delimiter
-                    String[] d = line.split(";");                                           
-                    
-                    // Reconstruct the appropriate object type based on the prefix tag
-                    switch (d[0].toUpperCase()) {
-                        case "FLIGHT":                        
-                            // Recreates Flight using original ID and parsed double values
-                            trans[count++] = new Flight(d[1], d[2], d[3], d[4], d[2], Double.parseDouble(d[6]), Double.parseDouble(d[5])); 
-                            break;
-                        case "TRAIN": 
-                            // Recreates Train using original ID and parsed values
-                            trans[count++] = new Train(d[1], d[2], d[3], d[4], d[6], "Standard", Double.parseDouble(d[5])); 
-                            break;
-                        case "BUS": 
-                            // Recreates Bus using original ID and parsed integer/double values
-                            trans[count++] = new Bus(d[1], d[2], d[3], d[4], d[2], Integer.parseInt(d[6]), Double.parseDouble(d[5])); 
-                            break;
-                        default:
-                            throw new Exception("Unknown transport type: " + d[0]);
-                    }
-                } catch (Exception e) {
-                    // Log the malformed line to the error file without stopping the load process
-                    ErrorLogger.log("Transport load error on line: " + line + " | Error: " + e.getMessage());
-                }
-            }
-        }
-        
-        // Return the total number of transportation objects successfully loaded
-        return count; 
-    }
+		try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
+			String line;
+			while ((line = reader.readLine()) != null) {
+				recordNumber++;
+				if (line.trim().isEmpty())
+					continue;
+
+				try {
+					String[] d = line.split(";");
+					// Assuming d[1] is the Type (FLIGHT, BUS, TRAIN)
+					String type = d[1].toUpperCase();
+
+					Transportation t;
+					if (type.equals("FLIGHT")) {
+						t = new Flight(d[0], d[2], d[3], d[4], d[5], Double.parseDouble(d[6]),
+								Double.parseDouble(d[7]));
+					} else if (type.equals("BUS")) {
+						t = new Bus(d[0], d[2], d[3], d[4], d[5], Integer.parseInt(d[6]), Double.parseDouble(d[7]));
+					} else if (type.equals("TRAIN")) {
+						t = new Train(d[0], d[2], d[3], d[4], d[5], d[6], Double.parseDouble(d[7]));
+					} else {
+
+						throw new Exception("Transport Error: Unknown transport type: " + type);
+					}
+
+					transports[count++] = t;
+
+				} catch (Exception e) {
+					// Logs the specific line number and error message to the batch bucket
+					ErrorLogger.log("Invalid Transportation Exception: Record number " + recordNumber
+							+ " in transports file. " + e.getMessage());
+				}
+			}
+		}
+		return count;
+	}
+
+	public static void saveTransports(Transportation[] transports, int count, String filePath) throws IOException {
+		try (PrintWriter writer = new PrintWriter(new FileWriter(filePath))) {
+			for (int i = 0; i < count; i++) {
+				Transportation t = transports[i];
+				String type = (t instanceof Flight) ? "FLIGHT" : (t instanceof Bus) ? "BUS" : "TRAIN";
+
+				// Save logic depends on your specific Transportation fields
+				writer.println(t.getTransportId() + ";" + type + ";" + t.getCompanyName() + ";" + t.getDepartureCity()
+						+ ";" + t.getArrivalCity());
+			}
+		}
+	}
 }
