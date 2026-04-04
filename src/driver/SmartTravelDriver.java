@@ -55,15 +55,12 @@ public class SmartTravelDriver {
 		System.out.println("=====================================\n");
 
 		// Prompts the user for the execution mode
-		System.out.println("Please, choose an option:");
-		System.out.println("1. Predefined testing scenario");
-		System.out.println("2. Menu interface");
+		System.out.println("Press 1 to open the menu interface.");
+		System.out.println("1. Menu interface");
 		System.out.print("Enter your choice: ");
 		int choice = input.nextInt();
 
-		if (choice == 1) {
-			predefinedScenario();
-		} else if (choice == 2) {
+		 if (choice == 1) {
 			menuMode();
 		} else {
 			System.out.print("\nInvalid choice, the program will now close.");
