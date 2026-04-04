@@ -22,130 +22,110 @@ import persistence.*;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class SmartTravelService {
 
-	// In-memory arrays
-	private Client[] clients = new Client[100];
+	// Collections
+	private List<Client> clients = new ArrayList<>();
 
-	private Trip[] trips = new Trip[200];
-	private Transportation[] transports = new Transportation[50];
-	private Accommodation[] accommodations = new Accommodation[50];
+	private List<Trip> trips = new ArrayList<>();
+	private List<Transportation> transports = new ArrayList<>();
+	private List<Accommodation> accommodations = new ArrayList<>();
+	private RecentList<Trip> recentTrips = new RecentList<>();
 
-	private int clientCount = 0;
-
-	private int tripCount = 0;
-	private int transCount = 0;
-	private int accomCount = 0;
-
-	public Client[] getClients() {
+	public List<Client> getClients() {
 		return clients;
 	}
 
-	public Trip[] getTrips() {
+	public List<Trip> getTrips() {
 		return trips;
 	}
 
-	public Transportation[] getTransports() {
+	public List<Transportation> getTransports() {
 		return transports;
 	}
 
-	public Accommodation[] getAccoms() {
+	public List<Accommodation> getAccoms() {
 		return accommodations;
 	}
 
 	public Client getClient(int i) {
-		return clients[i];
-	}
+	 return clients.get(i);
+	 }
 
-	public void setClients(Client[] clients) {
+	public void setClients(List<Client> clients) {
 		this.clients = clients;
 	}
 
 	public Trip getTrip(int i) {
-		return trips[i];
+		return trips.get(i);
 	}
 
-	public Trip[] getAllTrips() {
+	public List<Trip> getAllTrips() {
 		return trips;
 	}
 
-	public void setTrips(Trip[] trips) {
+	public void setTrips(List<Trip> trips) {
 		this.trips = trips;
 	}
 
 	public Transportation getTransports(int i) {
-		return transports[i];
+		return transports.get(i);
 	}
 
-	public void setTransports(Transportation[] transports) {
+	public void setTransports(List<Transportation> transports) {
 		this.transports = transports;
 	}
 
 	public Accommodation getAccoms(int i) {
-		return accommodations[i];
+		return accommodations.get(i);
 	}
 
-	public void setAccommodations(Accommodation[] accommodations) {
+	public void setAccommodations(List<Accommodation> accommodations) {
 		this.accommodations = accommodations;
 	}
 
 	public int getClientCount() {
-		return clientCount;
-	}
-
-	public void setClientCount(int clientCount) {
-		this.clientCount = clientCount;
+		return clients.size();
 	}
 
 	public int getTripCount() {
-		return tripCount;
-	}
-
-	public void setTripCount(int tripCount) {
-		this.tripCount = tripCount;
+		return trips.size();
 	}
 
 	public int getTransCount() {
-		return transCount;
-	}
-
-	public void setTransCount(int transCount) {
-		this.transCount = transCount;
+		return transports.size();
 	}
 
 	public int getAccomCount() {
-		return accomCount;
+		return accommodations.size();
 	}
 
-	public void setAccomCount(int accomCount) {
-		this.accomCount = accomCount;
-	}
+	
+	  public RecentList<Trip> getRecentTrips() { return recentTrips; }
+	 
 
 	// Adds a client after verifying the email is unique.
 	public void addClient(Client c) throws InvalidClientDataException, DuplicateEmailException {
 
-		if (clientCount >= clients.length) {
-			System.out.println("Client array is full.");
-			return;
-		}
-		for (int i = 0; i < clientCount; i++) {
-			if (clients[i].getEmailAdress().equalsIgnoreCase(c.getEmailAdress())) {
+		for (Client existing : clients) {
+			if (existing.getEmailAdress().equalsIgnoreCase(c.getEmailAdress())) {
 				throw new DuplicateEmailException("Email already exists.");
-				
+
 			}
-			
 
 		}
-		clients[clientCount++] = c;
+		clients.add(c);
 	}
 
 	// Finds a client
 	public Client findClientById(String id) throws EntityNotFoundException {
 
-		for (int i = 0; i < clientCount; i++) {
-			if (clients[i].getClientId().equalsIgnoreCase(id)) {
-				return clients[i];
+		for (Client c : clients) {
+			if (c.getClientId().equalsIgnoreCase(id)) {
+				return c;
 			}
 
 		}
@@ -155,8 +135,8 @@ public class SmartTravelService {
 
 	// Checks if a client exists or not
 	public boolean clientExists(String id) {
-		for (int i = 0; i < clientCount; i++) {
-			if (clients[i].getClientId().equalsIgnoreCase(id)) {
+		for (Client c : clients) {
+			if (c.getClientId().equalsIgnoreCase(id)) {
 				return true;
 
 			}
@@ -168,13 +148,12 @@ public class SmartTravelService {
 	// Adds an already validated Trip to the array.
 	public Trip createTrip(String destination, int duration, double basePrice, String clientId)
 			throws InvalidTripDataException, EntityNotFoundException {
-		if (tripCount >= trips.length) {
-			System.out.println("Trip array is full.");
-			return null;
-		}
+
 		Client c = findClientById(clientId);
 		Trip t = new Trip(destination, duration, basePrice, c);
-		trips[tripCount++] = t;
+		trips.add(t);
+
+		 recentTrips.addRecent(t);
 
 		return t;
 
@@ -182,52 +161,83 @@ public class SmartTravelService {
 
 	// Adds a transportation
 	public void addTransportation(Transportation t) {
-		transports[transCount++] = t;
+		transports.add(t);
 	}
 
-	// Adds an accomodation
+	// Adds an accommodation
 	public void addAccommodation(Accommodation a) {
-		accommodations[accomCount++] = a;
+		accommodations.add(a);
 	}
 
 	// Calculates and returns the total cost of the trip of the chosen index.
 	public double calculateTripTotal(int index) {
-		if (index < 0 || index >= tripCount) {
+		if (index < 0 || index >= trips.size()) {
 			return 0;
 		}
-		return trips[index].calculateTotalCost();
+		Trip t = trips.get(index);
+		 recentTrips.addRecent(t);
+		return t.calculateTotalCost();
 	}
 
 	// Loads all data from CSV files. Clients are loaded first.
 
 	public void loadAllData(String directory) throws IOException {
 
-		clientCount = ClientFileManager.loadClients(clients, directory + "clients.csv");
-		transCount = TransportationFileManager.loadTransports(transports, directory + "transports.csv");
-		accomCount = AccommodationFileManager.loadAccommodations(accommodations, directory + "accommodations.csv");
-		tripCount = TripFileManager.loadTrips(trips, directory + "trips.csv", clients, clientCount, transports,
-				transCount, accommodations, accomCount);
+		// Clients
+		Client[] clientArr = new Client[100];
+		int cCount = ClientFileManager.loadClients(clientArr, directory + "clients.csv");
+		clients.clear();
+		for (int i = 0; i < cCount; i++) {
+			clients.add(clientArr[i]);
+		}
+
+		// Transports
+		Transportation[] transArr = new Transportation[50];
+		int tCount = TransportationFileManager.loadTransports(transArr, directory + "transports.csv");
+		transports.clear();
+		for (int i = 0; i < tCount; i++) {
+			transports.add(transArr[i]);
+		}
+
+		// Accommodations
+		Accommodation[] accArr = new Accommodation[50];
+		int aCount = AccommodationFileManager.loadAccommodations(accArr, directory + "accommodations.csv");
+		accommodations.clear();
+		for (int i = 0; i < aCount; i++) {
+			accommodations.add(accArr[i]);
+		}
+
+		// Trips
+		Trip[] tripArr = new Trip[200];
+		int rCount = TripFileManager.loadTrips(tripArr, directory + "trips.csv", clientArr, cCount, transArr, tCount,
+				accArr, aCount);
+		trips.clear();
+		for (int i = 0; i < rCount; i++) {
+			trips.add(tripArr[i]);
+		}
+
 	}
 
 	// Saves all data currently in arrays back to CSV files[cite: 99, 118].
 
 	public void saveAllData(String directory) throws IOException {
 		new File(directory).mkdirs();
-		ClientFileManager.saveClients(clients, clientCount, directory + "clients.csv");
-		TransportationFileManager.saveTransports(transports, transCount, directory + "transports.csv");
-		AccommodationFileManager.saveAccommodations(accommodations, accomCount, directory + "accommodations.csv");
-		TripFileManager.saveTrips(trips, tripCount, directory + "trips.csv");
+
+		// Convert lists to arrays
+		ClientFileManager.saveClients(clients.toArray(new Client[0]), clients.size(), directory + "clients.csv");
+		TransportationFileManager.saveTransports(transports.toArray(new Transportation[0]), transports.size(),
+				directory + "transports.csv");
+		AccommodationFileManager.saveAccommodations(accommodations.toArray(new Accommodation[0]), accommodations.size(),
+				directory + "accommodations.csv");
+		TripFileManager.saveTrips(trips.toArray(new Trip[0]), trips.size(), directory + "trips.csv");
 	}
-	
-	
+
 	// Verifies if the email is a duplicate or not
 	public void checkDuplicateEmail(String email) throws DuplicateEmailException {
-		for (int i = 0; i < clientCount; i++) {
-			if (clients[i].getEmailAdress().equalsIgnoreCase(email))
+		for (Client c : clients) {
+			if (c.getEmailAdress().equalsIgnoreCase(email))
 				throw new DuplicateEmailException("Email already exists.");
 		}
 	}
-	
-
 
 }
