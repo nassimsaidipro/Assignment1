@@ -7,7 +7,7 @@ public class RecentList<T> {
 	// Internal storage
 	private LinkedList<T> list = new LinkedList<>();
 
-	// Maximum number of items kept in history
+	// Maximum number of items kept
 	private final int MAX_SIZE = 10;
 
 	// Adds item to the front. Removes the oldest if over capacity.

@@ -1,6 +1,6 @@
-TR3014;FLIGHT;AirCanada;Montreal;Paris
-TR3015;FLIGHT;Delta;New York;London
-TR3016;TRAIN;VIA Rail;Montreal;Toronto
-TR3017;TRAIN;Amtrak;Boston;Washington
-TR3018;BUS;Greyhound;Montreal;Quebec City
-TR3019;BUS;FlixBus;Paris;Lyon
+TR3001;FLIGHT;AirCanada;Montreal;Paris
+TR3002;FLIGHT;Delta;New York;London
+TR3003;TRAIN;VIA Rail;Montreal;Toronto
+TR3004;TRAIN;Amtrak;Boston;Washington
+TR3005;BUS;Greyhound;Montreal;Quebec City
+TR3006;BUS;FlixBus;Paris;Lyon
