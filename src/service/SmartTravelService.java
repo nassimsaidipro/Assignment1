@@ -35,6 +35,10 @@ public class SmartTravelService {
 	private List<Accommodation> accommodations = new ArrayList<>();
 	private RecentList<Trip> recentTrips = new RecentList<>();
 
+	// Add repos alongside your lists
+	private Repository<Client> clientRepo = new Repository<>();
+	private Repository<Trip> tripRepo = new Repository<>();
+
 	public List<Client> getClients() {
 		return clients;
 	}
@@ -52,8 +56,8 @@ public class SmartTravelService {
 	}
 
 	public Client getClient(int i) {
-	 return clients.get(i);
-	 }
+		return clients.get(i);
+	}
 
 	public void setClients(List<Client> clients) {
 		this.clients = clients;
@@ -103,11 +107,21 @@ public class SmartTravelService {
 		return accommodations.size();
 	}
 
-	
-	  public RecentList<Trip> getRecentTrips() { return recentTrips; }
-	 
+	public RecentList<Trip> getRecentTrips() {
+		return recentTrips;
+	}
 
-	// Adds a client after verifying the email is unique.
+	// Expose repos
+	public Repository<Client> getClientRepo() {
+		return clientRepo;
+	}
+
+	public Repository<Trip> getTripRepo() {
+		return tripRepo;
+	}
+
+	// Adds a client after verifying the email is unique, there's also a mirror for
+	// queries
 	public void addClient(Client c) throws InvalidClientDataException, DuplicateEmailException {
 
 		for (Client existing : clients) {
@@ -118,42 +132,35 @@ public class SmartTravelService {
 
 		}
 		clients.add(c);
+		clientRepo.add(c);
 	}
 
-	// Finds a client
+	// Finds a client by Id
 	public Client findClientById(String id) throws EntityNotFoundException {
 
-		for (Client c : clients) {
-			if (c.getId().equalsIgnoreCase(id)) {
-				return c;
-			}
-
-		}
-
-		throw new EntityNotFoundException();
+		return clientRepo.findById(id);
 	}
 
 	// Checks if a client exists or not
 	public boolean clientExists(String id) {
-		for (Client c : clients) {
-			if (c.getId().equalsIgnoreCase(id)) {
-				return true;
-
-			}
+		try {
+			clientRepo.findById(id);
+			return true;
+		} catch (EntityNotFoundException e) {
+			return false;
 		}
-		return false;
-
 	}
 
-	// Adds an already validated Trip to the array.
+	// Adds an already validated Trip to the array with a mirror for queries
 	public Trip createTrip(String destination, int duration, double basePrice, String clientId)
 			throws InvalidTripDataException, EntityNotFoundException {
 
 		Client c = findClientById(clientId);
 		Trip t = new Trip(destination, duration, basePrice, c);
-		trips.add(t);
+		trips.add(t); // primary storage
+		tripRepo.add(t);
 
-		 recentTrips.addRecent(t);
+		recentTrips.addRecent(t);
 
 		return t;
 
@@ -175,7 +182,7 @@ public class SmartTravelService {
 			return 0;
 		}
 		Trip t = trips.get(index);
-		 recentTrips.addRecent(t);
+		recentTrips.addRecent(t);
 		return t.calculateTotalCost();
 	}
 
@@ -187,14 +194,17 @@ public class SmartTravelService {
 		Client[] clientArr = new Client[100];
 		int cCount = ClientFileManager.loadClients(clientArr, directory + "clients.csv");
 		clients.clear();
+		clientRepo = new Repository<>();
 		for (int i = 0; i < cCount; i++) {
 			clients.add(clientArr[i]);
+			clientRepo.add(clientArr[i]);
 		}
 
 		// Transports
 		Transportation[] transArr = new Transportation[50];
 		int tCount = TransportationFileManager.loadTransports(transArr, directory + "transports.csv");
 		transports.clear();
+		
 		for (int i = 0; i < tCount; i++) {
 			transports.add(transArr[i]);
 		}
@@ -212,8 +222,10 @@ public class SmartTravelService {
 		int rCount = TripFileManager.loadTrips(tripArr, directory + "trips.csv", clientArr, cCount, transArr, tCount,
 				accArr, aCount);
 		trips.clear();
+		tripRepo = new Repository<>();
 		for (int i = 0; i < rCount; i++) {
 			trips.add(tripArr[i]);
+			tripRepo.add(tripArr[i]);
 		}
 
 	}
