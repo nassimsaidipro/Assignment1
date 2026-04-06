@@ -94,7 +94,7 @@ public class TripChartGenerator {
     	int count = service.getTripCount();
     	DefaultCategoryDataset dataset = new DefaultCategoryDataset();
         for (int i = 0; i < count; i++) {
-            dataset.addValue(service.calculateTripTotal(i), "Total Cost", trips.get(i).getTripId());
+            dataset.addValue(service.calculateTripTotal(i), "Total Cost", trips.get(i).getId());
         }
 
         JFreeChart chart = ChartFactory.createBarChart(
@@ -156,7 +156,7 @@ public class TripChartGenerator {
     	int count = service.getTripCount();
     	DefaultCategoryDataset dataset = new DefaultCategoryDataset();
         for (int i = 0; i < count; i++) {
-            dataset.addValue(trips.get(i).getDurationInDays(), "Duration (days)", trips.get(i).getTripId());
+            dataset.addValue(trips.get(i).getDurationInDays(), "Duration (days)", trips.get(i).getId());
         }
 
         JFreeChart chart = ChartFactory.createLineChart(

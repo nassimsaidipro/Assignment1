@@ -124,7 +124,7 @@ public class SmartTravelService {
 	public Client findClientById(String id) throws EntityNotFoundException {
 
 		for (Client c : clients) {
-			if (c.getClientId().equalsIgnoreCase(id)) {
+			if (c.getId().equalsIgnoreCase(id)) {
 				return c;
 			}
 
@@ -136,7 +136,7 @@ public class SmartTravelService {
 	// Checks if a client exists or not
 	public boolean clientExists(String id) {
 		for (Client c : clients) {
-			if (c.getClientId().equalsIgnoreCase(id)) {
+			if (c.getId().equalsIgnoreCase(id)) {
 				return true;
 
 			}

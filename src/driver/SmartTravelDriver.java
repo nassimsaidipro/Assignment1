@@ -123,17 +123,17 @@ public class SmartTravelDriver {
 		// Creating 3 trips
 
 		try {
-			Trip trip1 = service.createTrip("Paris", 7, 500.0, service.getClient(0).getClientId());
+			Trip trip1 = service.createTrip("Paris", 7, 500.0, service.getClient(0).getId());
 
 			trip1.setTransportation(service.getTransports(0));
 			trip1.setAccommodation(service.getAccoms(0));
 			service.getClient(0).setAmountSpent(service.getClient(0).getTotalSpent() + trip1.calculateTotalCost());
 			System.out.println("Trip created: " + trip1);
-			Trip trip2 = service.createTrip("Tel Aviv", 5, 400.0, service.getClient(1).getClientId());
+			Trip trip2 = service.createTrip("Tel Aviv", 5, 400.0, service.getClient(1).getId());
 			trip2.setTransportation(service.getTransports(1));
 			trip2.setAccommodation(service.getAccoms(1));
 			service.getClient(1).setAmountSpent(service.getClient(1).getTotalSpent() + trip2.calculateTotalCost());
-			Trip trip3 = service.createTrip("Haiti", 3, 300.0, service.getClient(2).getClientId());
+			Trip trip3 = service.createTrip("Haiti", 3, 300.0, service.getClient(2).getId());
 			trip3.setTransportation(service.getTransports(2));
 			trip3.setAccommodation(service.getAccoms(2));
 			service.getClient(2).setAmountSpent(service.getClient(2).getTotalSpent() + trip3.calculateTotalCost());
@@ -164,7 +164,7 @@ public class SmartTravelDriver {
 		// 7. Triggers InvalidTripDataException
 		System.out.println("\n ---- Testing InvalidTripDataException (price < $100)...");
 		try {
-			service.createTrip("Nowhere", 2, 50.0, service.getClient(0).getClientId());
+			service.createTrip("Nowhere", 2, 50.0, service.getClient(0).getId());
 		} catch (InvalidTripDataException e) {
 			System.out.println(e.getMessage());
 		} catch (EntityNotFoundException e) {
@@ -237,7 +237,7 @@ public class SmartTravelDriver {
 		// Calculates and displays the cost of trips
 		for (int i = 0; i < service.getTripCount(); i++) {
 			System.out.println();
-			System.out.println("Trip " + service.getTrip(i).getTripId() + " to " + service.getTrip(i).getDestination()
+			System.out.println("Trip " + service.getTrip(i).getId() + " to " + service.getTrip(i).getDestination()
 					+ " for " + service.getTrip(i).getDurationInDays() + " days" + "|Total price of: "
 					+ service.getTrip(i).calculateTotalCost());
 
@@ -378,9 +378,9 @@ public class SmartTravelDriver {
 				String costTripId = input.nextLine().trim();
 				boolean tripFound = false;
 				for (int i = 0; i < service.getTripCount(); i++) {
-					if (service.getTrip(i).getTripId().equalsIgnoreCase(costTripId)) {
+					if (service.getTrip(i).getId().equalsIgnoreCase(costTripId)) {
 						System.out.println(
-								"Trip: " + service.getTrip(i).getTripId() + " to " + service.getTrip(i).getDestination()
+								"Trip: " + service.getTrip(i).getId() + " to " + service.getTrip(i).getDestination()
 										+ " for " + service.getTrip(i).getDurationInDays() + " days");
 						System.out.println("Total cost: $" + service.getTrip(i).calculateTotalCost());
 						tripFound = true;
@@ -544,7 +544,7 @@ public class SmartTravelDriver {
 				List<Client> clients = service.getClients();
 
 				for (int i = 0; i < clients.size(); i++) {
-					if (clients.get(i).getClientId().equalsIgnoreCase(idDelete)) {
+					if (clients.get(i).getId().equalsIgnoreCase(idDelete)) {
 						clients.remove(i);
 						System.out.println("Client deleted successfully.");
 				        deleted = true;
@@ -652,7 +652,7 @@ public class SmartTravelDriver {
 				int index = -1;
 
 				for (int i = 0; i < service.getTripCount(); i++) {
-					if (service.getTrip(i).getTripId().equalsIgnoreCase(tripId)) {
+					if (service.getTrip(i).getId().equalsIgnoreCase(tripId)) {
 						index = i;
 						break;
 					}
@@ -719,7 +719,7 @@ public class SmartTravelDriver {
 								String transId = input.nextLine().trim();
 								boolean transFound = false;
 								for (int i = 0; i < service.getTransCount(); i++) {
-									if (service.getTransports(i).getTransportId().equalsIgnoreCase(transId)) {
+									if (service.getTransports(i).getId().equalsIgnoreCase(transId)) {
 										service.getTrip(index).setTransportation(service.getTransports(i));
 										System.out.println("Transportation updated successfully.");
 										transFound = true;
@@ -771,7 +771,7 @@ public class SmartTravelDriver {
 								String accomId = input.nextLine().trim();
 								boolean accomFound = false;
 								for (int i = 0; i < service.getAccomCount(); i++) {
-									if (service.getAccoms(i).getAccommodationId().equalsIgnoreCase(accomId)) {
+									if (service.getAccoms(i).getId().equalsIgnoreCase(accomId)) {
 										service.getTrip(index).setAccommodation(service.getAccoms(i));
 										System.out.println("Accommodation updated successfully.");
 										accomFound = true;
@@ -808,7 +808,7 @@ public class SmartTravelDriver {
 				List<Trip> trips = service.getTrips();
 
 				for (int i = 0; i < service.getTripCount(); i++) {
-					if (trips.get(i).getTripId().equalsIgnoreCase(tripDelete)) {
+					if (trips.get(i).getId().equalsIgnoreCase(tripDelete)) {
 						trips.remove(i);            
 						System.out.println("Trip deleted successfully.");
 						tripDeleted = true;
@@ -841,7 +841,7 @@ public class SmartTravelDriver {
 				String searchId = input.nextLine().trim();
 				boolean found = false;
 				for (int i = 0; i < service.getTripCount(); i++) {
-					if (service.getTrip(i).getTravelingClient().getClientId().equalsIgnoreCase(searchId)) {
+					if (service.getTrip(i).getTravelingClient().getId().equalsIgnoreCase(searchId)) {
 						System.out.println(service.getTrip(i));
 						System.out.println();
 						found = true;
@@ -971,7 +971,7 @@ public class SmartTravelDriver {
 				boolean transDeleted = false;
 				List<Transportation> transports = service.getTransports();
 				for (int i = 0; i < service.getTransCount(); i++) {
-					if (transports.get(i).getTransportId().equalsIgnoreCase(trId)) {
+					if (transports.get(i).getId().equalsIgnoreCase(trId)) {
 						transports.remove(i);
 						System.out.println("Deletion complete.");
 						transDeleted = true;
@@ -1127,8 +1127,8 @@ public class SmartTravelDriver {
 				boolean accomDeleted = false;
 				List<Accommodation> accoms = service.getAccoms();
 				for (int i = 0; i < service.getAccomCount(); i++) {
-					if (accoms.get(i).getAccommodationId().equalsIgnoreCase(accDelId)) {
-						accoms.remove(i); // List.remove – no manual shifting needed
+					if (accoms.get(i).getId().equalsIgnoreCase(accDelId)) {
+						accoms.remove(i);
 						System.out.println("Deletion complete.");
 						accomDeleted = true;
 						break;
@@ -1270,7 +1270,7 @@ public class SmartTravelDriver {
 		System.out.print("Enter the accommodation ID to attach: ");
 		String aId = input.nextLine().trim();
 		for (int i = 0; i < service.getAccomCount(); i++) {
-			if (service.getAccoms(i).getAccommodationId().equalsIgnoreCase(aId)) {
+			if (service.getAccoms(i).getId().equalsIgnoreCase(aId)) {
 				trip.setAccommodation(service.getAccoms(i));
 				System.out.println("Accommodation attached successfully.");
 				return trip;
@@ -1312,7 +1312,7 @@ public class SmartTravelDriver {
 		System.out.print("Enter the transportation ID to attach: ");
 		String tId = input.nextLine().trim();
 		for (int i = 0; i < service.getTransCount(); i++) {
-			if (service.getTransports(i).getTransportId().equalsIgnoreCase(tId)) {
+			if (service.getTransports(i).getId().equalsIgnoreCase(tId)) {
 				trip.setTransportation(service.getTransports(i));
 				System.out.println("Transportation attached successfully.");
 				return trip;
