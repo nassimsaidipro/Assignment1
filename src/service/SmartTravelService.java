@@ -251,5 +251,24 @@ public class SmartTravelService {
 				throw new DuplicateEmailException("Email already exists.");
 		}
 	}
+	
+	//Deletes a client
+	public void deleteClient(String id) throws EntityNotFoundException {
+	    boolean found = false;
+
+	    for (int i = 0; i < clients.size(); i++) {
+	        if (clients.get(i).getId().equalsIgnoreCase(id)) {
+	            clients.remove(i);
+	            found = true;
+	            break;
+	        }
+	    }
+
+	    if (!found) {
+	        throw new EntityNotFoundException("Client not found.");
+	    }
+
+	    clientRepo.removeById(id);
+	}
 
 }

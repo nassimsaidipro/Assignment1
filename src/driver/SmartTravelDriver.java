@@ -56,8 +56,7 @@ public class SmartTravelDriver {
 		System.out.println("=====================================\n");
 
 		// Prompts the user for the execution mode
-		System.out.println("Press 1 to open the menu interface.");
-		System.out.println("1. Menu interface");
+		System.out.println("Press 1 to procede: ");
 		System.out.print("Enter your choice: ");
 		int choice = input.nextInt();
 
@@ -499,7 +498,7 @@ public class SmartTravelDriver {
 				String idEdit = input.nextLine().trim();
 
 				try {
-					Client c = service.findClientById(idEdit);
+					Client c = service.getClientRepo().findById(idEdit);
 					System.out.println("\nEditing client: ");
 					System.out.println(c);
 					System.out.println();
@@ -540,19 +539,11 @@ public class SmartTravelDriver {
 				// Search for client by ID
 				System.out.print("Enter client ID to delete: ");
 				String idDelete = input.nextLine().trim();
-				boolean deleted = false;
-				List<Client> clients = service.getClients();
-
-				for (int i = 0; i < clients.size(); i++) {
-					if (clients.get(i).getId().equalsIgnoreCase(idDelete)) {
-						clients.remove(i);
-						System.out.println("Client deleted successfully.");
-				        deleted = true;
-						break;
-					}
-				}
-				if (!deleted) {
-					System.out.println("Client not found.");
+				try {
+				    service.deleteClient(idDelete);
+				    System.out.println("Client deleted successfully.");
+				} catch (EntityNotFoundException e) {
+				    System.out.println("Client not found.");
 				}
 
 				break;

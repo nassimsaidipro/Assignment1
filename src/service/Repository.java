@@ -25,6 +25,17 @@ public class Repository<T extends Identifiable & Comparable<? super T>> {
 		}
 		throw new EntityNotFoundException();
 	}
+	
+	// Removes and item by ID
+	public void removeById(String id) throws EntityNotFoundException {
+		for (int i = 0; i < items.size(); i++) {
+			if (items.get(i).getId().equalsIgnoreCase(id)) {
+				items.remove(i);
+				return;
+			}
+		}
+		throw new EntityNotFoundException("Entity with ID " + id + " not found.");
+	}
 
 	// Returns all items matching the predicate
 	public List<T> filter(Predicate<T> predicate) {
