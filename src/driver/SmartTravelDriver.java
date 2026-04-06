@@ -298,13 +298,14 @@ public class SmartTravelDriver {
 			System.out.println("4. Accommodation management");
 			System.out.println("5. Show the most expensive trip");
 			System.out.println("6. Deep copy of the transportation array");
-			System.out.println("7. Deep copy of the accommodation array");
+			System.out.println("7. Advanced Analytics ");
 			System.out.println("8. Total cost of a trip");
 			System.out.println("9.  List All Data Summary");
 			System.out.println("10. Load All Data (output/data/*.csv)");
 			System.out.println("11. Save All Data (output/data/*.csv)");
 			System.out.println("12. Run Predefined Scenario");
 			System.out.println("13. Generate Dashboard");
+			System.out.println("14. Deep copy of the accommodation array");
 			System.out.println("0. Exit");
 			System.out.println("===================================================");
 			System.out.print("Your choice: ");
@@ -355,18 +356,7 @@ public class SmartTravelDriver {
 
 			// Create and display a deep copy of the accommodation array
 			case 7:
-				if (service.getAccomCount() == 0) {
-					System.out.println("No accommodations available.");
-				} else {
-					Accommodation[] copyA = copyAccommodationArray();
-					copyA[0].setName("Modified name");
-					System.out.println("\nOriginal accommodation array:");
-					for (int i = 0; i < service.getAccomCount(); i++)
-						System.out.println(service.getAccoms(i));
-					System.out.println("\nCopied accommodation array:");
-					for (int i = 0; i < service.getAccomCount(); i++)
-						System.out.println(copyA[i]);
-				}
+				analyticsMenu();
 				break;
 			case 8:
 				if (service.getTripCount() == 0) {
@@ -409,7 +399,7 @@ public class SmartTravelDriver {
 					service.loadAllData("output/data/");
 					System.out.println("All data loaded successfully.");
 				} catch (IOException e) {
-					System.out.println("Error saving data: " + e.getMessage());
+					System.out.println("Error loading data: " + e.getMessage());
 					// ERROR LOGGER
 				}
 
@@ -435,6 +425,22 @@ public class SmartTravelDriver {
 					DashboardGenerator.generateDashboard(service);
 				} catch (IOException e) {
 					System.out.println("Dashboard generation failed: " + e.getMessage());
+				}
+				break;
+
+			// Create and display a deep copy of the accommodation array
+			case 14:
+				if (service.getAccomCount() == 0) {
+					System.out.println("No accommodations available.");
+				} else {
+					Accommodation[] copyA = copyAccommodationArray();
+					copyA[0].setName("Modified name");
+					System.out.println("\nOriginal accommodation array:");
+					for (int i = 0; i < service.getAccomCount(); i++)
+						System.out.println(service.getAccoms(i));
+					System.out.println("\nCopied accommodation array:");
+					for (int i = 0; i < service.getAccomCount(); i++)
+						System.out.println(copyA[i]);
 				}
 				break;
 			case 0:
@@ -540,10 +546,10 @@ public class SmartTravelDriver {
 				System.out.print("Enter client ID to delete: ");
 				String idDelete = input.nextLine().trim();
 				try {
-				    service.deleteClient(idDelete);
-				    System.out.println("Client deleted successfully.");
+					service.deleteClient(idDelete);
+					System.out.println("Client deleted successfully.");
 				} catch (EntityNotFoundException e) {
-				    System.out.println("Client not found.");
+					System.out.println("Client not found.");
 				}
 
 				break;
@@ -800,7 +806,7 @@ public class SmartTravelDriver {
 
 				for (int i = 0; i < service.getTripCount(); i++) {
 					if (trips.get(i).getId().equalsIgnoreCase(tripDelete)) {
-						trips.remove(i);            
+						trips.remove(i);
 						System.out.println("Trip deleted successfully.");
 						tripDeleted = true;
 						break;
@@ -1311,5 +1317,108 @@ public class SmartTravelDriver {
 		}
 		System.out.println("Transportation ID not found. No transportation attached.");
 		return trip;
+	}
+
+	// Displays the advanced analytics menu and handles all analytics operations.
+	public static void analyticsMenu() {
+		boolean menuReturn = false;
+		while (!menuReturn) {
+			System.out.println("\n--Advanced Analytics--");
+			System.out.println("7.1 Trips by Destination (Predicate filter)");
+			System.out.println("7.2 Trips by Cost Range (Predicate range)");
+			System.out.println("7.3 Top Clients by Spending (natural sort)");
+			System.out.println("7.4 Recent Trips (RecentList demo)");
+			System.out.println("7.5 Smart Sort Collections (business natural order)");
+			System.out.println("7.6 Back to main menu");
+			System.out.print("Your choice: ");
+			int choice = input.nextInt();
+			input.nextLine();
+
+			switch (choice) {
+
+			// 7.1 Filter trips by destination
+			case 1:
+				System.out.print("Enter destination to search: ");
+				String dest = input.nextLine().trim();
+				List<Trip> byDest = service.getTripRepo().filter(trip -> trip.getDestination().equalsIgnoreCase(dest));
+				if (byDest.isEmpty()) {
+					System.out.println("No trips found for destination: " + dest);
+				} else {
+					System.out.println("Trips to " + dest + ":");
+					for (Trip t : byDest) {
+						System.out.println(t);
+						System.out.println();
+					}
+				}
+				break;
+
+			// 7.2 Filter trips by cost range
+			case 2:
+				System.out.print("Enter minimum cost: ");
+				double minCost = input.nextDouble();
+				System.out.print("Enter maximum cost: ");
+				double maxCost = input.nextDouble();
+				input.nextLine();
+				List<Trip> byRange = service.getTripRepo()
+						.filter(trip -> trip.calculateTotalCost() >= minCost && trip.calculateTotalCost() <= maxCost);
+				if (byRange.isEmpty()) {
+					System.out.println("No trips found in that cost range.");
+				} else {
+					System.out.println("Trips between $" + minCost + " and $" + maxCost + ":");
+					for (Trip t : byRange) {
+						System.out.println(t);
+						System.out.println();
+					}
+				}
+				break;
+
+			// 7.3 Top clients by spending (natural sort)
+			case 3:
+				List<Client> sortedClients = service.getClientRepo().getSorted();
+				if (sortedClients.isEmpty()) {
+					System.out.println("No clients available.");
+				} else {
+					System.out.println("Clients sorted by spending (highest first):");
+					for (Client c : sortedClients) {
+						System.out.println(c);
+						System.out.println();
+					}
+				}
+				break;
+
+			// 7.4 Recent trips demo
+			case 4:
+				System.out.print("How many recent trips to show? ");
+				int n = input.nextInt();
+				input.nextLine();
+				if (service.getRecentTrips().isEmpty()) {
+					System.out.println("No recent trips recorded.");
+				} else {
+					service.getRecentTrips().printRecent(n);
+				}
+				break;
+
+			// 7.5 Smart sort trips by cost
+			case 5:
+				List<Trip> sortedTrips = service.getTripRepo().getSorted();
+				if (sortedTrips.isEmpty()) {
+					System.out.println("No trips available.");
+				} else {
+					System.out.println("Trips sorted by cost (lowest first):");
+					for (Trip t : sortedTrips) {
+						System.out.println("Trip " + t.getId() + " to " + t.getDestination() + " | Cost: $"
+								+ t.calculateTotalCost());
+					}
+				}
+				break;
+
+			case 6:
+				menuReturn = true;
+				break;
+
+			default:
+				System.out.println("Invalid option.");
+			}
+		}
 	}
 }

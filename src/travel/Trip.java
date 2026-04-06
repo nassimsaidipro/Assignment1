@@ -273,7 +273,7 @@ public class Trip implements  Identifiable, Billable, CsvPersistable, Comparable
 
 	@Override
 	public int compareTo(Trip o) {
-		return Double.compare(o.calculateTotalCost(), this.calculateTotalCost());
+		return Double.compare(this.calculateTotalCost(),o.calculateTotalCost());
 	}
 
 	@Override
