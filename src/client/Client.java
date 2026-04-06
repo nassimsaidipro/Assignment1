@@ -6,13 +6,15 @@
 package client;
 
 import exceptions.InvalidClientDataException;
+import interfaces.CsvPersistable;
+import interfaces.Identifiable;
 
 //This class represents a client of the travel agency.
 //It stores personal information about the client such as their first name,
 //last name, and email address.
 //Each client is automatically assigned a unique ID using a static counter,
 //ensuring every client can be individually identified within the system.
-public class Client {
+public class Client implements Identifiable, CsvPersistable, Comparable<Client> {
 
 	// Static counter to generate unique client IDs starting from 1001
 	private static int numId = 1001;
@@ -78,7 +80,15 @@ public class Client {
 		this.lastName = lastName;
 		this.emailAddress = emailAddress;
 		this.amountSpent = 0.0;
-
+	}
+	
+	// Temporary shell constructor for linking objects
+	public Client(String clientId) {
+	    this.clientId = clientId;
+	    this.firstName = "Unknown";
+	    this.lastName = "Unknown";
+	    this.emailAddress = "unknown@default.com";
+	    this.amountSpent = 0.0;
 	}
 
 	// Returns a deep copy of this Client object.
@@ -136,10 +146,6 @@ public class Client {
 		return emailAddress;
 	}
 
-	public String getClientId() {
-		return clientId;
-	}
-
 	public void setFirstName(String firstName) throws InvalidClientDataException {
 		if (firstName == null || firstName.trim().isEmpty() || firstName.length() > 50) {
 			throw new InvalidClientDataException("First name must be non-empty and 50 characters or less.");
@@ -170,6 +176,36 @@ public class Client {
 	public void setAmountSpent(double amountSpent) {
 		if (amountSpent >= 0)
 			this.amountSpent = amountSpent;
+	}
+
+	@Override
+	public int compareTo(Client o) {
+		return Double.compare(o.amountSpent, this.amountSpent);
+	}
+
+	@Override
+	public String toCsvRow() {
+		return this.getId() + ";" + this.firstName + ";" + this.lastName + ";" + this.emailAddress;
+	}
+
+	@Override
+	public String getId() {
+		return clientId;
+	}
+	
+	public static Client fromCsvRow(String csvLine) throws InvalidClientDataException {
+	    String[] parts = csvLine.split(";");
+	    
+	    if (parts.length != 4) {
+	        throw new InvalidClientDataException("Invalid CSV format: Client row must have 4 fields.");
+	    }
+	    
+	    String id = parts[0];
+	    String firstName = parts[1];
+	    String lastName = parts[2];
+	    String email = parts[3];
+	    
+	    return new Client(id, firstName, lastName, email);
 	}
 
 }

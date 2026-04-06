@@ -53,7 +53,7 @@ public class Hostel extends Accommodation {
 	// without accidentally inflating the static numId sequence.
 	@Override
 	public Accommodation copy() {
-		return new Hostel(this.getAccommodationId(), this.name, this.location, this.pricePerNight, this.sharedBedsPerRoom);
+		return new Hostel(this.getId(), this.name, this.location, this.pricePerNight, this.sharedBedsPerRoom);
 	}
 
 	// Calculates the total cost of the hostel stay for a given number of days
@@ -88,6 +88,11 @@ public class Hostel extends Accommodation {
 
 	public void setSharedBedsPerRoom(int sharedBedsPerRoom) {
 		this.sharedBedsPerRoom = sharedBedsPerRoom;
+	}
+	
+	@Override
+	public String toCsvRow() {
+	    return "HOSTEL;" + super.toCsvRow() + ";" + this.sharedBedsPerRoom;
 	}
 
 }

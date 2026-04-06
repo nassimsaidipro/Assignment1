@@ -62,7 +62,7 @@ public class TransportationFileManager {
 				String type = (t instanceof Flight) ? "FLIGHT" : (t instanceof Bus) ? "BUS" : "TRAIN";
 
 				// Save logic depends on your specific Transportation fields
-				writer.println(t.getTransportId() + ";" + type + ";" + t.getCompanyName() + ";" + t.getDepartureCity()
+				writer.println(t.getId() + ";" + type + ";" + t.getCompanyName() + ";" + t.getDepartureCity()
 						+ ";" + t.getArrivalCity());
 			}
 		}

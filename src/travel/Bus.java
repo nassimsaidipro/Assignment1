@@ -52,8 +52,7 @@ public class Bus extends Transportation {
 	// Passes the exact ID and shared fields up to the parent's protected
 	// constructor,
 	// and assigns the Bus-specific variables, without triggering a numId increment.
-	public Bus(String transportId, String companyName, String departureCity, String arrivalCity, String busCompany,
-			int numberOfStops, double busFare) {
+	public Bus(String transportId, String companyName, String departureCity, String arrivalCity, String busCompany, int numberOfStops, double busFare) {
 		super(transportId, companyName, departureCity, arrivalCity);
 		this.busCompany = busCompany;
 		this.numberOfStops = numberOfStops;
@@ -66,7 +65,7 @@ public class Bus extends Transportation {
 	// without accidentally inflating the static numId sequence.
 	@Override
 	public Transportation copy() {
-		return new Bus(this.getTransportId(), this.companyName, this.departureCity, this.arrivalCity, this.busCompany,
+		return new Bus(this.getId(), this.companyName, this.departureCity, this.arrivalCity, this.busCompany,
 				this.numberOfStops, this.busFare);
 	}
 
@@ -113,6 +112,11 @@ public class Bus extends Transportation {
 			throw new InvalidTransportDataException("Bus requires to have at least 1 stop");
 		}
 		this.numberOfStops = numberOfStops;
+	}
+	
+	@Override
+	public String toCsvRow() {
+	    return "BUS;" + super.toCsvRow() + ";" + this.numberOfStops;
 	}
 
 }

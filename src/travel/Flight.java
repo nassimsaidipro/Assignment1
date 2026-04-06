@@ -1,5 +1,5 @@
 // -----------------------------------------------------------------------
-// Assignment 1
+ // Assignment 1
 // Written by: Darwinsh Saint-Jean(40341644) and Nassim Saidi(40345885)
 // -----------------------------------------------------------------------
 
@@ -64,7 +64,7 @@ public class Flight extends Transportation {
 	// without accidentally inflating the static numId sequence.
 	@Override
 	public Transportation copy() {
-		return new Flight(this.getTransportId(), this.companyName, this.departureCity, this.arrivalCity, this.airlineName, this.luggageAllowance, this.flightPrice);
+		return new Flight(this.getId(), this.companyName, this.departureCity, this.arrivalCity, this.airlineName, this.luggageAllowance, this.flightPrice);
 	}
 
 	// Checks equality based on company name, departure/arrival cities,
@@ -110,6 +110,11 @@ public class Flight extends Transportation {
 			throw new InvalidTransportDataException("Luggage allowance cannot be less than 0kg");
 		}
 		this.luggageAllowance = luggageAllowance;
+	}
+	
+	@Override
+	public String toCsvRow() {
+	    return "FLIGHT;" + super.toCsvRow() + ";" + this.luggageAllowance;
 	}
 
 

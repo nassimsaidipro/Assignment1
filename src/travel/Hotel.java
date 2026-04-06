@@ -52,7 +52,7 @@ public class Hotel extends Accommodation {
 	// without accidentally inflating the static numId sequence.
 	@Override
 	public Accommodation copy() {
-		return new Hotel(this.getAccommodationId(), this.name, this.location, this.pricePerNight, this.starRating);
+		return new Hotel(this.getId(), this.name, this.location, this.pricePerNight, this.starRating);
 	}
 
 	// Calculates the total cost of the hotel stay for a given number of days
@@ -89,5 +89,10 @@ public class Hotel extends Accommodation {
 			throw new InvalidAccommodationDataException("Hotel star rating only 1 to 5");
 		}
 		this.starRating = starRating;
+	}
+	
+	@Override
+	public String toCsvRow() {
+	    return "HOTEL;" + super.toCsvRow() + ";" + this.starRating;
 	}
 }

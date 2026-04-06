@@ -56,7 +56,7 @@ public class AccommodationFileManager {
             for (int i = 0; i < count; i++) {
                 Accommodation a = accs[i];
                 String type = (a instanceof Hotel) ? "HOTEL" : "HOSTEL";
-                writer.println(a.getAccommodationId() + ";" + type + ";" + a.getName() + ";" + 
+                writer.println(a.getId() + ";" + type + ";" + a.getName() + ";" + 
                                a.getLocation() + ";" + a.getPricePerNight());
             }
         }

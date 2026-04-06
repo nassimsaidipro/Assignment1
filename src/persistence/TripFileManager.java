@@ -18,11 +18,11 @@ public class TripFileManager {
                 Trip t = trips[i];
                 
                 // Use "NONE" if an object isn't linked to avoid NullPointerExceptions
-                String clientId = (t.getTravelingClient() != null) ? t.getTravelingClient().getClientId() : "NONE";
-                String transId = (t.getTransportation() != null) ? t.getTransportation().getTransportId() : "NONE";
-                String accomId = (t.getAccommodation() != null) ? t.getAccommodation().getAccommodationId() : "NONE";
+                String clientId = (t.getTravelingClient() != null) ? t.getTravelingClient().getId() : "NONE";
+                String transId = (t.getTransportation() != null) ? t.getTransportation().getId() : "NONE";
+                String accomId = (t.getAccommodation() != null) ? t.getAccommodation().getId() : "NONE";
                 
-                writer.println(t.getTripId() + ";" + 
+                writer.println(t.getId() + ";" + 
                                t.getDestination() + ";" + 
                                t.getDurationInDays() + ";" + 
                                t.getBasePrice() + ";" + 
@@ -95,7 +95,7 @@ public class TripFileManager {
     private static Client findClient(String id, Client[] clients, int count) {
         if (id.equals("NONE")) return null;
         for (int i = 0; i < count; i++) {
-            if (clients[i].getClientId().equals(id)) return clients[i];
+            if (clients[i].getId().equals(id)) return clients[i];
         }
         return null; 
     }
@@ -103,7 +103,7 @@ public class TripFileManager {
     private static Transportation findTransport(String id, Transportation[] transports, int count) {
         if (id.equals("NONE")) return null;
         for (int i = 0; i < count; i++) {
-            if (transports[i].getTransportId().equals(id)) return transports[i];
+            if (transports[i].getId().equals(id)) return transports[i];
         }
         return null;
     }
@@ -111,7 +111,7 @@ public class TripFileManager {
     private static Accommodation findAccommodation(String id, Accommodation[] accommodations, int count) {
         if (id.equals("NONE")) return null;
         for (int i = 0; i < count; i++) {
-            if (accommodations[i].getAccommodationId().equals(id)) return accommodations[i];
+            if (accommodations[i].getId().equals(id)) return accommodations[i];
         }
         return null;
     }

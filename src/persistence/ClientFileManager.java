@@ -20,7 +20,7 @@ public class ClientFileManager {
 			for (int i = 0; i < count; i++) {
 				Client c = clients[i];
 				// Saves: ID;First;Last;Email;AmountSpent
-				writer.println(c.getClientId() + ";" + c.getFirstName() + ";" + c.getLastName() + ";"
+				writer.println(c.getId() + ";" + c.getFirstName() + ";" + c.getLastName() + ";"
 						+ c.getEmailAdress() + ";" + c.getTotalSpent());
 			}
 		}

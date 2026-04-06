@@ -57,7 +57,7 @@ public class Train extends Transportation {
 	// without accidentally inflating the static numId sequence.
 	@Override
 	public Transportation copy() {
-		return new Train(this.getTransportId(), this.companyName, this.departureCity, this.arrivalCity, this.trainType, this.seatClass, this.trainFare);
+		return new Train(this.getId(), this.companyName, this.departureCity, this.arrivalCity, this.trainType, this.seatClass, this.trainFare);
 	}
 
 	// Checks equality based on company name, departure/arrival cities,
@@ -100,6 +100,11 @@ public class Train extends Transportation {
 
 	public void setSeatClass(String seatClass) {
 		this.seatClass = seatClass;
+	}
+
+	@Override
+	public String toCsvRow() {
+	    return "TRAIN;" + super.toCsvRow() + ";" + this.trainType;
 	}
 
 }
