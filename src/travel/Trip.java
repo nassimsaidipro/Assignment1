@@ -5,6 +5,8 @@
 
 package travel;
 
+import java.util.List;
+
 import client.Client;
 import exceptions.InvalidTripDataException;
 import interfaces.Billable;
@@ -259,7 +261,7 @@ public class Trip implements  Identifiable, Billable, CsvPersistable, Comparable
 		if (this.travelingClient == null) {
 			return null;
 		}
-		return this.travelingClient;
+		return this.travelingClient.copy();
 	}
 
 	// Sets the traveling client using a deep copy to protect encapsulation, or null if not provided
@@ -296,57 +298,58 @@ public class Trip implements  Identifiable, Billable, CsvPersistable, Comparable
 		return tripId;
 	}
 
-	public static Trip fromCsvRow(String csvLine) throws InvalidTripDataException {     
-		String[] parts = csvLine.split(";", -1); 
+	public static Trip fromCsvRow(String csvLine, List<Client> clients, List<Accommodation> accommodations, List<Transportation> transportations) throws InvalidTripDataException { 
+		String[] parts = csvLine.split(";", -1);
 
-		if (parts.length != 7) {
+		if (parts.length != 7)
 			throw new InvalidTripDataException("Invalid CSV format: Trip row must have exactly 7 fields.");
-		}
 
-		String tripId = parts[0];
-		String clientId = parts[1];
-		String accmId = parts[2]; // Might be ""
-		String transId = parts[3]; // Might be ""
+		String tripId      = parts[0];
+		String clientId    = parts[1];
+		String accmId      = parts[2];
+		String transId     = parts[3];
 		String destination = parts[4];
 
 		int durationDays;
 		double basePrice;
 		try {
 			durationDays = Integer.parseInt(parts[5]);
-			basePrice = Double.parseDouble(parts[6]);
+			basePrice    = Double.parseDouble(parts[6]);
 		} catch (NumberFormatException e) {
-			throw new InvalidTripDataException("Invalid number format for duration or price in CSV.");
+			throw new InvalidTripDataException("Invalid number format.");
 		}
 
-		if (clientId == null || clientId.trim().isEmpty()) {
-			throw new InvalidTripDataException("Invalid Trip: ClientID is mandatory.");
+		Client foundClient = null;
+		for (Client c : clients) {
+			if (c.getId().equals(clientId)) {
+				foundClient = c;
+				break;
+			}
+		}
+		if (foundClient == null)
+			throw new InvalidTripDataException("Client not found: " + clientId);
+
+		Trip newTrip = new Trip(tripId, destination, durationDays, basePrice, foundClient);
+
+		if (accmId != null && !accmId.trim().isEmpty()) {
+			for (Accommodation a : accommodations) {
+				if (a.getId().equals(accmId)) {
+					newTrip.setAccommodation(a);
+					break;
+				}
+			}
 		}
 
-		if (clientId == null || clientId.trim().isEmpty()) {
-			throw new InvalidTripDataException("Invalid Trip: ClientID is mandatory.");
+		if (transId != null && !transId.trim().isEmpty()) {
+			for (Transportation t : transportations) {
+				if (t.getId().equals(transId)) {
+					newTrip.setTransportation(t);
+					break;
+				}
+			}
 		}
-		
-		//Je vais fix plus tard;
-		return null;
 
-		//Temporary client 
-		//    Client shellClient = new Client(clientId);
-
-		// Est-ce que ils se font validate par les exceptions. (Non faut je fixe)
-		//  Trip newTrip = new Trip(tripId, destination, durationDays, basePrice, shellClient);
-
-		//   if (accmId != null && !accmId.trim().isEmpty()) {
-		//      Accommodation shellAccm = new Accommodation(accmId); 
-
-		//      newTrip.setAccommodation(shellAccm); 
-		//  }
-
-		//   if (transId != null && !transId.trim().isEmpty()) {
-		//       Transportation shellTrans = new Transportation(transId);
-
-		//       newTrip.setTransportation(shellTrans); 
-		//   }
-
+		return newTrip;
 	}
 
 }
