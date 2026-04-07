@@ -15,15 +15,24 @@
 
 package service;
 
-import client.Client;
-import travel.*;
-import exceptions.*;
-import persistence.*;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import client.Client;
+import exceptions.DuplicateEmailException;
+import exceptions.EntityNotFoundException;
+import exceptions.InvalidClientDataException;
+import exceptions.InvalidTripDataException;
+import persistence.AccommodationFileManager;
+import persistence.ClientFileManager;
+import persistence.GenericFileManager;
+import persistence.TransportationFileManager;
+import persistence.TripFileManager;
+import travel.Accommodation;
+import travel.Transportation;
+import travel.Trip;
 
 public class SmartTravelService {
 
@@ -34,6 +43,8 @@ public class SmartTravelService {
 	private List<Transportation> transports = new ArrayList<>();
 	private List<Accommodation> accommodations = new ArrayList<>();
 	private RecentList<Trip> recentTrips = new RecentList<>();
+
+	private boolean useGenericPersistence = false;
 
 	// Add repos alongside your lists
 	private Repository<Client> clientRepo = new Repository<>();
@@ -190,42 +201,78 @@ public class SmartTravelService {
 
 	public void loadAllData(String directory) throws IOException {
 
-		// Clients
-		Client[] clientArr = new Client[100];
-		int cCount = ClientFileManager.loadClients(clientArr, directory + "clients.csv");
-		clients.clear();
-		clientRepo = new Repository<>();
-		for (int i = 0; i < cCount; i++) {
-			clients.add(clientArr[i]);
-			clientRepo.add(clientArr[i]);
+		if (useGenericPersistence) {
+			List<Client> loadedClients = GenericFileManager.load(directory + "clients.csv", Client.class);
+			clients.clear();
+			clients.addAll(loadedClients);
+
+			clientRepo = new Repository<>();
+			for (Client c : clients) {
+				clientRepo.add(c);
+			}
+
+			List<Transportation> loadedTransports = GenericFileManager.load(directory + "transports.csv",
+					Transportation.class);
+			transports.clear();
+			transports.addAll(loadedTransports);
+
+			List<Accommodation> loadedAccoms = GenericFileManager.load(directory + "accommodations.csv",
+					Accommodation.class);
+			accommodations.clear();
+			accommodations.addAll(loadedAccoms);
+
+			List<Trip> loadedTrips = GenericFileManager.load(directory + "trips.csv", clients, accommodations,
+					transports);
+			trips.clear();
+			trips.addAll(loadedTrips);
+
+			tripRepo = new Repository<>();
+			for (Trip t : trips) {
+				tripRepo.add(t);
+			}
+
+			System.out.println("Data successfully loaded using GenericFileManager!");
+
 		}
 
-		// Transports
-		Transportation[] transArr = new Transportation[50];
-		int tCount = TransportationFileManager.loadTransports(transArr, directory + "transports.csv");
-		transports.clear();
-		
-		for (int i = 0; i < tCount; i++) {
-			transports.add(transArr[i]);
-		}
+		else {
+			// Clients
+			Client[] clientArr = new Client[100];
+			int cCount = ClientFileManager.loadClients(clientArr, directory + "clients.csv");
+			clients.clear();
+			clientRepo = new Repository<>();
+			for (int i = 0; i < cCount; i++) {
+				clients.add(clientArr[i]);
+				clientRepo.add(clientArr[i]);
+			}
 
-		// Accommodations
-		Accommodation[] accArr = new Accommodation[50];
-		int aCount = AccommodationFileManager.loadAccommodations(accArr, directory + "accommodations.csv");
-		accommodations.clear();
-		for (int i = 0; i < aCount; i++) {
-			accommodations.add(accArr[i]);
-		}
+			// Transports
+			Transportation[] transArr = new Transportation[50];
+			int tCount = TransportationFileManager.loadTransports(transArr, directory + "transports.csv");
+			transports.clear();
 
-		// Trips
-		Trip[] tripArr = new Trip[200];
-		int rCount = TripFileManager.loadTrips(tripArr, directory + "trips.csv", clientArr, cCount, transArr, tCount,
-				accArr, aCount);
-		trips.clear();
-		tripRepo = new Repository<>();
-		for (int i = 0; i < rCount; i++) {
-			trips.add(tripArr[i]);
-			tripRepo.add(tripArr[i]);
+			for (int i = 0; i < tCount; i++) {
+				transports.add(transArr[i]);
+			}
+
+			// Accommodations
+			Accommodation[] accArr = new Accommodation[50];
+			int aCount = AccommodationFileManager.loadAccommodations(accArr, directory + "accommodations.csv");
+			accommodations.clear();
+			for (int i = 0; i < aCount; i++) {
+				accommodations.add(accArr[i]);
+			}
+
+			// Trips
+			Trip[] tripArr = new Trip[200];
+			int rCount = TripFileManager.loadTrips(tripArr, directory + "trips.csv", clientArr, cCount, transArr,
+					tCount, accArr, aCount);
+			trips.clear();
+			tripRepo = new Repository<>();
+			for (int i = 0; i < rCount; i++) {
+				trips.add(tripArr[i]);
+				tripRepo.add(tripArr[i]);
+			}
 		}
 
 	}
@@ -251,24 +298,24 @@ public class SmartTravelService {
 				throw new DuplicateEmailException("Email already exists.");
 		}
 	}
-	
-	//Deletes a client
+
+	// Deletes a client
 	public void deleteClient(String id) throws EntityNotFoundException {
-	    boolean found = false;
+		boolean found = false;
 
-	    for (int i = 0; i < clients.size(); i++) {
-	        if (clients.get(i).getId().equalsIgnoreCase(id)) {
-	            clients.remove(i);
-	            found = true;
-	            break;
-	        }
-	    }
+		for (int i = 0; i < clients.size(); i++) {
+			if (clients.get(i).getId().equalsIgnoreCase(id)) {
+				clients.remove(i);
+				found = true;
+				break;
+			}
+		}
 
-	    if (!found) {
-	        throw new EntityNotFoundException("Client not found.");
-	    }
+		if (!found) {
+			throw new EntityNotFoundException("Client not found.");
+		}
 
-	    clientRepo.removeById(id);
+		clientRepo.removeById(id);
 	}
 
 }
