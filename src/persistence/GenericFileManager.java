@@ -26,6 +26,8 @@ public class GenericFileManager<T extends CsvPersistable> {
 			String line;
 			while ((line = reader.readLine()) != null) {
 
+				if (line.trim().isEmpty()) continue; 
+
 				T item = null;
 				try {
 					switch(className) {
@@ -60,11 +62,13 @@ public class GenericFileManager<T extends CsvPersistable> {
 
 	public static List<Trip> load(String filepath,List<Client> clients, List<Accommodation> accommodations, List<Transportation> transportations){
 		List<Trip> items = new ArrayList<Trip>();
-
 		try (BufferedReader reader = new BufferedReader(new FileReader(filepath))) {
 
 			String line;
 			while ((line = reader.readLine()) != null) {
+
+				if (line.trim().isEmpty()) continue; 
+
 				try {
 					Trip trip = Trip.fromCsvRow(line, clients, accommodations, transportations);
 					items.add(trip);

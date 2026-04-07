@@ -19,7 +19,7 @@ public class ClientFileManager {
 		try (PrintWriter writer = new PrintWriter(new FileWriter(filePath))) {
 			for (int i = 0; i < count; i++) {
 				Client c = clients[i];
-				// Saves: ID;First;Last;Email;AmountSpent
+				
 				writer.println(c.getId() + ";" + c.getFirstName() + ";" + c.getLastName() + ";"
 						+ c.getEmailAdress() + ";" + c.getTotalSpent());
 			}
