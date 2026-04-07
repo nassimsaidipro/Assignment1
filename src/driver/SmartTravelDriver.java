@@ -441,13 +441,20 @@ public class SmartTravelDriver {
 				break;
 
 			case 11:
-				try {
-					service.saveAllData("output/data/");
-					System.out.println("All data saved successfully.");
-				} catch (IOException e) {
-					System.out.println("Error saving data: " + e.getMessage());
-					// ERROR LOGGER
-				}
+				System.out.println("Select save mode:");
+			    System.out.println("1. Default (A2 FileManagers)");
+			    System.out.println("2. Generic (A3 GenericFileManager)");
+			    int saveChoice = input.nextInt();
+			    
+			    
+			    service.setUseGenericPersistence(saveChoice == 2);
+			    
+			    try {
+			        service.saveAllData("output/data/");
+			        System.out.println("All data saved successfully.");
+			    } catch (IOException e) {
+			        System.out.println("Error saving data: " + e.getMessage());
+			    }
 
 				break;
 

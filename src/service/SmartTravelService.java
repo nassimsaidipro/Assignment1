@@ -239,8 +239,7 @@ public class SmartTravelService {
 			accommodations.clear();
 			accommodations.addAll(loadedAccoms);
 
-			List<Trip> loadedTrips = GenericFileManager.load(directory + "trips.csv", clients, accommodations,
-					transports);
+			List<Trip> loadedTrips = GenericFileManager.load(directory + "trips.csv", clients, accommodations,transports);
 			trips.clear();
 			trips.addAll(loadedTrips);
 
@@ -299,7 +298,15 @@ public class SmartTravelService {
 
 	public void saveAllData(String directory) throws IOException {
 		new File(directory).mkdirs();
-
+		
+		
+		if (useGenericPersistence) {
+	        // Use the new Assignment 3 Generic way to save
+			GenericFileManager.save(clients, directory + "clients.csv");
+	        GenericFileManager.save(transports, directory + "transports.csv");
+	        GenericFileManager.save(accommodations, directory + "accommodations.csv");
+	        GenericFileManager.save(trips, directory + "trips.csv");
+	    } else {
 		// Convert lists to arrays
 		ClientFileManager.saveClients(clients.toArray(new Client[0]), clients.size(), directory + "clients.csv");
 		TransportationFileManager.saveTransports(transports.toArray(new Transportation[0]), transports.size(),
@@ -307,6 +314,7 @@ public class SmartTravelService {
 		AccommodationFileManager.saveAccommodations(accommodations.toArray(new Accommodation[0]), accommodations.size(),
 				directory + "accommodations.csv");
 		TripFileManager.saveTrips(trips.toArray(new Trip[0]), trips.size(), directory + "trips.csv");
+	    }
 	}
 
 	// Verifies if the email is a duplicate or not

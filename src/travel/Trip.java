@@ -18,7 +18,7 @@ import interfaces.Identifiable;
 //into a single bookable trip. It tracks the duration and base price of the trip,
 //and can calculate the full total cost by combining all three cost components.
 //Deep copies are used throughout to protect encapsulation of all linked objects.
-public class Trip implements  Identifiable, Billable, CsvPersistable, Comparable<Trip>  {
+public class Trip implements Identifiable, Billable, CsvPersistable, Comparable<Trip> {
 
 	// Static counter to generate unique trip IDs starting from 2001
 	private static int numId = 2001;
@@ -35,18 +35,20 @@ public class Trip implements  Identifiable, Billable, CsvPersistable, Comparable
 	// and assigns a unique trip ID using the static counter
 	public Trip() {
 		this.destination = "Unknown";
-		this.durationInDays = 1;      
-		this.basePrice = 100.0;       
-		this.travelingClient = new Client(); 
+		this.durationInDays = 1;
+		this.basePrice = 100.0;
+		this.travelingClient = new Client();
 		this.transportation = null;
 		this.accommodation = null;
 		tripIdGenerator();
 	}
 
 	// Parameterized constructor - initializes trip details with provided values
-	// Performs a defensive copy of the client if not null, otherwise creates a default Client
+	// Performs a defensive copy of the client if not null, otherwise creates a
+	// default Client
 	// Sets transportation and accommodation to null, and assigns a unique trip ID
-	public Trip(String destination, int duration, double basePrice, Client travelingClient) throws InvalidTripDataException {
+	public Trip(String destination, int duration, double basePrice, Client travelingClient)
+			throws InvalidTripDataException {
 
 		if (basePrice < 100) {
 			throw new InvalidTripDataException("Base price needs to be greater or equal than 100$");
@@ -69,8 +71,10 @@ public class Trip implements  Identifiable, Billable, CsvPersistable, Comparable
 		tripIdGenerator();
 	}
 
-	// Copy constructor - performs deep copies of all fields from another Trip object
-	// Defensively copies the client, transportation, and accommodation if they are not null
+	// Copy constructor - performs deep copies of all fields from another Trip
+	// object
+	// Defensively copies the client, transportation, and accommodation if they are
+	// not null
 	// Assigns a new unique trip ID using the static counter
 	public Trip(Trip other) {
 		destination = other.destination;
@@ -111,15 +115,17 @@ public class Trip implements  Identifiable, Billable, CsvPersistable, Comparable
 		if (travelingClient != null) {
 			this.travelingClient = travelingClient;
 		} else {
-			this.travelingClient = null; 
+			this.travelingClient = null;
 		}
 
 		this.transportation = null;
 		this.accommodation = null;
 	}
 
-	// Checks equality based on destination, duration, base price, client, transportation, and accommodation.
-	// The unique tripId is excluded from this comparison since every trip object gets a different ID.
+	// Checks equality based on destination, duration, base price, client,
+	// transportation, and accommodation.
+	// The unique tripId is excluded from this comparison since every trip object
+	// gets a different ID.
 	@Override
 	public boolean equals(Object obj) {
 
@@ -131,26 +137,26 @@ public class Trip implements  Identifiable, Billable, CsvPersistable, Comparable
 		Trip other = (Trip) obj;
 
 		// Check primitive fields and destination string
-		if (this.durationInDays != other.durationInDays || 
-				this.basePrice != other.basePrice || 
-				!this.destination.equals(other.destination)) {
+		if (this.durationInDays != other.durationInDays || this.basePrice != other.basePrice
+				|| !this.destination.equals(other.destination)) {
 			return false;
 		}
 
 		// Safely check objects that might potentially be null
-		boolean clientEquals = (this.travelingClient == null && other.travelingClient == null) || 
-				(this.travelingClient != null && this.travelingClient.equals(other.travelingClient));
+		boolean clientEquals = (this.travelingClient == null && other.travelingClient == null)
+				|| (this.travelingClient != null && this.travelingClient.equals(other.travelingClient));
 
-		boolean transportEquals = (this.transportation == null && other.transportation == null) || 
-				(this.transportation != null && this.transportation.equals(other.transportation));
+		boolean transportEquals = (this.transportation == null && other.transportation == null)
+				|| (this.transportation != null && this.transportation.equals(other.transportation));
 
-		boolean accommodationEquals = (this.accommodation == null && other.accommodation == null) || 
-				(this.accommodation != null && this.accommodation.equals(other.accommodation));
+		boolean accommodationEquals = (this.accommodation == null && other.accommodation == null)
+				|| (this.accommodation != null && this.accommodation.equals(other.accommodation));
 
 		return clientEquals && transportEquals && accommodationEquals;
 	}
 
-	// Returns a formatted string displaying all Trip details, cascading down to print
+	// Returns a formatted string displaying all Trip details, cascading down to
+	// print
 	// the details of the Client, Transportation, and Accommodation if they exist.
 	@Override
 	public String toString() {
@@ -158,26 +164,21 @@ public class Trip implements  Identifiable, Billable, CsvPersistable, Comparable
 		String transportInfo = (transportation != null) ? transportation.toString() : "No transportation booked.";
 		String accommodationInfo = (accommodation != null) ? accommodation.toString() : "No accommodation booked.";
 
-		return "Trip ID: " + tripId + "\n" +
-		"Destination: " + destination + "\n" +
-		"Duration: " + durationInDays + " days\n" +
-		"Base Price: $" + basePrice + "\n" +
-		"--- Client Details ---\n" + 
-		clientInfo + "\n" +
-		"--- Transportation Details ---\n" + 
-		transportInfo + "\n" +
-		"--- Accommodation Details ---\n" + 
-		accommodationInfo;
+		return "Trip ID: " + tripId + "\n" + "Destination: " + destination + "\n" + "Duration: " + durationInDays
+				+ " days\n" + "Base Price: $" + basePrice + "\n" + "--- Client Details ---\n" + clientInfo + "\n"
+				+ "--- Transportation Details ---\n" + transportInfo + "\n" + "--- Accommodation Details ---\n"
+				+ accommodationInfo;
 	}
 
 	// Calculates the total cost of the trip by summing the base price,
 	// accommodation cost (based on duration), and transportation cost.
-	// Safely handles trips where accommodation or transportation haven't been booked yet.
+	// Safely handles trips where accommodation or transportation haven't been
+	// booked yet.
 	public double calculateTotalCost() {
 		double total = basePrice;
 
 		if (this.accommodation != null) {
-			total += this.accommodation.calculateCost((durationInDays-1));
+			total += this.accommodation.calculateCost((durationInDays - 1));
 		}
 
 		if (this.transportation != null) {
@@ -194,7 +195,6 @@ public class Trip implements  Identifiable, Billable, CsvPersistable, Comparable
 	}
 
 	// --- Getters and Setters ---
-
 
 	public String getDestination() {
 		return destination;
@@ -230,7 +230,8 @@ public class Trip implements  Identifiable, Billable, CsvPersistable, Comparable
 		return this.transportation.copy();
 	}
 
-	// Sets transportation using a deep copy to protect encapsulation, or null if not provided
+	// Sets transportation using a deep copy to protect encapsulation, or null if
+	// not provided
 	public void setTransportation(Transportation transportation) {
 		if (transportation == null) {
 			this.transportation = null;
@@ -247,7 +248,8 @@ public class Trip implements  Identifiable, Billable, CsvPersistable, Comparable
 		return this.accommodation.copy();
 	}
 
-	// Sets accommodation using a deep copy to protect encapsulation, or null if not provided
+	// Sets accommodation using a deep copy to protect encapsulation, or null if not
+	// provided
 	public void setAccommodation(Accommodation accommodation) {
 		if (accommodation == null) {
 			this.accommodation = null;
@@ -264,7 +266,8 @@ public class Trip implements  Identifiable, Billable, CsvPersistable, Comparable
 		return this.travelingClient.copy();
 	}
 
-	// Sets the traveling client using a deep copy to protect encapsulation, or null if not provided
+	// Sets the traveling client using a deep copy to protect encapsulation, or null
+	// if not provided
 	public void setTravelingClient(Client travelingClient) throws InvalidTripDataException {
 		if (travelingClient == null) {
 			throw new InvalidTripDataException("Client ID must exist in current client array.");
@@ -274,15 +277,22 @@ public class Trip implements  Identifiable, Billable, CsvPersistable, Comparable
 	}
 
 	// -- Interface implementations --
-	
+
 	@Override
 	public int compareTo(Trip o) {
-		return Double.compare(this.calculateTotalCost(),o.calculateTotalCost());
+		return Double.compare(this.calculateTotalCost(), o.calculateTotalCost());
 	}
 
 	@Override
 	public String toCsvRow() {
-		return this.getId() + ";" + this.travelingClient.getId() + ";" + this.accommodation.getId() + ";" + this.transportation.getId() + ";" + this.destination + ";" + this.durationInDays + ";" + this.basePrice;
+		// Check if accommodation is null; if so, use empty string, else get ID
+		String accId = (this.accommodation == null) ? "" : this.accommodation.getId();
+
+		// Check if transportation is null; if so, use empty string, else get ID
+		String transId = (this.transportation == null) ? "" : this.transportation.getId();
+
+		return this.getId() + ";" + this.travelingClient.getId() + ";" + accId + ";" + transId + ";" + this.destination
+				+ ";" + this.durationInDays + ";" + this.basePrice;
 	}
 
 	@Override
@@ -291,7 +301,7 @@ public class Trip implements  Identifiable, Billable, CsvPersistable, Comparable
 	}
 
 	@Override
-	public double getTotalCost() {	
+	public double getTotalCost() {
 		return calculateTotalCost();
 	}
 
@@ -300,23 +310,24 @@ public class Trip implements  Identifiable, Billable, CsvPersistable, Comparable
 		return tripId;
 	}
 
-	public static Trip fromCsvRow(String csvLine, List<Client> clients, List<Accommodation> accommodations, List<Transportation> transportations) throws InvalidTripDataException { 
+	public static Trip fromCsvRow(String csvLine, List<Client> clients, List<Accommodation> accommodations,
+			List<Transportation> transportations) throws InvalidTripDataException {
 		String[] parts = csvLine.split(";", -1);
 
 		if (parts.length != 7)
 			throw new InvalidTripDataException("Invalid CSV format: Trip row must have exactly 7 fields.");
 
-		String tripId      = parts[0];
-		String clientId    = parts[1];
-		String accmId      = parts[2];
-		String transId     = parts[3];
+		String tripId = parts[0];
+		String clientId = parts[1];
+		String accmId = parts[2];
+		String transId = parts[3];
 		String destination = parts[4];
 
 		int durationDays;
 		double basePrice;
 		try {
 			durationDays = Integer.parseInt(parts[5]);
-			basePrice    = Double.parseDouble(parts[6]);
+			basePrice = Double.parseDouble(parts[6]);
 		} catch (NumberFormatException e) {
 			throw new InvalidTripDataException("Invalid number format.");
 		}
