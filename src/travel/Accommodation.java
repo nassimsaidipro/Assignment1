@@ -132,6 +132,8 @@ public abstract class Accommodation implements Identifiable, CsvPersistable, Com
 
 		this.pricePerNight = pricePerNight;
 	}
+	
+	// -- Interface implementations --
 
 	@Override
 	public String getId() {

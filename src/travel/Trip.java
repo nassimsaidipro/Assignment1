@@ -273,6 +273,8 @@ public class Trip implements  Identifiable, Billable, CsvPersistable, Comparable
 		this.travelingClient = travelingClient.copy();
 	}
 
+	// -- Interface implementations --
+	
 	@Override
 	public int compareTo(Trip o) {
 		return Double.compare(this.calculateTotalCost(),o.calculateTotalCost());

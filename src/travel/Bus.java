@@ -114,6 +114,8 @@ public class Bus extends Transportation {
 		this.numberOfStops = numberOfStops;
 	}
 	
+	// -- Interface implementations --
+	
 	@Override
 	public String toCsvRow() {
 	    return "BUS;" + super.toCsvRow() + ";" + this.numberOfStops;

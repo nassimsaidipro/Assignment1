@@ -90,6 +90,8 @@ public class Hostel extends Accommodation {
 		this.sharedBedsPerRoom = sharedBedsPerRoom;
 	}
 	
+	// -- Interface implementations --
+	
 	@Override
 	public String toCsvRow() {
 	    return "HOSTEL;" + super.toCsvRow() + ";" + this.sharedBedsPerRoom;

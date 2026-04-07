@@ -128,6 +128,8 @@ public abstract class Transportation implements Identifiable, CsvPersistable, Co
 	public void setArrivalCity(String arrivalCity) {
 		this.arrivalCity = arrivalCity;
 	}
+	
+	// -- Interface implementations --
 
 	@Override
 	public String getId() {

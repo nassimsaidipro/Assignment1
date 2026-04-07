@@ -53,6 +53,7 @@ public class Client implements Identifiable, CsvPersistable, Comparable<Client> 
 			throw new InvalidClientDataException(
 					"Email must contain '@' and '.', have no spaces, and be <= 100 chars.");
 		}
+		
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.emailAddress = emailAddress;
@@ -177,6 +178,8 @@ public class Client implements Identifiable, CsvPersistable, Comparable<Client> 
 		if (amountSpent >= 0)
 			this.amountSpent = amountSpent;
 	}
+	
+	// -- Interface implementations --
 
 	@Override
 	public int compareTo(Client o) {
