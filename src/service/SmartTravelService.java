@@ -335,5 +335,10 @@ public class SmartTravelService {
 
 		clientRepo.removeById(id);
 	}
+	
+	//Sets the usegeneric to a value
+	public void setUseGenericPersistence(boolean val) {
+	    this.useGenericPersistence = val;
+	}
 
 }

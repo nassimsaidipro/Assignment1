@@ -284,7 +284,7 @@ public class SmartTravelDriver {
 		}
 
 		// Load all data back
-		
+
 		System.out.println("\n ---- Loading all data from output/data/...");
 		try {
 			service.loadAllData("output/data/");
@@ -292,16 +292,14 @@ public class SmartTravelDriver {
 		} catch (IOException e) {
 			System.out.println("Load failed: " + e.getMessage());
 		}
-		
-		
+
 		System.out.println("\n ---- Generating Dashboard for Predefined Scenario...");
-	    try {
-	        visualization.DashboardGenerator.generateDashboard(service);
-	        System.out.println("Dashboard updated with scenario data.");
-	    } catch (IOException e) {
-	        System.out.println("Dashboard generation failed: " + e.getMessage());
-	    }
-	
+		try {
+			visualization.DashboardGenerator.generateDashboard(service);
+			System.out.println("Dashboard updated with scenario data.");
+		} catch (IOException e) {
+			System.out.println("Dashboard generation failed: " + e.getMessage());
+		}
 
 	}
 //------------------------------------------------------------------------------------------------------------------------------------
@@ -415,6 +413,21 @@ public class SmartTravelDriver {
 				break;
 
 			case 10:
+				System.out.println("Select load mode:");
+				System.out.println("1. Default (A2 FileManagers)");
+				System.out.println("2. Generic (A3 GenericFileManager)");
+				System.out.print("Your choice: ");
+				int loadChoice = input.nextInt();
+				input.nextLine();
+
+				if (loadChoice == 1) {
+					service.setUseGenericPersistence(false);
+				} else if (loadChoice == 2) {
+					service.setUseGenericPersistence(true);
+				} else {
+					System.out.println("Invalid choice, defaulting to A2 FileManagers.");
+					service.setUseGenericPersistence(false);
+				}
 
 				try {
 					service.loadAllData("output/data/");
