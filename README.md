@@ -5,3 +5,5 @@ ArrayList would require O(n) time for front insertion because every existing ele
 Since RecentList never needs random access, we don't need ArrayList's O(1) get(i) advantage.
 Therefore, a LinkedList is more appropriate in this case, as it supports the required operations (front insertion and tail removal),
 where it outperforms an ArrayList.
+
+A2 COMPATIBILITY: YES

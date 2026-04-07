@@ -283,22 +283,23 @@ public class SmartTravelDriver {
 			System.out.println("Save failed: " + e.getMessage());
 		}
 
-		// Load all data back
-
-		System.out.println("\n ---- Loading all data from output/data/...");
-		try {
-			service.loadAllData("output/data/");
-			System.out.println("Load successful.");
-		} catch (IOException e) {
-			System.out.println("Load failed: " + e.getMessage());
-		}
-
 		System.out.println("\n ---- Generating Dashboard for Predefined Scenario...");
 		try {
 			visualization.DashboardGenerator.generateDashboard(service);
 			System.out.println("Dashboard updated with scenario data.");
 		} catch (IOException e) {
 			System.out.println("Dashboard generation failed: " + e.getMessage());
+		}
+
+		// Load all data back
+
+		System.out.println("\n ---- Loading all data from output/data/...");
+
+		try {
+			service.loadAllData("output/data/");
+			System.out.println("Load successful.");
+		} catch (IOException e) {
+			System.out.println("Load failed: " + e.getMessage());
 		}
 
 	}
