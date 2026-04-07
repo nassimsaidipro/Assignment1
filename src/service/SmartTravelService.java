@@ -1,6 +1,6 @@
 // -----------------------------------------------------------------------
 // Assignment 3
-// Written by: Darwinsh Saint-Jean(40341644)
+// Written by: Darwinsh Saint-Jean(40341644) and Nassim Saidi(40345885)
 // -----------------------------------------------------------------------
 /*The SmartTravelService class is the central business logic layer. 
  * It maintains four arrays to store records for 

@@ -1,6 +1,6 @@
 
 // Assignment 3
-// Written by: Darwinsh Saint-Jean (40341644)
+// Written by: Darwinsh Saint-Jean (40341644) and Nassim Saidi(40345885)
 /*
  * RecentList<T> is a generic fixed-size "recency tracker" backed by a LinkedList.
  * It keeps up to 10 of the most recently added items, always inserting new entries
