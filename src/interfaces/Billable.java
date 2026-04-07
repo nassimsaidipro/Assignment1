@@ -25,3 +25,4 @@ public interface Billable {
 	 * based on its specific pricing logic.
 	 */
 	double getTotalCost();
+}
