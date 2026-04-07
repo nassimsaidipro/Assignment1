@@ -1,5 +1,5 @@
 // -----------------------------------------------------------------------
-// Assignment 2
+// Assignment 3
 // Written by: Darwinsh Saint-Jean(40341644)
 // -----------------------------------------------------------------------
 /*The SmartTravelService class is the central business logic layer. 
@@ -10,6 +10,18 @@
  *  creating trips linked to existing clients, searching by ID,
  *  calculating trip totals, and loading/saving all data through the four
  *  FileManager classes in the persistence package
+ *   In Assignment 3, the class was extended with:
+ *   - A boolean flag (useGenericPersistence) that lets the caller switch
+ *     between the original A2 file managers and the new generic one.
+ *   - A Repository<T> for both clients and trips, enabling ID-based lookups.
+ *   - A RecentList<Trip> that tracks the most recently accessed trips.
+ *   
+ *  Persistence:
+ *   When useGenericPersistence is false (default), loadAllData() delegates
+ *   to the four original A2 FileManagers for backward compatibility.
+ *   When useGenericPersistence is true, loadAllData() uses the new
+ *   GenericFileManager<T extends CsvPersistable>, which handles all types
+ *   through a single reusable load/save API. 
  *  custom exceptions are thrown to handle input validation.
  */
 
@@ -36,20 +48,26 @@ import travel.Trip;
 
 public class SmartTravelService {
 
-	// Collections
+	// Primary storage lists for each entity type
 	private List<Client> clients = new ArrayList<>();
 
 	private List<Trip> trips = new ArrayList<>();
 	private List<Transportation> transports = new ArrayList<>();
 	private List<Accommodation> accommodations = new ArrayList<>();
+
+	// Tracks the most recently accessed/created trips (A3 addition)
 	private RecentList<Trip> recentTrips = new RecentList<>();
 
+	// When false, loadAllData() uses the original A2 FileManagers.
+	// When true, loadAllData() uses the new GenericFileManager.
 	private boolean useGenericPersistence = false;
 
-	// Add repos alongside your lists
+	// Secondary index structures
 	private Repository<Client> clientRepo = new Repository<>();
 	private Repository<Trip> tripRepo = new Repository<>();
 
+	// ---------------------------GETTERS AND
+	// SETTERS-----------------------------------
 	public List<Client> getClients() {
 		return clients;
 	}
@@ -122,7 +140,6 @@ public class SmartTravelService {
 		return recentTrips;
 	}
 
-	// Expose repos
 	public Repository<Client> getClientRepo() {
 		return clientRepo;
 	}
@@ -131,6 +148,7 @@ public class SmartTravelService {
 		return tripRepo;
 	}
 
+//-------------------------------------------------------------
 	// Adds a client after verifying the email is unique, there's also a mirror for
 	// queries
 	public void addClient(Client c) throws InvalidClientDataException, DuplicateEmailException {

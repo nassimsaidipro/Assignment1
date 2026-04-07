@@ -1,3 +1,13 @@
+
+// Assignment 3
+// Written by: Darwinsh Saint-Jean (40341644)
+/*
+ * RecentList<T> is a generic fixed-size "recency tracker" backed by a LinkedList.
+ * It keeps up to 10 of the most recently added items, always inserting new entries
+ * at the front and dropping the oldest from the back when full.
+ * Used in SmartTravelService to track recently accessed/created Trips.
+ */
+
 package service;
 
 import java.util.LinkedList;

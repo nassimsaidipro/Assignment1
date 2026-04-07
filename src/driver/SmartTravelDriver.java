@@ -1,23 +1,33 @@
 // -----------------------------------------------------------------------
-// Assignment 2
+// Assignment 3
 // Written by: Darwinsh Saint-Jean (40341644)
 // -----------------------------------------------------------------------
 
 // -----------------------------------------------------------------------
-// This SmartTravel program is a travel agency management system,
-// allowing employees to manage clients, trips, transportation options, and accommodations.
-// The program provides two modes:
-// 1. A predefined testing scenario that demonstrates the functionality:
-//    - Object creation and display using toString()
-//    - The equals() method tested across different cases
-//    - Polymorphic cost calculation for trips
-//    - A method to find the most expensive trip
-//    - Deep copy methods for transportation and accommodation arrays
-// 2. A menu interface that allows the user to add, edit, remove,
-//    and display information for all elements.
-//
-// The program uses inheritance and polymorphism for different types of
-// transportation (Flight, Train, Bus) and accommodations (Hotel, Hostel).
+/*
+ * SmartTravelDriver is the entry point of the SmartTravel application.
+ * It owns the single SmartTravelService instance 
+ *
+ * Two execution paths are available:
+ *   - Predefined Scenario: automatically creates sample clients, trips,
+ *     transportations, and accommodations, then tests exceptions, equals(),
+ *     deep copies, cost calculations, file save/load, and dashboard generation.
+ *   - Menu Mode: an interactive loop with submenus for managing clients,
+ *     trips, transportations, and accommodations, plus analytics, file I/O,
+ *     and dashboard generation.
+ *
+ * Key static helpers:
+ *   clientManagement()      — add, edit, delete, list clients
+ *   tripManagement()        — create, edit, cancel, list trips and filter by client
+ *   transportManagement()   — add, remove, list transportations by type
+ *   accomManagement()       — add, remove, list accommodations by type
+ *   analyticsMenu()         — predicate filters, cost ranges, sorted views, RecentList
+ *   attachTransportation()  — interactively links a transportation to a trip
+ *   attachAccommodation()   — interactively links an accommodation to a trip
+ *   showMostExpensiveTrip() — iterates trips and prints the highest-cost one
+ *   copyTransportationArray() — deep copies all transportations via copy constructors
+ *   copyAccommodationArray()  — deep copies all accommodations via copy constructors
+ */
 // -----------------------------------------------------------------------
 package driver;
 

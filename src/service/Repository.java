@@ -1,3 +1,13 @@
+// Assignment 3
+// Written by: Darwinsh Saint-Jean (40341644)
+/*
+ * Repository<T> is a generic in-memory store for any entity that implements
+ * both Identifiable and Comparable.
+ * It provides ID-based lookup and removal, predicate filtering, and sorted retrieval.
+ * Used in SmartTravelService as a secondary index alongside the raw lists,
+ * making client and trip lookups cleaner than manually iterating the lists.
+ */
+
 package service;
 
 import java.util.ArrayList;
@@ -25,7 +35,7 @@ public class Repository<T extends Identifiable & Comparable<? super T>> {
 		}
 		throw new EntityNotFoundException();
 	}
-	
+
 	// Removes and item by ID
 	public void removeById(String id) throws EntityNotFoundException {
 		for (int i = 0; i < items.size(); i++) {
