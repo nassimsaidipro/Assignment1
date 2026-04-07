@@ -112,6 +112,8 @@ public class Flight extends Transportation {
 		this.luggageAllowance = luggageAllowance;
 	}
 	
+	// -- Interface implementations --
+	
 	@Override
 	public String toCsvRow() {
 	    return "FLIGHT;" + super.toCsvRow() + ";" + this.luggageAllowance;

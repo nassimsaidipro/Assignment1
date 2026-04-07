@@ -101,6 +101,8 @@ public class Train extends Transportation {
 	public void setSeatClass(String seatClass) {
 		this.seatClass = seatClass;
 	}
+	
+	// -- Interface implementations --
 
 	@Override
 	public String toCsvRow() {

@@ -91,6 +91,8 @@ public class Hotel extends Accommodation {
 		this.starRating = starRating;
 	}
 	
+	// -- Interface implementations --
+	
 	@Override
 	public String toCsvRow() {
 	    return "HOTEL;" + super.toCsvRow() + ";" + this.starRating;
